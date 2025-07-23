@@ -1,0 +1,13 @@
+# Configured data sources
+sources:
+  - type: api
+    name: hospital_records
+    endpoint: https://api.example.com/records
+    frequency: hourly
+    format: json
+
+  - type: iot
+    name: wearable_devices
+    endpoint: mqtt://iot.example.com
+    frequency: realtime
+    format: protobuf

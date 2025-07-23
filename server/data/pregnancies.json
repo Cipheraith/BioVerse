@@ -1,0 +1,20 @@
+[
+  {
+    "id": "preg_001",
+    "patientId": "pat_001",
+    "estimatedDueDate": "2025-08-15",
+    "healthStatus": "stable",
+    "alerts": [],
+    "transportBooked": false,
+    "deliveryDetails": null
+  },
+  {
+    "id": "preg_002",
+    "patientId": "pat_002",
+    "estimatedDueDate": "2025-07-10",
+    "healthStatus": "high-risk",
+    "alerts": ["High blood pressure detected on 2025-06-28"],
+    "transportBooked": false,
+    "deliveryDetails": null
+  }
+]

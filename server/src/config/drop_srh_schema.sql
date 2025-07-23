@@ -1,0 +1,2 @@
+DROP VIEW IF EXISTS patient_srh_overview, active_srh_services;
+DROP TABLE IF EXISTS menstrual_cycles, contraception_plans, srh_assessments, sti_tests, family_planning, education_views, education_content, srh_counseling, partner_info, fertility_tracking, srh_notifications CASCADE;
