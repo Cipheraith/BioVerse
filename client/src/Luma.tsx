@@ -32,7 +32,7 @@ const LumaChatbot: React.FC = () => {
       }
 
       const response = await fetch(
-        `${process.env.VITE_API_BASE_URL}/api/luma/query`,
+        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/luma/query`,
         {
           method: "POST",
           headers: {
