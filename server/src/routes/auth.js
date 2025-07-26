@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { body, validationResult } = require('express-validator');
 const { register, login, googleLogin, me } = require('../controllers/authController');
 const { authenticateToken } = require('../middleware/auth');
 

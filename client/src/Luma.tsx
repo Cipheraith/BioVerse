@@ -4,7 +4,14 @@ import { useSocket } from "./SocketContext";
 
 const LumaChatbot: React.FC = () => {
   const [query, setQuery] = useState<string>("");
-  const [lumaResponse, setLumaResponse] = useState<any>(null); // Can be symptom analysis or SRH response
+  const [lumaResponse, setLumaResponse] = useState<{
+    response: string | {
+      primaryDiagnosis: string;
+      severity: string;
+      recommendations: string[];
+    };
+    type: string;
+  } | null>(null); // Can be symptom analysis or SRH response
   const [loading, setLoading] = useState<boolean>(false);
   const { socket } = useSocket();
 

@@ -301,6 +301,8 @@ router.get('/security/assessment', authenticateToken, authorizeRoles(['admin', '
 
 // Generate compliance reports
 router.post('/reports/generate', authenticateToken, authorizeRoles(['admin', 'compliance_officer']), async (req, res) => {
+  try {
+    const { reportType, standards, dateRange } = req.body;
 
     const report = {
       id: `report_${Date.now()}`,

@@ -2309,3 +2309,36 @@
 {"level":"info","message":"User disconnected: admin@bioverse.com (4) - Reason: transport close","module":"socket","service":"bioverse-api","timestamp":"2025-07-22 15:08:51"}
 {"level":"info","message":"User disconnected: admin@bioverse.com (4) - Reason: transport error","module":"socket","service":"bioverse-api","timestamp":"2025-07-22 15:08:51"}
 {"level":"info","message":"SIGINT received, shutting down gracefully...","service":"bioverse-api","timestamp":"2025-07-22 15:08:55"}
+{"level":"warn","message":"Payment service running in mock mode - no Stripe API key provided","service":"bioverse-api","timestamp":"2025-07-25 19:26:59"}
+{"level":"info","message":"Socket.IO server initialized successfully","module":"socket","service":"bioverse-api","timestamp":"2025-07-25 19:27:01"}
+{"level":"info","message":"🚀 BioVerse server running on http://localhost:3000","service":"bioverse-api","timestamp":"2025-07-25 19:27:01"}
+{"level":"info","message":"🌍 Environment: development","service":"bioverse-api","timestamp":"2025-07-25 19:27:01"}
+{"level":"info","message":"📊 Health check available at: http://localhost:3000/health","service":"bioverse-api","timestamp":"2025-07-25 19:27:01"}
+{"level":"info","message":"🔒 Rate limiting: Enabled","service":"bioverse-api","timestamp":"2025-07-25 19:27:01"}
+{"level":"info","message":"📝 Request logging: Disabled","service":"bioverse-api","timestamp":"2025-07-25 19:27:01"}
+{"level":"info","message":"SIGINT received, shutting down gracefully...","service":"bioverse-api","timestamp":"2025-07-25 19:27:44"}
+{"level":"warn","message":"Payment service running in mock mode - no Stripe API key provided","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"level":"info","message":"Socket.IO server initialized successfully","module":"socket","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"level":"info","message":"🚀 BioVerse server running on http://localhost:3000","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"level":"info","message":"🌍 Environment: development","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"level":"info","message":"📊 Health check available at: http://localhost:3000/health","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"level":"info","message":"🔒 Rate limiting: Enabled","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"level":"info","message":"📝 Request logging: Disabled","service":"bioverse-api","timestamp":"2025-07-25 20:16:29"}
+{"heapTotal":"21.99 MB","heapUsed":"19.16 MB","level":"warn","message":"High memory usage detected","percentage":"87.14%","service":"bioverse-api","timestamp":"2025-07-25 20:17:29"}
+{"heapTotal":"21.99 MB","heapUsed":"19.25 MB","level":"warn","message":"High memory usage detected","percentage":"87.54%","service":"bioverse-api","timestamp":"2025-07-25 20:18:29"}
+{"heapTotal":"21.99 MB","heapUsed":"19.30 MB","level":"warn","message":"High memory usage detected","percentage":"87.78%","service":"bioverse-api","timestamp":"2025-07-25 20:19:29"}
+{"heapTotal":"21.99 MB","heapUsed":"19.34 MB","level":"warn","message":"High memory usage detected","percentage":"87.95%","service":"bioverse-api","timestamp":"2025-07-25 20:20:29"}
+{"avgResponseTime":"0.00ms","errorRate":"0.00%","level":"info","memoryUsage":"19.39 MB","message":"Performance Stats:","requests":0,"service":"bioverse-api","timestamp":"2025-07-25 20:21:29","uptime":"300s"}
+{"heapTotal":"21.99 MB","heapUsed":"19.41 MB","level":"warn","message":"High memory usage detected","percentage":"88.28%","service":"bioverse-api","timestamp":"2025-07-25 20:21:29"}
+{"heapTotal":"21.99 MB","heapUsed":"19.43 MB","level":"warn","message":"High memory usage detected","percentage":"88.38%","service":"bioverse-api","timestamp":"2025-07-25 20:21:29"}
+{"heapTotal":"21.99 MB","heapUsed":"19.47 MB","level":"warn","message":"High memory usage detected","percentage":"88.54%","service":"bioverse-api","timestamp":"2025-07-25 20:22:29"}
+{"level":"warn","message":"Payment service running in mock mode - no Stripe API key provided","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"level":"info","message":"Socket.IO server initialized successfully","module":"socket","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"level":"info","message":"🚀 BioVerse server running on http://localhost:3000","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"level":"info","message":"🌍 Environment: development","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"level":"info","message":"📊 Health check available at: http://localhost:3000/health","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"level":"info","message":"🔒 Rate limiting: Enabled","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"level":"info","message":"📝 Request logging: Disabled","service":"bioverse-api","timestamp":"2025-07-25 20:57:26"}
+{"heapTotal":"21.99 MB","heapUsed":"19.23 MB","level":"warn","message":"High memory usage detected","percentage":"87.46%","service":"bioverse-api","timestamp":"2025-07-25 20:58:26"}
+{"heapTotal":"21.99 MB","heapUsed":"19.32 MB","level":"warn","message":"High memory usage detected","percentage":"87.87%","service":"bioverse-api","timestamp":"2025-07-25 20:59:26"}
+{"heapTotal":"21.99 MB","heapUsed":"19.38 MB","level":"warn","message":"High memory usage detected","percentage":"88.12%","service":"bioverse-api","timestamp":"2025-07-25 21:00:26"}

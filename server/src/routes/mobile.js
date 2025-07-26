@@ -181,6 +181,8 @@ router.get('/analytics', authenticateToken, authorizeRoles(['admin']), (req, res
 
 // Offline sync data management
 router.post('/sync', authenticateToken, async (req, res) => {
+  try {
+    const { offlineData } = req.body;
     const userId = req.user.id;
 
     // Process offline data

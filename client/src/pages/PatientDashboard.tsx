@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useSocket } from '../SocketContext';
+import { useSocket } from '../hooks/useSocket';
 import { useAuth } from '../hooks/useAuth';
 import { AlertTriangle, CheckCircle, Calendar, Activity, Heart, TrendingUp, Phone, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -153,16 +153,25 @@ const PatientDashboard: React.FC = () => {
   const sendEmergencyAlert = (patientId: string, location: string) => {
     if (socket) {
       socket.emit('emergency:alert', {
+        id: Date.now().toString(), // Add unique ID for tracking
         patientId: patientId,
         location: location,
         severity: 'critical',
         symptoms: 'Patient initiated emergency',
         diagnosis: 'Immediate assistance required',
+        timestamp: new Date().toISOString(),
       });
       setEmergencySent(true);
       setLoadingLocation(false);
-      setEmergencyMessage('Emergency alert sent! Responders have been notified.');
+      setEmergencyMessage('🚨 Emergency alert sent! Responders have been notified and are on their way.');
     }
+  };
+
+  const resetEmergencyState = () => {
+    setEmergencySent(false);
+    setEmergencyAcknowledged(false);
+    setEmergencyMessage('');
+    setLoadingLocation(false);
   };
 
   const getStatusColor = (status: string) => {
@@ -228,28 +237,62 @@ const PatientDashboard: React.FC = () => {
       </div>
 
       {/* Emergency Button */}
-      <div className="mb-8 p-6 bg-red-50 dark:bg-red-950 rounded-xl shadow-lg border border-red-200 dark:border-red-800">
+      <div className="mb-8 p-6 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 rounded-xl shadow-2xl border-2 border-red-300 dark:border-red-700">
         <div className="text-center">
-          <AlertTriangle className="mx-auto mb-4 text-red-600 dark:text-red-400" size={48} />
-          <h2 className="text-2xl font-bold text-red-700 dark:text-red-300 mb-4">Emergency Assistance</h2>
-          <p className="text-red-600 dark:text-red-400 mb-6">
-            In case of a medical emergency, press the button below to alert health workers and ambulance services.
+          <motion.div
+            animate={emergencySent ? {} : { scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="mb-4"
+          >
+            <AlertTriangle className="mx-auto text-red-600 dark:text-red-400" size={56} />
+          </motion.div>
+          <h2 className="text-3xl font-bold text-red-700 dark:text-red-300 mb-4">🚨 Emergency Assistance</h2>
+          <p className="text-red-600 dark:text-red-400 mb-6 text-lg">
+            In case of a medical emergency, press the button below to instantly alert health workers and ambulance services.
           </p>
-          <button
+          <motion.button
             onClick={handleEmergencyClick}
             disabled={emergencySent || loadingLocation}
-            className={`w-full sm:w-auto px-8 py-4 rounded-lg text-white font-bold text-xl transition-all duration-300 ${
-              emergencySent ? 'bg-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700 hover:scale-105'
+            whileHover={emergencySent || loadingLocation ? {} : { scale: 1.05 }}
+            whileTap={emergencySent || loadingLocation ? {} : { scale: 0.95 }}
+            animate={emergencySent ? {} : { boxShadow: ['0 0 0 0 rgba(239, 68, 68, 0.7)', '0 0 0 20px rgba(239, 68, 68, 0)'] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className={`w-full sm:w-auto px-12 py-6 rounded-full text-white font-bold text-2xl transition-all duration-300 shadow-2xl ${
+              emergencySent ? 'bg-green-600 cursor-not-allowed' : 
+              loadingLocation ? 'bg-orange-500 cursor-wait' :
+              'bg-red-600 hover:bg-red-700 active:bg-red-800'
             }`}
           >
-            {loadingLocation ? 'Getting Location...' : emergencySent ? 'Alert Sent!' : 'EMERGENCY BUTTON'}
-          </button>
+            {loadingLocation ? (
+              <>
+                <span className="animate-spin inline-block mr-2">⚡</span>
+                Getting Location...
+              </>
+            ) : emergencySent ? (
+              <>
+                <CheckCircle className="inline-block mr-2" size={24} />
+                Alert Sent!
+              </>
+            ) : (
+              <>
+                🆘 EMERGENCY BUTTON
+              </>
+            )}
+          </motion.button>
           {emergencyMessage && (
             <div className={`mt-4 p-3 rounded-lg ${emergencyAcknowledged ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}`}>
               <p className={`text-sm ${emergencyAcknowledged ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {emergencyMessage}
                 {emergencyAcknowledged && <CheckCircle className="inline-block ml-2" size={16} />}
               </p>
+              {(emergencySent || emergencyAcknowledged) && (
+                <button
+                  onClick={resetEmergencyState}
+                  className="mt-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm rounded-lg transition-all"
+                >
+                  Reset Emergency Status
+                </button>
+              )}
             </div>
           )}
         </div>

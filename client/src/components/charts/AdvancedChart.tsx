@@ -40,8 +40,8 @@ ChartJS.register(
 interface AdvancedChartProps {
   type: 'line' | 'bar' | 'doughnut' | 'pie' | 'area';
   title: string;
-  data: ChartData<any>;
-  options?: ChartOptions<any>;
+  data: ChartData<'line' | 'bar' | 'doughnut' | 'pie'>;
+  options?: ChartOptions<'line' | 'bar' | 'doughnut' | 'pie'>;
   height?: number;
   showControls?: boolean;
   realTime?: boolean;
@@ -62,40 +62,39 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
   onDataUpdate,
   className = ''
 }) => {
-  const chartRef = useRef<any>(null);
+  const chartRef = useRef<ChartJS | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [trend, setTrend] = useState<'up' | 'down' | 'stable'>('stable');
 
   // Real-time data updates
   useEffect(() => {
+    const calculateTrendInEffect = () => {
+      if (data.datasets && data.datasets[0] && data.datasets[0].data) {
+        const dataPoints = data.datasets[0].data as number[];
+        if (dataPoints.length >= 2) {
+          const last = dataPoints[dataPoints.length - 1];
+          const previous = dataPoints[dataPoints.length - 2];
+          
+          if (last > previous) setTrend('up');
+          else if (last < previous) setTrend('down');
+          else setTrend('stable');
+        }
+      }
+    };
+
     if (realTime && onDataUpdate) {
       const interval = setInterval(() => {
         onDataUpdate();
-        calculateTrend();
+        calculateTrendInEffect();
       }, updateInterval);
 
       return () => clearInterval(interval);
     }
-  }, [realTime, updateInterval, onDataUpdate]);
-
-  // Calculate trend based on data
-  const calculateTrend = () => {
-    if (data.datasets && data.datasets[0] && data.datasets[0].data) {
-      const dataPoints = data.datasets[0].data as number[];
-      if (dataPoints.length >= 2) {
-        const last = dataPoints[dataPoints.length - 1];
-        const previous = dataPoints[dataPoints.length - 2];
-        
-        if (last > previous) setTrend('up');
-        else if (last < previous) setTrend('down');
-        else setTrend('stable');
-      }
-    }
-  };
+  }, [realTime, updateInterval, onDataUpdate, data]);
 
   // Default chart options with BioVerse branding
-  const defaultOptions: ChartOptions<any> = {
+  const defaultOptions: ChartOptions<'line' | 'bar' | 'doughnut' | 'pie'> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -125,7 +124,7 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
         cornerRadius: 8,
         displayColors: true,
         callbacks: {
-          afterLabel: function(context: any) {
+          afterLabel: function(context: { datasetIndex: number; parsed: { y: number } }) {
             // Add custom health insights to tooltips
             if (type === 'line' && context.datasetIndex === 0) {
               const value = context.parsed.y;

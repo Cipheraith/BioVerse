@@ -134,6 +134,17 @@ router.get('/:patientId/risk-analysis', authenticateToken, authorizeRoles(['heal
 
 // Get population health insights (for Ministry of Health)
 router.get('/population/insights', authenticateToken, authorizeRoles(['admin', 'moh']), async (req, res) => {
+  try {
+    const populationInsights = await healthDataAggregator.getPopulationHealthInsights();
+    
+    res.json({
+      insights: populationInsights,
+      message: 'Population health insights retrieved successfully'
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to get population insights', error: error.message });
+  }
+});
 
 // Get resource allocation recommendations
 router.get('/population/resource-allocation', authenticateToken, authorizeRoles(['admin', 'moh']), async (req, res) => {

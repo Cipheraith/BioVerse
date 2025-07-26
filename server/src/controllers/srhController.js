@@ -430,6 +430,8 @@ const getMenstrualCycleHistory = async (req, res) => {
 // =======================
 
 const getSexualHealthEducation = async (req, res) => {
+  try {
+    const { category, ageGroup } = req.query;
 
     const educationContent = [
       {

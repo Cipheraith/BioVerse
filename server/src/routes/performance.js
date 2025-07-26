@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getPerformanceStats, resetStats } = require('../middleware/performance');
+const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 // Get performance statistics
 router.get('/stats', authenticateToken, authorizeRoles(['admin', 'moh']), (req, res) => {

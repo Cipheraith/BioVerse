@@ -65,6 +65,10 @@ app.use((req, res, next) => {
 // Performance monitoring middleware
 app.use(performanceMonitor);
 
+// Import routers
+const mainRouter = require('./src/routes/index');
+const lumaRouter = require('./src/routes/luma');
+
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.status(200).json({
