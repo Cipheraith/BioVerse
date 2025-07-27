@@ -3462,3 +3462,27 @@
 {"level":"info","message":"Using model llama3.2:3b for Luma responses","module":"ai","service":"bioverse-api","timestamp":"2025-07-27 11:25:54"}
 {"level":"warn","message":"Payment service running in mock mode - no Stripe API key provided","service":"bioverse-api","timestamp":"2025-07-27 11:25:54"}
 {"code":"EIO","errno":-5,"level":"error","message":"Uncaught Exception: EIO: i/o error, write","service":"bioverse-api","stack":"Error: EIO: i/o error, write\n    at writeSync (node:fs:923:3)\n    at SyncWriteStream._write (node:internal/fs/sync_write_stream:27:5)\n    at writeOrBuffer (node:internal/streams/writable:572:12)\n    at _write (node:internal/streams/writable:501:10)\n    at Writable.write (node:internal/streams/writable:510:10)\n    at console.value (node:internal/console/constructor:298:16)\n    at console.log (node:internal/console/constructor:384:26)\n    at initializeDatabase (/home/fred/Downloads/BioVerse/server/src/config/database.js:26:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","syscall":"write","timestamp":"2025-07-27 11:25:55"}
+{"level":"info","message":"Using model llama3.2:3b for Luma responses","module":"ai","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"warn","message":"Payment service running in mock mode - no Stripe API key provided","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"Ollama is available with model: llama3.2:3b","module":"ai","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"Ollama service initialized successfully","module":"ai","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"Socket.IO server initialized successfully","module":"socket","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"🚀 BioVerse server running on http://localhost:3000","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"🌍 Environment: development","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"📊 Health check available at: http://localhost:3000/health","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"🔒 Rate limiting: Enabled","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"📝 Request logging: Disabled","service":"bioverse-api","timestamp":"2025-07-27 12:04:35"}
+{"level":"info","message":"User connected: jamengo@gmail.com (20) - Role: patient","module":"socket","service":"bioverse-api","timestamp":"2025-07-27 12:05:13"}
+{"level":"info","message":"User connected: jamengo@gmail.com (20) - Role: patient","module":"socket","service":"bioverse-api","timestamp":"2025-07-27 12:05:14"}
+{"heapTotal":"22.49 MB","heapUsed":"19.95 MB","level":"warn","message":"High memory usage detected","percentage":"88.73%","service":"bioverse-api","timestamp":"2025-07-27 12:05:35"}
+{"heapTotal":"24.24 MB","heapUsed":"22.17 MB","level":"warn","message":"High memory usage detected","percentage":"91.46%","service":"bioverse-api","timestamp":"2025-07-27 12:06:35"}
+{"heapTotal":"25.74 MB","heapUsed":"22.49 MB","level":"warn","message":"High memory usage detected","percentage":"87.39%","service":"bioverse-api","timestamp":"2025-07-27 12:07:35"}
+{"heapTotal":"25.74 MB","heapUsed":"22.56 MB","level":"warn","message":"High memory usage detected","percentage":"87.67%","service":"bioverse-api","timestamp":"2025-07-27 12:08:35"}
+{"avgResponseTime":"18.36ms","errorRate":"41.38%","level":"info","memoryUsage":"22.66 MB","message":"Performance Stats:","requests":29,"service":"bioverse-api","timestamp":"2025-07-27 12:09:35","uptime":"300s"}
+{"heapTotal":"25.74 MB","heapUsed":"22.69 MB","level":"warn","message":"High memory usage detected","percentage":"88.15%","service":"bioverse-api","timestamp":"2025-07-27 12:09:35"}
+{"heapTotal":"25.74 MB","heapUsed":"22.70 MB","level":"warn","message":"High memory usage detected","percentage":"88.21%","service":"bioverse-api","timestamp":"2025-07-27 12:09:35"}
+{"heapTotal":"24.99 MB","heapUsed":"23.02 MB","level":"warn","message":"High memory usage detected","percentage":"92.13%","service":"bioverse-api","timestamp":"2025-07-27 12:10:35"}
+{"level":"info","message":"User disconnected: jamengo@gmail.com (20) - Reason: transport close","module":"socket","service":"bioverse-api","timestamp":"2025-07-27 12:10:36"}
+{"level":"info","message":"User disconnected: jamengo@gmail.com (20) - Reason: transport error","module":"socket","service":"bioverse-api","timestamp":"2025-07-27 12:10:36"}
+{"heapTotal":"24.99 MB","heapUsed":"23.22 MB","level":"warn","message":"High memory usage detected","percentage":"92.92%","service":"bioverse-api","timestamp":"2025-07-27 12:11:35"}
+{"level":"info","message":"SIGINT received, shutting down gracefully...","service":"bioverse-api","timestamp":"2025-07-27 12:11:35"}

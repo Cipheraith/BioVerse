@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { HeartPulse, BrainCircuit, Activity, Users, Sparkles, Zap, Shield, Globe } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  HeartPulse, BrainCircuit, Activity, Users, Sparkles, Zap, Shield, Globe,
+  ArrowRight, Play, CheckCircle, TrendingUp, Eye, Cpu, Database,
+  Stethoscope, Brain, Dna, Microscope, Pulse, Target, Award, Star
+} from 'lucide-react';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();

@@ -22,6 +22,8 @@ import {
 import { HealthTwin } from '../../types/healthTwin';
 import healthTwinService from '../../services/healthTwinService';
 import { HealthAvatar3D } from './HealthAvatar3D';
+import { AnatomicalModel3D } from './AnatomicalModel3D';
+import { HealthDataVisualization3D } from './HealthDataVisualization3D';
 
 interface HealthTwinOverviewProps {
   healthTwin: HealthTwin;
