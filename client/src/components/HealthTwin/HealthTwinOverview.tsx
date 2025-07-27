@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { HealthTwin } from '../../types/healthTwin';
 import healthTwinService from '../../services/healthTwinService';
+import { HealthAvatar3D } from './HealthAvatar3D';
 
 interface HealthTwinOverviewProps {
   healthTwin: HealthTwin;
@@ -65,6 +66,20 @@ export const HealthTwinOverview: React.FC<HealthTwinOverviewProps> = ({
       animate="visible"
       className="space-y-6"
     >
+      {/* 3D Avatar Visualization */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/20 dark:to-gray-800/20 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center mb-4">
+            <User className="h-6 w-6 text-gray-600 dark:text-gray-400 mr-2" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">3D Avatar</h3>
+          </div>
+          <HealthAvatar3D healthTwin={healthTwin} healthSummary={healthSummary} />
+          <div className="mt-4 text-gray-700 dark:text-gray-300 text-sm">
+            Rotate and explore the avatar! More features coming soon.
+          </div>
+        </div>
+      </motion.div>
+
       {/* Patient Information */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Basic Information */}

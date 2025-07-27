@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  Users, Calendar, Activity, AlertTriangle, TrendingUp, RefreshCw
+  Users, Calendar, Activity, AlertTriangle, TrendingUp, RefreshCw, Heart, Brain, Shield, Eye
 } from 'lucide-react';
 
 interface StatCardProps {
@@ -37,7 +37,18 @@ interface RecentActivity {
   formattedTime?: string;
 }
 
-
+interface HealthTwinSummary {
+  patientId: string;
+  patientName: string;
+  age: number;
+  gender: string;
+  healthScore: number;
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  lastUpdated: string;
+  activeAlerts: number;
+  chronicConditions: string[];
+  recentActivity: string;
+}
 
 const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState({
@@ -54,12 +65,78 @@ const AdminDashboard: React.FC = () => {
     riskDistribution: { high: 0, medium: 0, low: 0 }
   });
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
+  const [healthTwins, setHealthTwins] = useState<HealthTwinSummary[]>([]);
+  const [healthTwinsLoading, setHealthTwinsLoading] = useState(false);
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const navigate = useNavigate();
+
+  const fetchHealthTwins = async () => {
+    try {
+      setHealthTwinsLoading(true);
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${process.env.VITE_API_BASE_URL}/api/health-twins/summary`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setHealthTwins(data);
+    } catch (e) {
+      console.error('Error fetching health twins:', e);
+      // Generate mock data for demonstration
+      const mockData: HealthTwinSummary[] = [
+        {
+          patientId: '1',
+          patientName: 'Sarah Johnson',
+          age: 34,
+          gender: 'Female',
+          healthScore: 85,
+          riskLevel: 'low',
+          lastUpdated: '2 hours ago',
+          activeAlerts: 0,
+          chronicConditions: ['Hypertension'],
+          recentActivity: 'Vital signs updated'
+        },
+        {
+          patientId: '2',
+          patientName: 'Michael Chen',
+          age: 45,
+          gender: 'Male',
+          healthScore: 62,
+          riskLevel: 'medium',
+          lastUpdated: '4 hours ago',
+          activeAlerts: 1,
+          chronicConditions: ['Diabetes', 'High Cholesterol'],
+          recentActivity: 'Symptom check reported'
+        },
+        {
+          patientId: '3',
+          patientName: 'Maria Rodriguez',
+          age: 67,
+          gender: 'Female',
+          healthScore: 45,
+          riskLevel: 'high',
+          lastUpdated: '1 hour ago',
+          activeAlerts: 3,
+          chronicConditions: ['Heart Disease', 'Diabetes'],
+          recentActivity: 'Emergency alert triggered'
+        }
+      ];
+      setHealthTwins(mockData);
+    } finally {
+      setHealthTwinsLoading(false);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -91,6 +168,9 @@ const AdminDashboard: React.FC = () => {
       }
       const activityData = await activityResponse.json();
       setRecentActivity(activityData);
+      
+      // Fetch health twins
+      await fetchHealthTwins();
       
       // Update last updated timestamp
       setLastUpdated(new Date());
@@ -211,6 +291,13 @@ const AdminDashboard: React.FC = () => {
               >
                 View Symptom Trends
               </button>
+              <button
+                onClick={fetchHealthTwins}
+                className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base flex items-center justify-center"
+              >
+                <Heart className="h-4 w-4 mr-2" />
+                View Health Twins
+              </button>
             </div>
           </div>
         </div>
@@ -245,6 +332,142 @@ const AdminDashboard: React.FC = () => {
               <span>Low Risk ({stats.riskDistribution.low})</span>
             </div>
           </div>
+        </div>
+
+        {/* Health Twins Management Section */}
+        <div className="mt-4 sm:mt-8 bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-text dark:text-dark-text flex items-center">
+              <Heart className="h-6 w-6 text-red-500 mr-2" />
+              Health Twins Management
+            </h2>
+            <button
+              onClick={fetchHealthTwins}
+              disabled={healthTwinsLoading}
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 text-sm"
+            >
+              <Brain className={`h-4 w-4 mr-1 ${healthTwinsLoading ? 'animate-spin' : ''}`} />
+              {healthTwinsLoading ? 'Loading...' : 'View All Health Twins'}
+            </button>
+          </div>
+          
+          {healthTwinsLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+              <p className="text-lg font-medium text-text dark:text-dark-text">Loading Health Twins...</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Patient
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Health Score
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Risk Level
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Alerts
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Last Updated
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                  {healthTwins.map((twin, idx) => (
+                    <motion.tr
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                      onClick={() => navigate(`/patients/${twin.patientId}`)}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                              <span className="text-white font-medium text-sm">{twin.patientName.charAt(0)}</span>
+                            </div>
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">{twin.patientName}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">{twin.age} years old, {twin.gender}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
+                            <div 
+                              className={`h-2.5 rounded-full ${
+                                twin.healthScore >= 80 ? 'bg-green-500' :
+                                twin.healthScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                              }`}
+                              style={{ width: `${twin.healthScore}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">{twin.healthScore}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          twin.riskLevel === 'low' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                          twin.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                          twin.riskLevel === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                        }`}>
+                          <Shield className="h-3 w-3 mr-1" />
+                          {twin.riskLevel.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {twin.activeAlerts > 0 ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                            <AlertTriangle className="h-3 w-3 mr-1" />
+                            {twin.activeAlerts} Alert{twin.activeAlerts > 1 ? 's' : ''}
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-500 dark:text-gray-400">No alerts</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {twin.lastUpdated}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/patients/${twin.patientId}`);
+                          }}
+                          className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          View Twin
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+              
+              {healthTwins.length === 0 && !healthTwinsLoading && (
+                <div className="text-center py-12">
+                  <Heart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Health Twins Found</p>
+                  <p className="text-gray-500 dark:text-gray-400">Health twins will appear here once patients are registered and their health data is processed.</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

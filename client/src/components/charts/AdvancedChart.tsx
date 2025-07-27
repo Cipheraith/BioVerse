@@ -21,7 +21,9 @@ import {
 } from 'chart.js';
 import { Line, Bar, Doughnut, Pie } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
-import { RefreshCw, Download, Maximize2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { RefreshCw, Download, Maximize2, TrendingUp, TrendingDown, Minus, Activity } from 'lucide-react';
+import Plot from 'react-plotly.js';
+import { PlotData, Layout, Config } from 'plotly.js';
 
 // Register Chart.js components
 ChartJS.register(
@@ -38,16 +40,18 @@ ChartJS.register(
 );
 
 interface AdvancedChartProps {
-  type: 'line' | 'bar' | 'doughnut' | 'pie' | 'area';
+  type: 'line' | 'bar' | 'doughnut' | 'pie' | 'area' | 'heatmap' | 'scatter3d' | 'surface' | 'radar';
   title: string;
-  data: ChartData<'line' | 'bar' | 'doughnut' | 'pie'>;
+  data: ChartData<'line' | 'bar' | 'doughnut' | 'pie'> | PlotData[];
   options?: ChartOptions<'line' | 'bar' | 'doughnut' | 'pie'>;
+  layout?: Partial<Layout>;
   height?: number;
   showControls?: boolean;
   realTime?: boolean;
   updateInterval?: number;
   onDataUpdate?: () => void;
   className?: string;
+  plotlyConfig?: Partial<Config>;
 }
 
 const AdvancedChart: React.FC<AdvancedChartProps> = ({
@@ -55,26 +59,43 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
   title,
   data,
   options = {},
+  layout = {},
   height = 300,
   showControls = true,
   realTime = false,
   updateInterval = 5000,
   onDataUpdate,
-  className = ''
+  className = '',
+  plotlyConfig = {}
 }) => {
   const chartRef = useRef<ChartJS | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [trend, setTrend] = useState<'up' | 'down' | 'stable'>('stable');
 
+  // Check if data is Plotly format
+  const isPlotlyChart = ['heatmap', 'scatter3d', 'surface', 'radar'].includes(type);
+  
   // Real-time data updates
   useEffect(() => {
     const calculateTrendInEffect = () => {
-      if (data.datasets && data.datasets[0] && data.datasets[0].data) {
+      if (!isPlotlyChart && data.datasets && data.datasets[0] && data.datasets[0].data) {
         const dataPoints = data.datasets[0].data as number[];
         if (dataPoints.length >= 2) {
           const last = dataPoints[dataPoints.length - 1];
           const previous = dataPoints[dataPoints.length - 2];
+          
+          if (last > previous) setTrend('up');
+          else if (last < previous) setTrend('down');
+          else setTrend('stable');
+        }
+      } else if (isPlotlyChart && Array.isArray(data)) {
+        // Handle Plotly data trend calculation
+        const plotData = data[0];
+        if (plotData.y && Array.isArray(plotData.y) && plotData.y.length >= 2) {
+          const yData = plotData.y as number[];
+          const last = yData[yData.length - 1];
+          const previous = yData[yData.length - 2];
           
           if (last > previous) setTrend('up');
           else if (last < previous) setTrend('down');
@@ -91,7 +112,7 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
 
       return () => clearInterval(interval);
     }
-  }, [realTime, updateInterval, onDataUpdate, data]);
+  }, [realTime, updateInterval, onDataUpdate, data, isPlotlyChart]);
 
   // Default chart options with BioVerse branding
   const defaultOptions: ChartOptions<'line' | 'bar' | 'doughnut' | 'pie'> = {
@@ -211,15 +232,52 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
   const trendColor = trend === 'up' ? 'text-green-500' : 
                      trend === 'down' ? 'text-red-500' : 'text-gray-500';
 
+  // Default Plotly layout
+  const defaultPlotlyLayout: Partial<Layout> = {
+    autosize: true,
+    margin: { l: 50, r: 50, t: 50, b: 50 },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    font: {
+      family: 'Inter, sans-serif',
+      size: 12,
+      color: '#374151'
+    },
+    ...layout
+  };
+
+  // Default Plotly config
+  const defaultPlotlyConfig: Partial<Config> = {
+    displayModeBar: true,
+    displaylogo: false,
+    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+    ...plotlyConfig
+  };
+
   // Render chart based on type
   const renderChart = () => {
+    if (isPlotlyChart) {
+      return (
+        <Plot
+          data={data as PlotData[]}
+          layout={{
+            ...defaultPlotlyLayout,
+            height: isFullscreen ? window.innerHeight - 200 : height
+          }}
+          config={defaultPlotlyConfig}
+          style={{ width: '100%', height: '100%' }}
+          useResizeHandler={true}
+        />
+      );
+    }
+
     switch (type) {
       case 'line':
       case 'area':
         return (
           <Line
             ref={chartRef}
-            data={data}
+            data={data as ChartData<'line'>}
             options={mergedOptions}
             height={height}
           />
@@ -228,7 +286,7 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
         return (
           <Bar
             ref={chartRef}
-            data={data}
+            data={data as ChartData<'bar'>}
             options={mergedOptions}
             height={height}
           />
@@ -237,7 +295,7 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
         return (
           <Doughnut
             ref={chartRef}
-            data={data}
+            data={data as ChartData<'doughnut'>}
             options={mergedOptions}
             height={height}
           />
@@ -246,7 +304,7 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
         return (
           <Pie
             ref={chartRef}
-            data={data}
+            data={data as ChartData<'pie'>}
             options={mergedOptions}
             height={height}
           />

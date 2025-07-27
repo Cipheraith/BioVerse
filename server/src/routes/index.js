@@ -34,6 +34,7 @@ const marketplaceRoutes = require('./marketplace');
 const mobileRoutes = require('./mobile');
 const feedbackRoutes = require('./feedback');
 const complianceRoutes = require('./compliance');
+const lumaRoutes = require('./luma');
 
 router.use('/auth', authRoutes);
 router.use('/patients', patientRoutes);
@@ -59,5 +60,6 @@ router.use('/marketplace', marketplaceRoutes);
 router.use('/mobile', mobileRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/compliance', complianceRoutes);
+router.use('/luma', lumaRoutes);
 
 module.exports = router;

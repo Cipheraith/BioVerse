@@ -1,8 +1,10 @@
 const axios = require('axios');
 const { ai: logger } = require('./logger');
+const ollamaService = require('./ollamaService');
 
-// Mock AI analysis for development (replace with actual AI service in production)
-const MOCK_AI_ENABLED = !process.env.OPENAI_API_KEY || process.env.NODE_ENV === 'development';
+// AI service configuration - prefer Ollama, fallback to OpenAI, then mock
+const USE_OLLAMA = process.env.USE_OLLAMA !== 'false'; // Use Ollama by default
+const MOCK_AI_ENABLED = false; // Disable mock AI to force real AI usage
 
 // Common symptoms and their associated conditions
 const SYMPTOM_DATABASE = {
@@ -124,6 +126,20 @@ const analyzeSymptoms = async (symptoms, patientContext = {}) => {
   try {
     if (MOCK_AI_ENABLED) {
       return await mockSymptomAnalysis(symptoms, patientContext);
+    }
+    
+    // Try Ollama first, then fallback to OpenAI
+    if (USE_OLLAMA) {
+      try {
+        logger.info('Using Ollama for symptom analysis');
+        return await ollamaService.analyzeSymptoms(symptoms, patientContext);
+      } catch (ollamaError) {
+        logger.warn('Ollama failed, falling back to OpenAI:', ollamaError.message);
+        if (process.env.OPENAI_API_KEY) {
+          return await realAIAnalysis(symptoms, patientContext);
+        }
+        throw ollamaError;
+      }
     } else {
       return await realAIAnalysis(symptoms, patientContext);
     }
@@ -142,11 +158,22 @@ const analyzeSymptoms = async (symptoms, patientContext = {}) => {
   }
 };
 
-// Get Luma response for general questions
+// Get Luma response for all types of health questions
 const getLumaResponse = async (query) => {
   const lowerCaseQuery = query.toLowerCase();
 
-  // Check SRH database first
+  // Check if this is a greeting or general conversation
+  const greetings = ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'how are you'];
+  const isGreeting = greetings.some(greeting => lowerCaseQuery.includes(greeting));
+  
+  if (isGreeting) {
+    return {
+      response: "Hello! I'm Luma, your AI health assistant powered by Llama 3.2. I'm here to help you with:\n\n• Health questions and concerns\n• Symptom analysis and guidance\n• Sexual and reproductive health information\n• General wellness tips\n• Healthcare navigation\n• Medical terminology explanations\n\nWhat can I help you with today? Please remember that while I can provide helpful information, I'm not a replacement for professional medical advice.",
+      type: 'greeting'
+    };
+  }
+
+  // Check for specific health topics in SRH database
   for (const key in SRH_DATABASE) {
     const entry = SRH_DATABASE[key];
     if (entry.keywords.some(keyword => lowerCaseQuery.includes(keyword))) {
@@ -154,9 +181,87 @@ const getLumaResponse = async (query) => {
     }
   }
 
-  // If no SRH match, use symptom analysis
-  const symptomAnalysis = await analyzeSymptoms(query);
-  return { response: symptomAnalysis, type: 'symptom' };
+  // Check for common health questions
+  const healthTopics = {
+    'nutrition': 'Good nutrition is essential for health. Focus on a balanced diet with plenty of fruits, vegetables, whole grains, and lean proteins. Stay hydrated and limit processed foods, sugar, and excessive salt.',
+    'exercise': 'Regular physical activity is crucial for maintaining good health. Aim for at least 150 minutes of moderate exercise or 75 minutes of vigorous exercise per week, plus strength training twice a week.',
+    'sleep': 'Quality sleep is vital for health. Most adults need 7-9 hours of sleep per night. Maintain a consistent sleep schedule, create a comfortable sleep environment, and avoid screens before bedtime.',
+    'stress': 'Managing stress is important for both mental and physical health. Try relaxation techniques like deep breathing, meditation, or yoga. Regular exercise and social support also help manage stress.',
+    'vaccination': 'Vaccines are safe and effective tools for preventing serious diseases. Stay up to date with recommended vaccinations. Consult your healthcare provider about which vaccines you need.',
+    'diabetes': 'Diabetes management involves monitoring blood sugar, following a healthy diet, regular exercise, and taking medications as prescribed. Regular check-ups with your healthcare team are essential.',
+    'hypertension': 'High blood pressure can be managed through lifestyle changes like reducing salt intake, regular exercise, maintaining a healthy weight, and taking prescribed medications.',
+    'mental health': 'Mental health is just as important as physical health. If you\'re experiencing persistent sadness, anxiety, or other mental health concerns, please reach out to a mental health professional.'
+  };
+
+  for (const [topic, response] of Object.entries(healthTopics)) {
+    if (lowerCaseQuery.includes(topic) || lowerCaseQuery.includes(topic.replace(' ', ''))) {
+      return { response, type: 'general_health' };
+    }
+  }
+
+  // Use Ollama (Llama 3.2) for comprehensive health questions
+  if (USE_OLLAMA) {
+    try {
+      logger.info('Using Ollama for Luma response');
+      return await ollamaService.getLumaResponse(query);
+    } catch (error) {
+      logger.warn('Ollama failed for Luma response, using fallback:', error.message);
+      // Continue to fallback responses below instead of throwing
+    }
+  }
+
+  // Check if this looks like a symptom query
+  const symptomKeywords = ['pain', 'ache', 'hurt', 'feel', 'symptom', 'sick', 'ill', 'fever', 'cough', 'headache', 'nausea', 'tired', 'dizzy'];
+  const isSymptomQuery = symptomKeywords.some(keyword => lowerCaseQuery.includes(keyword));
+  
+  if (isSymptomQuery) {
+    const symptomAnalysis = await analyzeSymptoms(query);
+    const formattedResponse = formatSymptomAnalysisForChat(symptomAnalysis);
+    return { response: formattedResponse, type: 'symptom' };
+  }
+
+  // Default response for general queries
+  return {
+    response: "I'm here to help with your health-related questions! I can assist with:\n\n• Symptom analysis and health concerns\n• General health and wellness information\n• Sexual and reproductive health topics\n• Nutrition and exercise guidance\n• Mental health support resources\n• Medical terminology explanations\n\nCould you please be more specific about what health topic you'd like to discuss? Remember, I provide information for educational purposes and always recommend consulting healthcare professionals for medical advice.",
+    type: 'general'
+  };
+};
+
+// Format symptom analysis as readable chat response
+const formatSymptomAnalysisForChat = (analysis) => {
+  let response = `Based on your symptoms, here's what I found:\n\n`;
+  
+  response += `**Primary Assessment:** ${analysis.primaryDiagnosis}\n`;
+  response += `**Severity Level:** ${analysis.severity}\n`;
+  response += `**Confidence:** ${analysis.confidence}%\n\n`;
+  
+  if (analysis.possibleConditions && analysis.possibleConditions.length > 0) {
+    response += `**Possible conditions to consider:**\n`;
+    analysis.possibleConditions.forEach(condition => {
+      response += `• ${condition}\n`;
+    });
+    response += `\n`;
+  }
+  
+  if (analysis.recommendations && analysis.recommendations.length > 0) {
+    response += `**My recommendations:**\n`;
+    analysis.recommendations.forEach(rec => {
+      response += `• ${rec}\n`;
+    });
+    response += `\n`;
+  }
+  
+  if (analysis.redFlags && analysis.redFlags.length > 0) {
+    response += `**⚠️ Important alerts:**\n`;
+    analysis.redFlags.forEach(flag => {
+      response += `• ${flag}\n`;
+    });
+    response += `\n`;
+  }
+  
+  response += `**Remember:** This is an AI assessment and should not replace professional medical advice. Please consult with a healthcare provider for proper diagnosis and treatment.`;
+  
+  return response;
 };
 
 // Mock AI analysis for development

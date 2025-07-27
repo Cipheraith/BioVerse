@@ -1,851 +1,154 @@
 
-> server@1.0.0 dev
-> nodemon src/index.js
+> server@1.0.0 start
+> node src/index.js
 
-[33m[nodemon] 3.1.10[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
-[32m[nodemon] starting `node src/index.js`[39m
+[dotenv@17.2.0] injecting env (25) from .env (tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] })
+2025-07-26 15:48:55 [[32minfo[39m]: Using model llama3.2:3b for Luma responses {
+  "service": "bioverse-api",
+  "module": "ai"
+}
+2025-07-26 15:48:55 [[33mwarn[39m]: Payment service running in mock mode - no Stripe API key provided {
+  "service": "bioverse-api"
+}
+2025-07-26 15:48:55 [[32minfo[39m]: Ollama is available with model: llama3.2:3b {
+  "service": "bioverse-api",
+  "module": "ai"
+}
+2025-07-26 15:48:55 [[32minfo[39m]: Ollama service initialized successfully {
+  "service": "bioverse-api",
+  "module": "ai"
+}
 Connected to PostgreSQL database
 Tables created or already exist.
 Telemedicine seeding completed - monitoring sessions seeding disabled for debugging
-2025-07-22 11:58:41 [[32minfo[39m]: Socket.IO server initialized successfully {
+2025-07-26 15:48:55 [[32minfo[39m]: Socket.IO server initialized successfully {
   "service": "bioverse-api",
   "module": "socket"
 }
-2025-07-22 11:58:41 [[31merror[39m]: Uncaught Exception: listen EADDRINUSE: address already in use :::3000 {
-  "service": "bioverse-api",
-  "code": "EADDRINUSE",
-  "errno": -98,
-  "syscall": "listen",
-  "address": "::",
-  "port": 3000,
-  "stack": "Error: listen EADDRINUSE: address already in use :::3000\n    at Server.setupListenHandle [as _listen2] (node:net:1940:16)\n    at listenInCluster (node:net:1997:12)\n    at Server.listen (node:net:2102:7)\n    at /home/fred/Downloads/BioVerse/server/src/index.js:101:12\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
-}
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting child process[39m
-[32m[nodemon] starting `node src/index.js`[39m
-Connected to PostgreSQL database
-Tables created or already exist.
-Telemedicine seeding completed - monitoring sessions seeding disabled for debugging
-2025-07-22 12:03:41 [[32minfo[39m]: Socket.IO server initialized successfully {
-  "service": "bioverse-api",
-  "module": "socket"
-}
-2025-07-22 12:03:41 [[32minfo[39m]: 🚀 BioVerse server running on http://localhost:3000 {
+2025-07-26 15:48:55 [[32minfo[39m]: 🚀 BioVerse server running on http://localhost:3000 {
   "service": "bioverse-api"
 }
-2025-07-22 12:03:41 [[32minfo[39m]: 🌍 Environment: development {
+2025-07-26 15:48:55 [[32minfo[39m]: 🌍 Environment: development {
   "service": "bioverse-api"
 }
-2025-07-22 12:03:41 [[32minfo[39m]: 📊 Health check available at: http://localhost:3000/health {
+2025-07-26 15:48:55 [[32minfo[39m]: 📊 Health check available at: http://localhost:3000/health {
   "service": "bioverse-api"
 }
 Starting maternal health scheduler...
-2025-07-22 12:03:41 [[32minfo[39m]: 🔒 Rate limiting: Enabled {
+2025-07-26 15:48:55 [[32minfo[39m]: 🔒 Rate limiting: Enabled {
   "service": "bioverse-api"
 }
-2025-07-22 12:03:41 [[32minfo[39m]: 📝 Request logging: Disabled {
+2025-07-26 15:48:55 [[32minfo[39m]: 📝 Request logging: Disabled {
   "service": "bioverse-api"
 }
-2025-07-22 12:04:41 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:49:55 [[33mwarn[39m]: High memory usage detected {
   "service": "bioverse-api",
-  "heapUsed": "19.02 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "88.50%"
+  "heapUsed": "20.41 MB",
+  "heapTotal": "22.99 MB",
+  "percentage": "88.79%"
 }
 Active pregnancies without transport booked: 0
-2025-07-22 12:05:41 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:50:55 [[33mwarn[39m]: High memory usage detected {
   "service": "bioverse-api",
-  "heapUsed": "19.09 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "88.86%"
+  "heapUsed": "20.47 MB",
+  "heapTotal": "22.99 MB",
+  "percentage": "89.06%"
 }
 Active pregnancies without transport booked: 0
-2025-07-22 12:06:41 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:51:55 [[33mwarn[39m]: High memory usage detected {
   "service": "bioverse-api",
-  "heapUsed": "19.14 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.09%"
+  "heapUsed": "20.51 MB",
+  "heapTotal": "22.99 MB",
+  "percentage": "89.21%"
 }
 Active pregnancies without transport booked: 0
-2025-07-22 12:07:41 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:52:00 [[32minfo[39m]: User connected: admin@bioverse.com (4) - Role: admin {
   "service": "bioverse-api",
-  "heapUsed": "19.20 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.35%"
+  "module": "socket"
 }
-Active pregnancies without transport booked: 0
-2025-07-22 12:08:41 [[32minfo[39m]: Performance Stats: {
+2025-07-26 15:52:01 [[32minfo[39m]: User connected: admin@bioverse.com (4) - Role: admin {
   "service": "bioverse-api",
-  "uptime": "300s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.24 MB"
+  "module": "socket"
 }
-2025-07-22 12:08:41 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:52:55 [[33mwarn[39m]: High memory usage detected {
   "service": "bioverse-api",
-  "heapUsed": "19.26 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.64%"
-}
-2025-07-22 12:08:41 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.28 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.73%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 12:09:41 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.32 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.92%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:31:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.36 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.08%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:32:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.39 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.25%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:33:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.42 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.39%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:34:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "5476s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.46 MB"
-}
-2025-07-22 13:34:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.47 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.61%"
-}
-2025-07-22 13:34:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.49 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.68%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:35:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.52 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.83%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:36:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.55 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.96%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:37:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.57 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.09%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:38:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.60 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.22%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:39:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "5776s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.63 MB"
-}
-2025-07-22 13:39:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.64 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.41%"
-}
-2025-07-22 13:39:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.66 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.49%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:40:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.69 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.62%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:41:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.71 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.75%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:42:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.74 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "91.87%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:43:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.77 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "92.00%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:44:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "6076s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.80 MB"
-}
-2025-07-22 13:44:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.81 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "92.19%"
-}
-2025-07-22 13:44:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.83 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "92.26%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:45:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.85 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "92.39%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:46:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.88 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "92.52%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:47:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.91 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "92.65%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:48:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.22 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "85.45%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:49:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "6376s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.24 MB"
-}
-2025-07-22 13:49:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.26 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "85.63%"
-}
-2025-07-22 13:49:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.27 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "85.70%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:50:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.30 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "85.82%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:51:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.33 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "85.94%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:52:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.36 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.07%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:53:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.38 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.19%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:54:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "6676s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.41 MB"
-}
-2025-07-22 13:54:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.42 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.37%"
-}
-2025-07-22 13:54:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.44 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.44%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:55:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.47 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.57%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:56:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.49 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.69%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:57:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.52 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.81%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:58:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.55 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "86.93%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 13:59:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "6976s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.58 MB"
-}
-2025-07-22 13:59:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.59 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.12%"
-}
-2025-07-22 13:59:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.61 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.22%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:00:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.64 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.34%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:01:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.67 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.47%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:02:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.70 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.59%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:03:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.72 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.71%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:04:57 [[32minfo[39m]: Performance Stats: {
-  "service": "bioverse-api",
-  "uptime": "7276s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.75 MB"
-}
-2025-07-22 14:04:57 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.77 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.90%"
-}
-2025-07-22 14:04:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.78 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "87.97%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:05:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.81 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "88.09%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:06:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.84 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "88.21%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:07:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.86 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "88.33%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:08:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.89 MB",
-  "heapTotal": "22.49 MB",
+  "heapUsed": "21.22 MB",
+  "heapTotal": "23.99 MB",
   "percentage": "88.46%"
 }
 Active pregnancies without transport booked: 0
-2025-07-22 14:09:57 [[32minfo[39m]: Performance Stats: {
+2025-07-26 15:52:58 [[32minfo[39m]: Using mock AI analysis for symptoms: {
+  "0": "I",
+  "1": " ",
+  "2": "h",
+  "3": "a",
+  "4": "v",
+  "5": "e",
+  "6": " ",
+  "7": "a",
+  "8": " ",
+  "9": "h",
+  "10": "e",
+  "11": "a",
+  "12": "d",
+  "13": "a",
+  "14": "c",
+  "15": "h",
+  "16": "e",
+  "17": " ",
+  "18": "a",
+  "19": "n",
+  "20": "d",
+  "21": " ",
+  "22": "f",
+  "23": "l",
+  "24": "u",
+  "25": "e",
   "service": "bioverse-api",
-  "uptime": "7576s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
+  "module": "ai"
+}
+2025-07-26 15:53:55 [[32minfo[39m]: Performance Stats: {
+  "service": "bioverse-api",
+  "uptime": "300s",
+  "requests": 13,
+  "avgResponseTime": "11.46ms",
   "errorRate": "0.00%",
-  "memoryUsage": "19.92 MB"
+  "memoryUsage": "21.62 MB"
 }
-2025-07-22 14:09:57 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:53:55 [[33mwarn[39m]: High memory usage detected {
   "service": "bioverse-api",
-  "heapUsed": "19.94 MB",
-  "heapTotal": "22.49 MB",
-  "percentage": "88.67%"
+  "heapUsed": "21.64 MB",
+  "heapTotal": "24.99 MB",
+  "percentage": "86.60%"
 }
-2025-07-22 14:09:58 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:53:55 [[33mwarn[39m]: High memory usage detected {
   "service": "bioverse-api",
-  "heapUsed": "19.26 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.61%"
+  "heapUsed": "21.66 MB",
+  "heapTotal": "24.99 MB",
+  "percentage": "86.69%"
 }
 Active pregnancies without transport booked: 0
-2025-07-22 14:10:58 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:54:05 [[32minfo[39m]: User disconnected: admin@bioverse.com (4) - Reason: transport close {
   "service": "bioverse-api",
-  "heapUsed": "19.28 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.74%"
+  "module": "socket"
 }
-Active pregnancies without transport booked: 0
-2025-07-22 14:11:58 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:54:05 [[32minfo[39m]: User disconnected: admin@bioverse.com (4) - Reason: transport error {
   "service": "bioverse-api",
-  "heapUsed": "19.31 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "89.87%"
+  "module": "socket"
 }
-Active pregnancies without transport booked: 0
-2025-07-22 14:12:58 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:54:09 [[32minfo[39m]: User connected: admin@bioverse.com (4) - Role: admin {
   "service": "bioverse-api",
-  "heapUsed": "19.34 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.00%"
+  "module": "socket"
 }
-Active pregnancies without transport booked: 0
-2025-07-22 14:13:58 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:54:09 [[32minfo[39m]: User connected: admin@bioverse.com (4) - Role: admin {
   "service": "bioverse-api",
-  "heapUsed": "19.37 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.13%"
+  "module": "socket"
 }
-Active pregnancies without transport booked: 0
-2025-07-22 14:14:57 [[32minfo[39m]: Performance Stats: {
+2025-07-26 15:54:23 [[32minfo[39m]: User disconnected: admin@bioverse.com (4) - Reason: transport close {
   "service": "bioverse-api",
-  "uptime": "7876s",
-  "requests": 0,
-  "avgResponseTime": "0.00ms",
-  "errorRate": "0.00%",
-  "memoryUsage": "19.39 MB"
+  "module": "socket"
 }
-2025-07-22 14:14:57 [[33mwarn[39m]: High memory usage detected {
+2025-07-26 15:54:23 [[32minfo[39m]: User disconnected: admin@bioverse.com (4) - Reason: transport error {
   "service": "bioverse-api",
-  "heapUsed": "19.41 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.32%"
+  "module": "socket"
 }
-2025-07-22 14:14:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.42 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.39%"
-}
-Active pregnancies without transport booked: 0
-2025-07-22 14:15:58 [[33mwarn[39m]: High memory usage detected {
-  "service": "bioverse-api",
-  "heapUsed": "19.45 MB",
-  "heapTotal": "21.49 MB",
-  "percentage": "90.52%"
-}
-Active pregnancies without transport booked: 0
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-(node:11464) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 exit listeners added to [Bus]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
-(Use `node --trace-warnings ...` to show where the warning was created)
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src/index.js`[39m
-/home/fred/Downloads/BioVerse/server/src/controllers/patientController.js:190
-const getPatientHealthTwin = async (req, res) => {
-      ^
-
-SyntaxError: Identifier 'getPatientHealthTwin' has already been declared
-    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
-    at Module._compile (node:internal/modules/cjs/loader:1704:20)
-    at Object..js (node:internal/modules/cjs/loader:1895:10)
-    at Module.load (node:internal/modules/cjs/loader:1465:32)
-    at Function._load (node:internal/modules/cjs/loader:1282:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.require (node:internal/modules/cjs/loader:1487:12)
-    at require (node:internal/modules/helpers:135:16)
-    at Object.<anonymous> (/home/fred/Downloads/BioVerse/server/src/routes/patients.js:4:123)
-
-Node.js v22.17.1
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m

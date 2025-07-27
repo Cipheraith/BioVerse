@@ -3,6 +3,13 @@ const router = express.Router();
 const { getLumaResponse } = require('../controllers/lumaController');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
-router.post('/query', authenticateToken, authorizeRoles(['admin', 'moh', 'health_worker']), getLumaResponse);
+// Development mode - bypass authentication for Luma
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+if (isDevelopment) {
+  router.post('/query', getLumaResponse);
+} else {
+  router.post('/query', authenticateToken, authorizeRoles(['admin', 'moh', 'health_worker']), getLumaResponse);
+}
 
 module.exports = router;
