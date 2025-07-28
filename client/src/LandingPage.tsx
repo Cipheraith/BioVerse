@@ -188,10 +188,10 @@ const LandingPage: React.FC = () => {
           >
             <motion.button
               onClick={() => setIsVideoPlaying(true)}
-              className="group bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 flex items-center space-x-3 shadow-2xl"
+              className="group bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 flex items-center space-x-3 shadow-lg"
               whileHover={{ 
                 scale: 1.05,
-                boxShadow: "0 20px 40px rgba(6, 182, 212, 0.4)"
+                boxShadow: "0 15px 30px rgba(6, 182, 212, 0.25)"
               }}
               whileTap={{ scale: 0.95 }}
             >
@@ -201,10 +201,10 @@ const LandingPage: React.FC = () => {
             
             <motion.button
               onClick={() => navigate('/register')}
-              className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 flex items-center space-x-3 shadow-2xl"
+              className="group bg-gradient-to-r from-purple-700 to-pink-700 hover:from-purple-800 hover:to-pink-800 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 flex items-center space-x-3 shadow-lg"
               whileHover={{ 
                 scale: 1.05,
-                boxShadow: "0 20px 40px rgba(147, 51, 234, 0.4)"
+                boxShadow: "0 15px 30px rgba(147, 51, 234, 0.25)"
               }}
               whileTap={{ scale: 0.95 }}
             >

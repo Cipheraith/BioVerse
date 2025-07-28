@@ -227,7 +227,7 @@ const Register: React.FC = () => {
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="sm:col-span-2">
-                <button type="submit" disabled={isLoading} className="group w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 rounded-xl flex items-center justify-center">
+                <button type="submit" disabled={isLoading} className="group w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-4 rounded-xl flex items-center justify-center shadow-md transition-all duration-300">
                   {isLoading ? <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" /> : <><span>Create Account</span><ArrowRight className="w-5 h-5 ml-2" /></>}
                 </button>
               </motion.div>

@@ -255,12 +255,12 @@ const PatientDashboard: React.FC = () => {
             disabled={emergencySent || loadingLocation}
             whileHover={emergencySent || loadingLocation ? {} : { scale: 1.05 }}
             whileTap={emergencySent || loadingLocation ? {} : { scale: 0.95 }}
-            animate={emergencySent ? {} : { boxShadow: ['0 0 0 0 rgba(239, 68, 68, 0.7)', '0 0 0 20px rgba(239, 68, 68, 0)'] }}
+            animate={emergencySent ? {} : { boxShadow: ['0 0 0 0 rgba(239, 68, 68, 0.4)', '0 0 0 15px rgba(239, 68, 68, 0)'] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className={`w-full sm:w-auto px-12 py-6 rounded-full text-white font-bold text-2xl transition-all duration-300 shadow-2xl ${
-              emergencySent ? 'bg-green-600 cursor-not-allowed' : 
-              loadingLocation ? 'bg-orange-500 cursor-wait' :
-              'bg-red-600 hover:bg-red-700 active:bg-red-800'
+            className={`w-full sm:w-auto px-12 py-6 rounded-full text-white font-bold text-2xl transition-all duration-300 shadow-lg ${
+              emergencySent ? 'bg-green-700 cursor-not-allowed' : 
+              loadingLocation ? 'bg-orange-600 cursor-wait' :
+              'bg-red-700 hover:bg-red-800 active:bg-red-900'
             }`}
           >
             {loadingLocation ? (

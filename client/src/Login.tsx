@@ -200,7 +200,7 @@ const Login: React.FC = () => {
                 type="button"
                 className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   loginType === 'username'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow-md'
                     : 'text-gray-400 hover:text-white'
                 }`}
                 onClick={() => setLoginType('username')}
@@ -213,7 +213,7 @@ const Login: React.FC = () => {
                 type="button"
                 className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   loginType === 'phoneNumber'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow-md'
                     : 'text-gray-400 hover:text-white'
                 }`}
                 onClick={() => setLoginType('phoneNumber')}
