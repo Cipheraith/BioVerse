@@ -29,6 +29,7 @@ import SRHPage from './SRHPage';
 import SettingsPage from './pages/SettingsPage';
 import TelemedicineDashboard from './pages/TelemedicineDashboard';
 import VideoCall from './components/VideoCall';
+import HealthTwinsPage from './pages/HealthTwinsPage';
 
 
 const App: React.FC = () => {
@@ -88,6 +89,11 @@ const App: React.FC = () => {
           <Route path="/roles" element={<RoleSelection />} />
           <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'health_worker', 'patient', 'ambulance_driver', 'pharmacy']} />}>
             <Route path="/settings" element={<SettingsPage />} />
+          </Route>
+          
+          {/* Health Twins Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'health_worker', 'patient']} />}>
+            <Route path="/health-twins" element={<HealthTwinsPage />} />
           </Route>
         </Routes>
       </AnimatePresence>

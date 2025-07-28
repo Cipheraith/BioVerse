@@ -21,9 +21,10 @@ import {
 } from 'lucide-react';
 import { HealthTwin } from '../../types/healthTwin';
 import healthTwinService from '../../services/healthTwinService';
-import { HealthAvatar3D } from './HealthAvatar3D';
-import { AnatomicalModel3D } from './AnatomicalModel3D';
-import { HealthDataVisualization3D } from './HealthDataVisualization3D';
+// Temporarily disabled 3D components due to React 19 compatibility
+// import { HealthAvatar3D } from './HealthAvatar3D';
+// import { AnatomicalModel3D } from './AnatomicalModel3D';
+// import { HealthDataVisualization3D } from './HealthDataVisualization3D';
 
 interface HealthTwinOverviewProps {
   healthTwin: HealthTwin;
@@ -75,7 +76,12 @@ export const HealthTwinOverview: React.FC<HealthTwinOverviewProps> = ({
             <User className="h-6 w-6 text-gray-600 dark:text-gray-400 mr-2" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">3D Avatar</h3>
           </div>
-          <HealthAvatar3D healthTwin={healthTwin} healthSummary={healthSummary} />
+          {/* Temporarily disabled 3D component */}
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            <User className="h-16 w-16 mx-auto mb-4" />
+            <p>3D Health Avatar</p>
+            <p className="text-sm mt-2">Interactive 3D visualization coming soon!</p>
+          </div>
           <div className="mt-4 text-gray-700 dark:text-gray-300 text-sm">
             Rotate and explore the avatar! More features coming soon.
           </div>
