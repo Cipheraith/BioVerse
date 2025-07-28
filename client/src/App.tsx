@@ -20,6 +20,11 @@ import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import LandingPage from './LandingPage';
 import AboutPage from './AboutPage'; // Import AboutPage
+import ApiDocsPage from './ApiDocsPage';
+import ContactPage from './ContactPage';
+import SupportPage from './SupportPage';
+import PrivacyPage from './PrivacyPage';
+import DocsPage from './DocsPage';
 import SRHPage from './SRHPage';
 import SettingsPage from './pages/SettingsPage';
 import TelemedicineDashboard from './pages/TelemedicineDashboard';
@@ -28,7 +33,7 @@ import VideoCall from './components/VideoCall';
 
 const App: React.FC = () => {
   const location = useLocation();
-  const noLayoutRoutes = ['/', '/login', '/register', '/about']; // Add /about to noLayoutRoutes
+  const noLayoutRoutes = ['/', '/login', '/register', '/about', '/docs', '/contact', '/support', '/privacy', '/api']; // Add public routes
 
   if (noLayoutRoutes.includes(location.pathname)) {
     return (
@@ -37,7 +42,12 @@ const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/about" element={<AboutPage />} /> {/* Add AboutPage route */}
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/docs" element={<DocsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/support" element={<SupportPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/api" element={<ApiDocsPage />} />
         </Routes>
       </AnimatePresence>
     );

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../hooks/useSocket';
 import { useAuth } from '../hooks/useAuth';
-import { AlertTriangle, CheckCircle, Calendar, Activity, Heart, TrendingUp, Phone, MapPin } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Calendar, Activity, Heart, TrendingUp, Phone, MapPin, Sparkles, Zap, Brain, Stethoscope, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface Appointment {

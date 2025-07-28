@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '/bio.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, Calendar, BarChart2, LogOut, Settings, Bell, Bot, HeartPulse, Menu, Video } from 'lucide-react';
+import { Home, Users, Calendar, BarChart2, LogOut, Settings, Bell, Bot, HeartPulse, Menu, Video, X, Sparkles, Zap } from 'lucide-react';
 import { useAuth } from './hooks/useAuth';
 import LumaChatbot from './components/LumaChatbot';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,19 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const { logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const handleLogout = () => {
     logout();
