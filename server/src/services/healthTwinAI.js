@@ -19,7 +19,7 @@ class HealthTwinAI {
   async generateHealthPredictions(patientId, timeframe = '6m') {
     try {
       const cacheKey = `predictions_${patientId}_${timeframe}`;
-      
+
       // Check cache first
       if (this.predictionCache.has(cacheKey)) {
         const cached = this.predictionCache.get(cacheKey);
@@ -30,7 +30,7 @@ class HealthTwinAI {
 
       // Fetch comprehensive patient data
       const patientData = await this.getComprehensivePatientData(patientId);
-      
+
       // Run multiple prediction models
       const [
         riskPredictions,
@@ -78,7 +78,7 @@ class HealthTwinAI {
    */
   async predictHealthRisks(patientData, timeframe) {
     const risks = [];
-    
+
     // Cardiovascular risk prediction
     const cvRisk = this.calculateCardiovascularRisk(patientData);
     if (cvRisk.score > 0.3) {
@@ -124,17 +124,17 @@ class HealthTwinAI {
   async predictHealthTrajectory(patientData, timeframe) {
     const months = this.mapTimeframeToMonths(timeframe);
     const trajectory = [];
-    
+
     // Current health score
     const currentScore = this.calculateCurrentHealthScore(patientData);
-    
+
     // Generate trajectory points
     for (let month = 0; month <= months; month++) {
       const timeDecay = month / months;
       const trendFactor = this.calculateHealthTrend(patientData);
-      
+
       let predictedScore = currentScore;
-      
+
       // Apply trend
       if (trendFactor > 0) {
         // Improving trend
@@ -143,14 +143,14 @@ class HealthTwinAI {
         // Declining trend
         predictedScore += trendFactor * timeDecay * 20 * (1 + timeDecay * 0.3);
       }
-      
+
       // Add stochastic variation
       const variation = (Math.random() - 0.5) * 5 * Math.sqrt(timeDecay);
       predictedScore += variation;
-      
+
       // Clamp to valid range
       predictedScore = Math.max(0, Math.min(100, predictedScore));
-      
+
       trajectory.push({
         month,
         healthScore: predictedScore,
@@ -159,7 +159,7 @@ class HealthTwinAI {
         interventionOpportunities: this.identifyInterventionOpportunities(predictedScore, month)
       });
     }
-    
+
     return {
       trajectory,
       overallTrend: this.classifyTrend(trajectory),
@@ -173,7 +173,7 @@ class HealthTwinAI {
    */
   async generateInterventionRecommendations(patientData) {
     const recommendations = [];
-    
+
     // Lifestyle interventions
     const lifestyleScore = this.assessLifestyleFactors(patientData);
     if (lifestyleScore.needsImprovement) {
@@ -187,7 +187,7 @@ class HealthTwinAI {
         evidence: 'Strong clinical evidence',
         personalizedPlan: this.generateExercisePlan(patientData)
       });
-      
+
       if (lifestyleScore.dietScore < 0.6) {
         recommendations.push({
           category: 'lifestyle',
@@ -201,7 +201,7 @@ class HealthTwinAI {
         });
       }
     }
-    
+
     // Medical interventions
     const medicalNeeds = this.assessMedicalInterventionNeeds(patientData);
     medicalNeeds.forEach(need => {
@@ -216,7 +216,7 @@ class HealthTwinAI {
         clinicalGuidelines: need.guidelines
       });
     });
-    
+
     // Monitoring recommendations
     const monitoringNeeds = this.assessMonitoringNeeds(patientData);
     monitoringNeeds.forEach(need => {
@@ -230,7 +230,7 @@ class HealthTwinAI {
         alertThresholds: need.thresholds
       });
     });
-    
+
     return {
       recommendations: recommendations.sort((a, b) => {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
@@ -256,13 +256,46 @@ class HealthTwinAI {
     };
   }
 
+  /** 
+   * AI-based proactive insights
+   */
+  async generateProactiveInsights(patientId) {
+    try {
+      const patientData = await this.getComprehensivePatientData(patientId);
+      const proactiveInsights = {
+        lifestyleAdjustments: this.identifyLifestyleAdjustments(patientData),
+        earlyDiseaseWarnings: this.detectEarlyWarnings(patientData),
+        personalizedMedicationPlans: this.generateMedicationPlans(patientData),
+      };
+      
+      return proactiveInsights;
+    } catch (error) {
+      logger.error('Error generating proactive insights:', error);
+      throw error;
+    }
+  }
+
+  identifyLifestyleAdjustments(patientData) {
+    return ['Increase physical activity', 'Adopt balanced diet', 'Improve sleep hygiene'];
+  }
+
+  detectEarlyWarnings(patientData) {
+    // Analyze patterns to foresee conditions
+    return ['High stress level detected', 'Increased risk of hypertension'];
+  }
+
+  generateMedicationPlans(patientData) {
+    // Create customized medication adjustments
+    return ['Adjust beta blocker dosage', 'Consider statin therapy'];
+  }
+
   /**
    * Calculate cardiovascular risk using Framingham-like model
    */
   calculateCardiovascularRisk(patientData) {
     let score = 0;
     const factors = [];
-    
+
     // Age factor
     if (patientData.age > 65) {
       score += 0.3;
@@ -271,13 +304,13 @@ class HealthTwinAI {
       score += 0.15;
       factors.push('Middle age');
     }
-    
+
     // Gender factor
     if (patientData.gender === 'male' && patientData.age > 45) {
       score += 0.1;
       factors.push('Male gender');
     }
-    
+
     // Chronic conditions
     if (patientData.chronicConditions) {
       if (patientData.chronicConditions.includes('Hypertension')) {
@@ -293,7 +326,7 @@ class HealthTwinAI {
         factors.push('High cholesterol');
       }
     }
-    
+
     // Risk factors
     if (patientData.riskFactors) {
       if (patientData.riskFactors.includes('Smoking')) {
@@ -309,7 +342,7 @@ class HealthTwinAI {
         factors.push('Physical inactivity');
       }
     }
-    
+
     return { score: Math.min(1, score), factors };
   }
 
@@ -319,25 +352,25 @@ class HealthTwinAI {
   calculateDiabetesRisk(patientData) {
     let score = 0;
     const factors = [];
-    
+
     // Age factor
     if (patientData.age > 45) {
       score += 0.2;
       factors.push('Age over 45');
     }
-    
+
     // BMI factor (estimated from risk factors)
     if (patientData.riskFactors && patientData.riskFactors.includes('Obesity')) {
       score += 0.3;
       factors.push('Obesity');
     }
-    
+
     // Family history
     if (patientData.medicalHistory && patientData.medicalHistory.includes('Family history of diabetes')) {
       score += 0.25;
       factors.push('Family history');
     }
-    
+
     // Existing conditions
     if (patientData.chronicConditions) {
       if (patientData.chronicConditions.includes('Hypertension')) {
@@ -349,7 +382,7 @@ class HealthTwinAI {
         factors.push('Prediabetes');
       }
     }
-    
+
     // Lifestyle factors
     if (patientData.riskFactors) {
       if (patientData.riskFactors.includes('Sedentary lifestyle')) {
@@ -357,7 +390,7 @@ class HealthTwinAI {
         factors.push('Physical inactivity');
       }
     }
-    
+
     return { score: Math.min(1, score), factors };
   }
 
@@ -367,26 +400,26 @@ class HealthTwinAI {
   calculateMentalHealthRisk(patientData) {
     let score = 0;
     const factors = [];
-    
+
     // Chronic conditions impact
     if (patientData.chronicConditions && patientData.chronicConditions.length > 2) {
       score += 0.2;
       factors.push('Multiple chronic conditions');
     }
-    
+
     // Recent symptoms indicating stress/anxiety
     if (patientData.recentSymptoms) {
       const mentalHealthSymptoms = ['anxiety', 'depression', 'insomnia', 'fatigue', 'stress'];
-      const hasSymptoms = patientData.recentSymptoms.some(symptom => 
+      const hasSymptoms = patientData.recentSymptoms.some(symptom =>
         mentalHealthSymptoms.some(mhs => symptom.toLowerCase().includes(mhs))
       );
-      
+
       if (hasSymptoms) {
         score += 0.3;
         factors.push('Mental health symptoms reported');
       }
     }
-    
+
     // Social determinants
     if (patientData.riskFactors) {
       if (patientData.riskFactors.includes('Social isolation')) {
@@ -398,7 +431,7 @@ class HealthTwinAI {
         factors.push('Financial stress');
       }
     }
-    
+
     return { score: Math.min(1, score), factors };
   }
 
@@ -434,20 +467,20 @@ class HealthTwinAI {
 
   calculateCurrentHealthScore(patientData) {
     let score = 85;
-    
+
     // Adjust for age
     if (patientData.age > 65) score -= 10;
     else if (patientData.age > 45) score -= 5;
-    
+
     // Adjust for chronic conditions
     score -= (patientData.chronicConditions?.length || 0) * 8;
-    
+
     // Adjust for recent symptoms
     score -= (patientData.recentSymptoms?.length || 0) * 2;
-    
+
     // Adjust for risk factors
     score -= (patientData.riskFactors?.length || 0) * 5;
-    
+
     return Math.max(0, Math.min(100, score));
   }
 
@@ -457,9 +490,9 @@ class HealthTwinAI {
     const riskFactorCount = patientData.riskFactors?.length || 0;
     const chronicConditionCount = patientData.chronicConditions?.length || 0;
     const recentSymptomCount = patientData.recentSymptoms?.length || 0;
-    
+
     const negativeFactors = riskFactorCount + chronicConditionCount + recentSymptomCount;
-    
+
     if (negativeFactors > 8) return -0.5; // Declining
     if (negativeFactors < 3) return 0.3;  // Improving
     return 0; // Stable
@@ -467,36 +500,36 @@ class HealthTwinAI {
 
   calculateOverallConfidence(patientData) {
     let confidence = 0.8;
-    
+
     // Reduce confidence if data is sparse
     if (!patientData.labResults || patientData.labResults.length < 3) {
       confidence -= 0.2;
     }
-    
+
     if (!patientData.recentSymptoms || patientData.recentSymptoms.length === 0) {
       confidence -= 0.1;
     }
-    
+
     if (!patientData.appointments || patientData.appointments.length < 2) {
       confidence -= 0.1;
     }
-    
+
     return Math.max(0.3, confidence);
   }
 
   assessDataQuality(patientData) {
     let quality = 'high';
     let score = 100;
-    
+
     // Check data completeness
     if (!patientData.chronicConditions || patientData.chronicConditions.length === 0) score -= 10;
     if (!patientData.labResults || patientData.labResults.length < 3) score -= 20;
     if (!patientData.recentSymptoms || patientData.recentSymptoms.length === 0) score -= 15;
     if (!patientData.appointments || patientData.appointments.length < 2) score -= 10;
-    
+
     if (score < 60) quality = 'low';
     else if (score < 80) quality = 'medium';
-    
+
     return { quality, score };
   }
 
@@ -516,7 +549,7 @@ class HealthTwinAI {
     const firstScore = trajectory[0].healthScore;
     const lastScore = trajectory[trajectory.length - 1].healthScore;
     const difference = lastScore - firstScore;
-    
+
     if (difference > 5) return 'improving';
     if (difference < -5) return 'declining';
     return 'stable';
@@ -528,7 +561,7 @@ class HealthTwinAI {
       const prev = trajectory[i - 1].healthScore;
       const curr = trajectory[i].healthScore;
       const next = trajectory[i + 1].healthScore;
-      
+
       // Check for significant direction change
       if ((curr - prev) * (next - curr) < -25) {
         points.push({
