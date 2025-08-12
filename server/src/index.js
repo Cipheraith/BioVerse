@@ -7,7 +7,6 @@ const rateLimit = require("express-rate-limit");
 const { initializeDatabase } = require("./config/database");
 
 const mainRouter = require("./routes");
-const lumaRouter = require("./routes/luma");
 const {
   startTransportScheduler,
 } = require("./services/maternalHealthScheduler");
@@ -88,7 +87,7 @@ app.get("/health", (req, res) => {
 
 // API Routes
 app.use("/api", mainRouter);
-app.use("/api/luma", lumaRouter);
+// Note: Luma is now handled by Python AI backend via /api/ai/chat
 
 // Start Server
 initializeDatabase()

@@ -1,0 +1,104 @@
+# Python AI Docker Ignore File
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.out
+
+# Models (too large for container)
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.pb
+
+# Data files
+data/
+*.csv
+*.json
+*.parquet
+
+# Environment files
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+docs/
+
+# Tests
+tests/
+test_*
+*_test.py
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Cache
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

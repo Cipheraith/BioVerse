@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from "../hooks/useSocket";
-import { AlertTriangle, CheckCircle, MapPin, Clock, Navigation } from 'lucide-react';
+import { AlertTriangle, CheckCircle, MapPin, Clock, Navigation, Sparkles, Zap, Siren } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import GlassCard from '../components/ui/GlassCard';
+import GlassButton from '../components/ui/GlassButton';
+import FloatingParticles from '../components/ui/FloatingParticles';
 
 interface PatientDetails {
     name: string;
@@ -80,158 +83,342 @@ const AmbulanceDriverDashboard: React.FC = () => {
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="container mx-auto p-6"
-        >
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-text dark:text-dark-text">Ambulance Driver Dashboard</h1>
-                <div className="flex items-center space-x-4">
-                    <span className="text-sm text-muted dark:text-dark-muted">Status:</span>
-                    <span className={`font-semibold ${getStatusColor(driverStatus)}`}>
-                        {driverStatus.toUpperCase()}
-                    </span>
-                </div>
-            </div>
-
-            {/* Status Control */}
-            <div className="mb-6 bg-card dark:bg-dark-card p-4 rounded-xl shadow-lg border border-border dark:border-dark-border">
-                <h2 className="text-lg font-semibold mb-3 text-text dark:text-dark-text">Driver Status</h2>
-                <div className="flex space-x-3">
-                    <button
-                        onClick={() => updateDriverStatus('available')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${driverStatus === 'available'
-                            ? 'bg-green-600 text-white'
-                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900'
-                            }`}
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/20 to-slate-900 relative overflow-hidden">
+            <FloatingParticles count={20} colors={['red', 'orange', 'yellow']} />
+            
+            <div className="relative z-10 p-4 sm:p-6 lg:p-8">
+                <div className="max-w-7xl mx-auto">
+                    {/* Enhanced Header */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-8 text-center"
                     >
-                        Available
-                    </button>
-                    <button
-                        onClick={() => updateDriverStatus('busy')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${driverStatus === 'busy'
-                            ? 'bg-yellow-600 text-white'
-                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-yellow-100 dark:hover:bg-yellow-900'
-                            }`}
-                    >
-                        Busy
-                    </button>
-                    <button
-                        onClick={() => updateDriverStatus('offline')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${driverStatus === 'offline'
-                            ? 'bg-red-600 text-white'
-                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900'
-                            }`}
-                    >
-                        Offline
-                    </button>
-                </div>
-            </div>
-
-            {/* Emergency Alerts */}
-            <div className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-text dark:text-dark-text">Emergency Dispatch Alerts</h2>
-                {emergencyAlerts.length === 0 ? (
-                    <div className="bg-card dark:bg-dark-card p-6 rounded-xl shadow-lg border border-border dark:border-dark-border text-center">
-                        <CheckCircle className="mx-auto mb-3 text-green-500" size={48} />
-                        <p className="text-muted dark:text-dark-muted">No active emergency alerts.</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 gap-4">
-                        {emergencyAlerts.map((alert) => (
+                        <motion.div
+                            className="inline-flex items-center bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-full px-6 py-2 mb-6"
+                            animate={{ scale: [1, 1.02, 1] }}
+                            transition={{ duration: 3, repeat: Infinity }}
+                        >
+                            <Siren className="w-4 h-4 text-red-400 mr-2" />
+                            <span className="text-sm text-red-300 font-medium">Emergency Response System</span>
                             <motion.div
-                                key={alert.alertId}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 p-6 rounded-lg shadow-md"
-                            >
-                                <div className="flex justify-between items-start">
-                                    <div className="flex-1">
-                                        <div className="flex items-center mb-3">
-                                            <AlertTriangle className="mr-2" size={24} />
-                                            <h3 className="font-bold text-xl">EMERGENCY: {alert.severity.toUpperCase()}</h3>
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                            <div>
-                                                <p className="font-semibold">Patient ID: {alert.patientId}</p>
-                                                <p>Symptoms: {alert.symptoms}</p>
-                                                <p>Diagnosis: {alert.diagnosis}</p>
-                                                <p>Reported By: {alert.reportedBy}</p>
-                                            </div>
-                                            <div>
-                                                <div className="flex items-center mb-2">
-                                                    <MapPin className="mr-1" size={16} />
-                                                    <span className="font-semibold">Location:</span>
-                                                </div>
-                                                <p className="mb-2">{alert.location}</p>
-                                                <div className="flex items-center">
-                                                    <Clock className="mr-1" size={16} />
-                                                    <span className="text-sm">{new Date(alert.timestamp).toLocaleString()}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {alert.patientDetails && (
-                                            <div className="bg-red-50 dark:bg-red-950 p-3 rounded-lg mb-4">
-                                                <h4 className="font-semibold mb-2">Patient Details:</h4>
-                                                <p>Name: {alert.patientDetails.name}</p>
-                                                <p>Contact: {alert.patientDetails.contact}</p>
-                                                <p>Medical History: {alert.patientDetails.medicalHistory?.join(', ') || 'None'}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="ml-4 flex flex-col space-y-2">
-                                        <button
-                                            onClick={() => acknowledgeEmergency(alert.alertId, alert.patientId)}
-                                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg flex items-center transition-all"
-                                        >
-                                            <CheckCircle className="mr-2" size={20} />
-                                            Respond
-                                        </button>
-                                        <button
-                                            onClick={() => navigate('/dispatch-map')}
-                                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center transition-all"
-                                        >
-                                            <Navigation className="mr-2" size={16} />
-                                            View Map
-                                        </button>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                )}
-            </div>
+                                className={`ml-2 w-2 h-2 rounded-full ${
+                                    driverStatus === 'available' ? 'bg-green-400' :
+                                    driverStatus === 'busy' ? 'bg-yellow-400' : 'bg-red-400'
+                                }`}
+                                animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            />
+                        </motion.div>
 
-            {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-card dark:bg-dark-card rounded-xl p-6 shadow-lg border border-border dark:border-dark-border">
-                    <h3 className="text-lg font-semibold mb-3 text-text dark:text-dark-text">Dispatch Map</h3>
-                    <p className="text-muted dark:text-dark-muted mb-4">View live emergency locations and optimal routes.</p>
-                    <button
-                        onClick={() => navigate('/dispatch-map')}
-                        className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 px-4 rounded-lg transition-all"
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-4">
+                            <span className="bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                                Emergency
+                            </span>
+                            <br />
+                            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                Response
+                            </span>
+                        </h1>
+                        
+                        <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8">
+                            <motion.p 
+                                className="text-xl text-gray-300"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                            >
+                                Ambulance Driver Control Center
+                            </motion.p>
+                            
+                            <div className="flex items-center space-x-4">
+                                <span className="text-sm text-gray-400">Status:</span>
+                                <motion.span 
+                                    className={`font-bold text-lg ${getStatusColor(driverStatus)}`}
+                                    animate={{ scale: [1, 1.05, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                >
+                                    {driverStatus.toUpperCase()}
+                                </motion.span>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Enhanced Status Control */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="mb-8"
                     >
-                        Open Map
-                    </button>
-                </div>
-                <div className="bg-card dark:bg-dark-card rounded-xl p-6 shadow-lg border border-border dark:border-dark-border">
-                    <h3 className="text-lg font-semibold mb-3 text-text dark:text-dark-text">Emergency Contacts</h3>
-                    <p className="text-muted dark:text-dark-muted mb-4">Quick access to hospital and dispatch contacts.</p>
-                    <button className="w-full bg-secondary hover:bg-secondary-700 text-secondary-text font-bold py-2 px-4 rounded-lg transition-all">
-                        View Contacts
-                    </button>
-                </div>
-                <div className="bg-card dark:bg-dark-card rounded-xl p-6 shadow-lg border border-border dark:border-dark-border">
-                    <h3 className="text-lg font-semibold mb-3 text-text dark:text-dark-text">Trip History</h3>
-                    <p className="text-muted dark:text-dark-muted mb-4">View your completed emergency responses.</p>
-                    <button className="w-full bg-accent hover:bg-accent-700 text-accent-text font-bold py-2 px-4 rounded-lg transition-all">
-                        View History
-                    </button>
+                        <GlassCard gradient="green" glow className="text-center">
+                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center justify-center">
+                                <Zap className="mr-3 text-yellow-400" size={28} />
+                                Driver Status Control
+                            </h2>
+                            <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                                <GlassButton
+                                    variant={driverStatus === 'available' ? 'success' : 'ghost'}
+                                    glow={driverStatus === 'available'}
+                                    onClick={() => updateDriverStatus('available')}
+                                    icon={<CheckCircle size={18} />}
+                                >
+                                    Available
+                                </GlassButton>
+                                <GlassButton
+                                    variant={driverStatus === 'busy' ? 'warning' : 'ghost'}
+                                    glow={driverStatus === 'busy'}
+                                    onClick={() => updateDriverStatus('busy')}
+                                    icon={<Clock size={18} />}
+                                >
+                                    Busy
+                                </GlassButton>
+                                <GlassButton
+                                    variant={driverStatus === 'offline' ? 'danger' : 'ghost'}
+                                    glow={driverStatus === 'offline'}
+                                    onClick={() => updateDriverStatus('offline')}
+                                    icon={<AlertTriangle size={18} />}
+                                >
+                                    Offline
+                                </GlassButton>
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+
+                    {/* Enhanced Emergency Alerts */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="mb-8"
+                    >
+                        <div className="text-center mb-6">
+                            <h2 className="text-3xl font-black text-white mb-2 flex items-center justify-center">
+                                <AlertTriangle className="mr-3 text-red-400" size={32} />
+                                Emergency Dispatch Alerts
+                            </h2>
+                            <p className="text-gray-400">Real-time emergency response coordination</p>
+                        </div>
+
+                        <AnimatePresence>
+                            {emergencyAlerts.length === 0 ? (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                >
+                                    <GlassCard gradient="green" className="text-center py-16">
+                                        <motion.div
+                                            animate={{ y: [0, -10, 0], scale: [1, 1.1, 1] }}
+                                            transition={{ duration: 3, repeat: Infinity }}
+                                        >
+                                            <CheckCircle className="mx-auto mb-6 text-green-400" size={80} />
+                                        </motion.div>
+                                        <h3 className="text-2xl font-bold text-white mb-4">All Clear</h3>
+                                        <p className="text-gray-400">No active emergency alerts at this time.</p>
+                                    </GlassCard>
+                                </motion.div>
+                            ) : (
+                                <div className="grid grid-cols-1 gap-6">
+                                    {emergencyAlerts.map((alert, index) => (
+                                        <motion.div
+                                            key={alert.alertId}
+                                            initial={{ opacity: 0, x: -20, scale: 0.95 }}
+                                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                                            exit={{ opacity: 0, x: 20, scale: 0.95 }}
+                                            transition={{ delay: index * 0.1 }}
+                                        >
+                                            <GlassCard gradient="pink" glow className="relative overflow-hidden">
+                                                {/* Pulsing emergency indicator */}
+                                                <motion.div
+                                                    className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500"
+                                                    animate={{ opacity: [1, 0.5, 1] }}
+                                                    transition={{ duration: 1, repeat: Infinity }}
+                                                />
+                                                
+                                                <div className="flex flex-col lg:flex-row justify-between items-start space-y-6 lg:space-y-0">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center mb-4">
+                                                            <motion.div
+                                                                className="p-3 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-xl mr-4"
+                                                                animate={{ scale: [1, 1.1, 1] }}
+                                                                transition={{ duration: 2, repeat: Infinity }}
+                                                            >
+                                                                <AlertTriangle className="text-red-400" size={28} />
+                                                            </motion.div>
+                                                            <div>
+                                                                <h3 className="font-black text-2xl text-white">
+                                                                    EMERGENCY: {alert.severity.toUpperCase()}
+                                                                </h3>
+                                                                <p className="text-red-300 font-semibold">
+                                                                    Patient ID: {alert.patientId}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                                            <div className="space-y-3">
+                                                                <div className="bg-white/5 rounded-xl p-4">
+                                                                    <h4 className="text-white font-bold mb-2">Medical Info</h4>
+                                                                    <p className="text-gray-300 text-sm">Symptoms: {alert.symptoms}</p>
+                                                                    <p className="text-gray-300 text-sm">Diagnosis: {alert.diagnosis}</p>
+                                                                    <p className="text-gray-300 text-sm">Reported By: {alert.reportedBy}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-3">
+                                                                <div className="bg-white/5 rounded-xl p-4">
+                                                                    <div className="flex items-center mb-2">
+                                                                        <MapPin className="mr-2 text-blue-400" size={18} />
+                                                                        <h4 className="text-white font-bold">Location</h4>
+                                                                    </div>
+                                                                    <p className="text-gray-300 text-sm mb-2">{alert.location}</p>
+                                                                    <div className="flex items-center">
+                                                                        <Clock className="mr-2 text-cyan-400" size={16} />
+                                                                        <span className="text-gray-400 text-xs">
+                                                                            {new Date(alert.timestamp).toLocaleString()}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {alert.patientDetails && (
+                                                            <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-xl p-4 mb-4">
+                                                                <h4 className="text-white font-bold mb-3 flex items-center">
+                                                                    <span className="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                                                                    Patient Details
+                                                                </h4>
+                                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                                                                    <div>
+                                                                        <span className="text-gray-400">Name:</span>
+                                                                        <p className="text-white font-semibold">{alert.patientDetails.name}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="text-gray-400">Contact:</span>
+                                                                        <p className="text-white font-semibold">{alert.patientDetails.contact}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="text-gray-400">Medical History:</span>
+                                                                        <p className="text-white font-semibold">
+                                                                            {alert.patientDetails.medicalHistory?.join(', ') || 'None'}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    
+                                                    <div className="flex flex-col space-y-3 lg:ml-6">
+                                                        <GlassButton
+                                                            variant="danger"
+                                                            size="lg"
+                                                            glow
+                                                            icon={<CheckCircle size={20} />}
+                                                            onClick={() => acknowledgeEmergency(alert.alertId, alert.patientId)}
+                                                        >
+                                                            Respond Now
+                                                        </GlassButton>
+                                                        <GlassButton
+                                                            variant="primary"
+                                                            icon={<Navigation size={18} />}
+                                                            onClick={() => navigate('/dispatch-map')}
+                                                        >
+                                                            View Map
+                                                        </GlassButton>
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Animated background elements */}
+                                                <motion.div
+                                                    className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/5 to-transparent rounded-full blur-2xl"
+                                                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                                                    transition={{ duration: 4, repeat: Infinity }}
+                                                />
+                                            </GlassCard>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    {/* Enhanced Quick Actions */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8 }}
+                        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                    >
+                        <GlassCard gradient="blue" hover glow>
+                            <div className="text-center">
+                                <motion.div
+                                    className="w-16 h-16 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                                    animate={{ rotate: [0, 360] }}
+                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                >
+                                    <MapPin className="w-8 h-8 text-blue-400" />
+                                </motion.div>
+                                <h3 className="text-xl font-bold text-white mb-3">Dispatch Map</h3>
+                                <p className="text-gray-400 mb-6">View live emergency locations and optimal routes.</p>
+                                <GlassButton
+                                    variant="primary"
+                                    glow
+                                    icon={<Navigation size={18} />}
+                                    onClick={() => navigate('/dispatch-map')}
+                                    className="w-full"
+                                >
+                                    Open Map
+                                </GlassButton>
+                            </div>
+                        </GlassCard>
+
+                        <GlassCard gradient="purple" hover glow>
+                            <div className="text-center">
+                                <motion.div
+                                    className="w-16 h-16 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                                    animate={{ scale: [1, 1.1, 1] }}
+                                    transition={{ duration: 3, repeat: Infinity }}
+                                >
+                                    <CheckCircle className="w-8 h-8 text-purple-400" />
+                                </motion.div>
+                                <h3 className="text-xl font-bold text-white mb-3">Emergency Contacts</h3>
+                                <p className="text-gray-400 mb-6">Quick access to hospital and dispatch contacts.</p>
+                                <GlassButton
+                                    variant="secondary"
+                                    glow
+                                    className="w-full"
+                                    onClick={() => console.log('View contacts')}
+                                >
+                                    View Contacts
+                                </GlassButton>
+                            </div>
+                        </GlassCard>
+
+                        <GlassCard gradient="orange" hover glow>
+                            <div className="text-center">
+                                <motion.div
+                                    className="w-16 h-16 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                                    animate={{ y: [0, -5, 0] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                >
+                                    <Clock className="w-8 h-8 text-orange-400" />
+                                </motion.div>
+                                <h3 className="text-xl font-bold text-white mb-3">Trip History</h3>
+                                <p className="text-gray-400 mb-6">View your completed emergency responses.</p>
+                                <GlassButton
+                                    variant="warning"
+                                    glow
+                                    className="w-full"
+                                    onClick={() => console.log('View history')}
+                                >
+                                    View History
+                                </GlassButton>
+                            </div>
+                        </GlassCard>
+                    </motion.div>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
 

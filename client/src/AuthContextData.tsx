@@ -1,10 +1,19 @@
 import { createContext, useContext } from "react";
 
+interface User {
+  id: string;
+  username?: string;
+  fullName?: string;
+  role: string;
+}
+
 interface AuthContextType {
   token: string | null;
   role: string | null;
   userId: string | null;
-  login: (token: string, role: string, userId: string) => void;
+  user: User | null;
+  loading: boolean;
+  login: (token: string, role: string, userId: string, userData?: Partial<User>) => void;
   logout: () => void;
 }
 

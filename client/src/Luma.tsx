@@ -84,7 +84,7 @@ const handleSendMessage = async () => {
 
     try {
         // Use the BioVerse backend API which handles Ollama integration
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/luma/query`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/luma/query`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -125,7 +125,7 @@ const handleSendMessage = async () => {
         ) {
           if (socket) {
             socket.emit("emergency:alert", {
-              patientId: patientId,
+              patientId: "unknown",
               location: "Unknown",
               severity: data.response.severity,
               symptoms: currentQuery,

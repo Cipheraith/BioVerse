@@ -1,492 +1,360 @@
 /**
- * Enhanced AI Service for BioVerse Client
- * Integrates with Ollama-powered backend AI services
+ * AI Service Integration for Frontend
+ * Handles communication with Python AI backend through Node.js API
  */
 
-interface AIResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  confidence?: number;
-  timestamp?: string;
+import { api } from './api';
+
+export interface HealthTwinData {
+  patient_id: string;
+  medical_history?: any;
+  current_vitals?: any;
+  lifestyle_data?: any;
 }
 
-interface SymptomAnalysis {
-  diagnosis: Array<{
-    condition: string;
-    description: string;
-    likelihood: number;
-  }>;
-  recommendations: Array<{
-    text: string;
-    priority: 'low' | 'medium' | 'high';
-    category: string;
-  }>;
-  suggestedTests: string[];
-  warnings: string[];
-  confidence: number;
-  disclaimer: string;
+export interface HealthTwinUpdate {
+  vitals?: any;
+  symptoms?: string[];
+  medications?: any[];
+  lifestyle_changes?: any;
 }
 
-interface HealthPrediction {
-  predictions: Array<{
-    condition: string;
-    probability: number;
-    timeframe: string;
-    factors: string[];
-  }>;
-  trends: Array<{
-    metric: string;
-    direction: 'improving' | 'stable' | 'declining';
-    confidence: number;
-  }>;
-  risks: Array<{
-    type: string;
-    level: 'low' | 'medium' | 'high' | 'critical';
-    description: string;
-  }>;
-  interventions: Array<{
-    type: string;
-    urgency: 'routine' | 'urgent';
-    description: string;
-  }>;
+export interface SymptomAnalysis {
+  symptoms: string[];
+  patient_history?: any;
+  severity?: 'mild' | 'moderate' | 'severe';
 }
 
-interface HealthRecommendation {
-  recommendations: Array<{
-    category: 'lifestyle' | 'medical' | 'monitoring';
-    priority: 'low' | 'medium' | 'high';
-    text: string;
-    expectedImpact?: number;
-    timeframe?: string;
-  }>;
-  lifestyle: Array<{
-    area: string;
-    suggestion: string;
-    difficulty: 'easy' | 'moderate' | 'challenging';
-  }>;
-  medical: Array<{
-    type: string;
-    description: string;
-    urgency: string;
-  }>;
-  monitoring: Array<{
-    metric: string;
-    frequency: string;
-    target: string;
-  }>;
+export interface HealthRiskPrediction {
+  patient_data: any;
+  risk_factors?: string[];
+  timeframe?: '1m' | '3m' | '6m' | '1y';
 }
 
-interface ChatResponse {
-  response: string;
-  conversationId: string;
-  timestamp: string;
-  model: string;
-  confidence: number;
+export interface HealthInsights {
+  patient_id: string;
+  data_points: any[];
+  insight_type?: 'trends' | 'anomalies' | 'recommendations' | 'all';
 }
 
-interface DocumentAnalysis {
-  analysis: string;
-  keyFindings: string[];
-  recommendations: string[];
-  extractedData: Record<string, any>;
-  confidence: number;
-  documentType: string;
+export interface AIChat {
+  message: string;
+  context?: any;
+  model?: string;
 }
 
-interface HealthEducation {
-  topic: string;
-  content: string;
-  keyPoints: string[];
-  actionItems: string[];
-  resources: Array<{
-    title: string;
-    url: string;
-    type: 'article' | 'video' | 'tool';
-  }>;
-  complexity: 'basic' | 'intermediate' | 'advanced';
+export interface AIAnalysis {
+  analysis_type: 'medical' | 'diagnostic' | 'risk_assessment' | 'treatment_plan';
+  data: any;
+  instructions?: string;
 }
 
-interface AIStatus {
-  status: 'healthy' | 'unhealthy' | 'unknown';
-  capabilities: {
-    medicalDiagnosis: boolean;
-    healthPredictions: boolean;
-    chatbot: boolean;
-    documentAnalysis: boolean;
-    healthEducation: boolean;
-    dataAnalysis: boolean;
-  };
-  models: {
-    available: number;
-    medical: boolean;
-    chat: boolean;
-    code: boolean;
-  };
-  stats: {
-    activeConversations: number;
-    cacheSize: number;
-    defaultModel: string;
-    medicalModel: string;
-  };
+export interface VisualizationRequest {
+  type: 'chart' | 'graph' | '3d_model' | 'heatmap' | 'timeline';
+  data: any;
+  options?: any;
+}
+
+export interface InteractiveChart {
+  chart_type: 'line' | 'bar' | 'scatter' | 'pie' | 'area' | 'radar';
+  data: any;
+  config?: any;
 }
 
 class AIService {
-  private baseUrl: string;
-  private token: string | null = null;
+  private baseURL = '/api/ai';
 
-  constructor() {
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
-    this.token = localStorage.getItem('token');
-  }
-
-  private async makeRequest<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<AIResponse<T>> {
+  // Health check for AI service
+  async checkHealth() {
     try {
-      const url = `${this.baseUrl}/api/ai${endpoint}`;
-      
-      const defaultHeaders = {
-        'Content-Type': 'application/json',
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-      };
-
-      const config: RequestInit = {
-        ...options,
-        headers: {
-          ...defaultHeaders,
-          ...options.headers,
-        },
-      };
-
-      const response = await fetch(url, config);
-      const data = await response.json();
-
-      if (!response.ok) {
-        return {
-          success: false,
-          error: data.error || `HTTP ${response.status}: ${response.statusText}`,
-        };
-      }
-
-      return {
-        success: true,
-        data,
-        timestamp: new Date().toISOString(),
-      };
+      const response = await api.get(`${this.baseURL}/health`);
+      return response.data;
     } catch (error) {
-      console.error(`AI Service Error (${endpoint}):`, error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred',
-      };
+      console.error('AI service health check failed:', error);
+      throw error;
     }
   }
 
-  /**
-   * Enhanced Luma chatbot interaction
-   */
-  async chat(
-    message: string,
-    patientId?: string,
-    conversationId?: string
-  ): Promise<AIResponse<ChatResponse>> {
-    return this.makeRequest<ChatResponse>('/chat', {
-      method: 'POST',
-      body: JSON.stringify({
-        message,
-        patientId,
-        conversationId,
-      }),
-    });
-  }
+  // ==================== HEALTH TWIN METHODS ====================
 
-  /**
-   * Advanced symptom analysis with AI diagnosis
-   */
-  async analyzeSymptoms(
-    symptoms: Array<{
-      symptom: string;
-      severity?: 'mild' | 'moderate' | 'severe';
-      duration?: string;
-      description?: string;
-    }>,
-    patientId: string,
-    additionalInfo?: Record<string, any>
-  ): Promise<AIResponse<SymptomAnalysis>> {
-    return this.makeRequest<SymptomAnalysis>('/symptoms/analyze', {
-      method: 'POST',
-      body: JSON.stringify({
-        symptoms,
-        patientId,
-        additionalInfo,
-      }),
-    });
-  }
-
-  /**
-   * Generate health predictions using AI
-   */
-  async generateHealthPredictions(
-    patientId: string,
-    timeframe: '1m' | '3m' | '6m' | '1y' | '5y' = '6m'
-  ): Promise<AIResponse<HealthPrediction>> {
-    return this.makeRequest<HealthPrediction>(`/predictions/${patientId}/${timeframe}`);
-  }
-
-  /**
-   * Get personalized health recommendations
-   */
-  async getHealthRecommendations(
-    patientId: string,
-    goals: string[] = [],
-    preferences: Record<string, any> = {}
-  ): Promise<AIResponse<HealthRecommendation>> {
-    return this.makeRequest<HealthRecommendation>(`/recommendations/${patientId}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        goals,
-        preferences,
-      }),
-    });
-  }
-
-  /**
-   * Analyze health documents with AI
-   */
-  async analyzeDocument(
-    documentText: string,
-    documentType: 'lab_report' | 'prescription' | 'medical_note' | 'discharge_summary' | 'general' = 'general',
-    patientId?: string
-  ): Promise<AIResponse<DocumentAnalysis>> {
-    return this.makeRequest<DocumentAnalysis>('/documents/analyze', {
-      method: 'POST',
-      body: JSON.stringify({
-        documentText,
-        documentType,
-        patientId,
-      }),
-    });
-  }
-
-  /**
-   * Generate health education content
-   */
-  async generateHealthEducation(
-    topic: string,
-    patientId?: string,
-    complexity: 'basic' | 'intermediate' | 'advanced' = 'intermediate'
-  ): Promise<AIResponse<HealthEducation>> {
-    return this.makeRequest<HealthEducation>('/education', {
-      method: 'POST',
-      body: JSON.stringify({
-        topic,
-        patientId,
-        complexity,
-      }),
-    });
-  }
-
-  /**
-   * Analyze health data patterns
-   */
-  async analyzeHealthDataPatterns(
-    patientId: string,
-    analysisType: 'trends' | 'patterns' | 'anomalies' | 'correlations' = 'trends',
-    timeRange: '1w' | '1m' | '3m' | '6m' | '1y' = '3m'
-  ): Promise<AIResponse<any>> {
-    return this.makeRequest('/data/analyze', {
-      method: 'POST',
-      body: JSON.stringify({
-        patientId,
-        analysisType,
-        timeRange,
-      }),
-    });
-  }
-
-  /**
-   * Get comprehensive health insights
-   */
-  async getHealthInsights(patientId: string): Promise<AIResponse<any>> {
-    return this.makeRequest(`/insights/${patientId}`);
-  }
-
-  /**
-   * Batch symptom analysis for multiple patients
-   */
-  async batchAnalyzeSymptoms(
-    analyses: Array<{
-      patientId: string;
-      symptoms: Array<{
-        symptom: string;
-        severity?: string;
-        duration?: string;
-      }>;
-    }>
-  ): Promise<AIResponse<any>> {
-    return this.makeRequest('/symptoms/batch-analyze', {
-      method: 'POST',
-      body: JSON.stringify({
-        analyses,
-      }),
-    });
-  }
-
-  /**
-   * Get AI service status and capabilities
-   */
-  async getAIStatus(): Promise<AIResponse<AIStatus>> {
-    return this.makeRequest<AIStatus>('/status');
-  }
-
-  /**
-   * Get available AI models (admin only)
-   */
-  async getAvailableModels(): Promise<AIResponse<any>> {
-    return this.makeRequest('/models');
-  }
-
-  /**
-   * Pull new AI model (admin only)
-   */
-  async pullModel(modelName: string): Promise<AIResponse<any>> {
-    return this.makeRequest('/models/pull', {
-      method: 'POST',
-      body: JSON.stringify({
-        modelName,
-      }),
-    });
-  }
-
-  /**
-   * Clear conversation history
-   */
-  async clearConversationHistory(patientId: string): Promise<AIResponse<any>> {
-    return this.makeRequest(`/conversations/${patientId}`, {
-      method: 'DELETE',
-    });
-  }
-
-  /**
-   * Get AI analytics (admin only)
-   */
-  async getAIAnalytics(): Promise<AIResponse<any>> {
-    return this.makeRequest('/analytics');
-  }
-
-  /**
-   * Update authentication token
-   */
-  updateToken(token: string | null): void {
-    this.token = token;
-    if (token) {
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('token');
-    }
-  }
-
-  /**
-   * Utility method to format AI responses for display
-   */
-  formatResponse(response: any): string {
-    if (typeof response === 'string') {
-      return response;
-    }
-    
-    if (response && typeof response === 'object') {
-      // Handle different response types
-      if (response.response) {
-        return response.response;
-      }
-      
-      if (response.content) {
-        return response.content;
-      }
-      
-      if (response.analysis) {
-        return response.analysis;
-      }
-      
-      // Fallback to JSON string
-      return JSON.stringify(response, null, 2);
-    }
-    
-    return 'No response available';
-  }
-
-  /**
-   * Check if AI service is available
-   */
-  async isAvailable(): Promise<boolean> {
+  async createHealthTwin(data: HealthTwinData) {
     try {
-      const status = await this.getAIStatus();
-      return status.success && status.data?.status === 'healthy';
+      const response = await api.post(`${this.baseURL}/health-twins/create`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to create health twin:', error);
+      throw error;
+    }
+  }
+
+  async getHealthTwin(twinId: string) {
+    try {
+      const response = await api.get(`${this.baseURL}/health-twins/${twinId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get health twin:', error);
+      throw error;
+    }
+  }
+
+  async updateHealthTwin(twinId: string, data: HealthTwinUpdate) {
+    try {
+      const response = await api.put(`${this.baseURL}/health-twins/${twinId}`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to update health twin:', error);
+      throw error;
+    }
+  }
+
+  async getHealthTwinPredictions(twinId: string, timeframe: '7d' | '30d' | '90d' | '1y' = '30d') {
+    try {
+      const response = await api.get(`${this.baseURL}/health-twins/${twinId}/predictions`, {
+        params: { timeframe }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get health twin predictions:', error);
+      throw error;
+    }
+  }
+
+  async getHealthTwinVisualization(twinId: string, type: '3d' | '2d' | 'chart' | 'timeline' = '3d') {
+    try {
+      const response = await api.get(`${this.baseURL}/health-twins/${twinId}/visualization`, {
+        params: { type }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get health twin visualization:', error);
+      throw error;
+    }
+  }
+
+  // ==================== MACHINE LEARNING METHODS ====================
+
+  async analyzeSymptoms(data: SymptomAnalysis) {
+    try {
+      const response = await api.post(`${this.baseURL}/ml/analyze-symptoms`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to analyze symptoms:', error);
+      throw error;
+    }
+  }
+
+  async predictHealthRisks(data: HealthRiskPrediction) {
+    try {
+      const response = await api.post(`${this.baseURL}/ml/predict-risks`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to predict health risks:', error);
+      throw error;
+    }
+  }
+
+  async generateHealthInsights(data: HealthInsights) {
+    try {
+      const response = await api.post(`${this.baseURL}/ml/health-insights`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to generate health insights:', error);
+      throw error;
+    }
+  }
+
+  async runDiagnosticModel(modelName: string, inputData: any, confidenceThreshold?: number) {
+    try {
+      const payload = {
+        input_data: inputData,
+        ...(confidenceThreshold && { confidence_threshold: confidenceThreshold })
+      };
+      const response = await api.post(`${this.baseURL}/ml/models/${modelName}/predict`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to run diagnostic model:', error);
+      throw error;
+    }
+  }
+
+  // ==================== ANALYTICS METHODS ====================
+
+  async getPopulationHealthAnalytics(region?: string, timeframe: '1m' | '3m' | '6m' | '1y' | '2y' = '1y') {
+    try {
+      const params: any = { timeframe };
+      if (region) params.region = region;
+      
+      const response = await api.get(`${this.baseURL}/analytics/population-health`, { params });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get population health analytics:', error);
+      throw error;
+    }
+  }
+
+  async getDiseaseSurveillanceData(disease?: string, region?: string, timeframe: '1m' | '3m' | '6m' | '1y' = '6m') {
+    try {
+      const params: any = { timeframe };
+      if (disease) params.disease = disease;
+      if (region) params.region = region;
+      
+      const response = await api.get(`${this.baseURL}/analytics/disease-surveillance`, { params });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get disease surveillance data:', error);
+      throw error;
+    }
+  }
+
+  async generateHealthReport(reportType: 'population' | 'disease' | 'facility' | 'custom', parameters: any, format?: 'json' | 'pdf' | 'excel' | 'csv') {
+    try {
+      const payload = {
+        report_type: reportType,
+        parameters,
+        ...(format && { format })
+      };
+      const response = await api.post(`${this.baseURL}/analytics/reports`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to generate health report:', error);
+      throw error;
+    }
+  }
+
+  // ==================== AI CHAT METHODS ====================
+
+  async chatWithAI(data: AIChat) {
+    try {
+      const response = await api.post(`${this.baseURL}/chat`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to chat with AI:', error);
+      throw error;
+    }
+  }
+
+  async analyzeWithAI(data: AIAnalysis) {
+    try {
+      const response = await api.post(`${this.baseURL}/analyze`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to analyze with AI:', error);
+      throw error;
+    }
+  }
+
+  // ==================== VISUALIZATION METHODS ====================
+
+  async generateVisualization(data: VisualizationRequest) {
+    try {
+      const response = await api.post(`${this.baseURL}/visualizations/generate`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to generate visualization:', error);
+      throw error;
+    }
+  }
+
+  async getInteractiveChart(data: InteractiveChart) {
+    try {
+      const response = await api.post(`${this.baseURL}/visualizations/interactive-chart`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get interactive chart:', error);
+      throw error;
+    }
+  }
+
+  // ==================== UTILITY METHODS ====================
+
+  async isAIServiceAvailable(): Promise<boolean> {
+    try {
+      const health = await this.checkHealth();
+      return health.success && health.data.connected;
     } catch (error) {
       return false;
     }
   }
 
-  /**
-   * Get confidence level styling
-   */
-  getConfidenceStyle(confidence: number): {
-    color: string;
-    label: string;
-    bgColor: string;
-  } {
-    if (confidence >= 0.9) {
-      return { color: 'text-green-600', label: 'Very High', bgColor: 'bg-green-100' };
-    } else if (confidence >= 0.8) {
-      return { color: 'text-blue-600', label: 'High', bgColor: 'bg-blue-100' };
-    } else if (confidence >= 0.7) {
-      return { color: 'text-yellow-600', label: 'Medium', bgColor: 'bg-yellow-100' };
-    } else if (confidence >= 0.6) {
-      return { color: 'text-orange-600', label: 'Low', bgColor: 'bg-orange-100' };
-    } else {
-      return { color: 'text-red-600', label: 'Very Low', bgColor: 'bg-red-100' };
+  async getAIServiceStatus() {
+    try {
+      const response = await this.checkHealth();
+      return response.data;
+    } catch (error) {
+      return {
+        connected: false,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      };
     }
   }
 
-  /**
-   * Format medical recommendations for display
-   */
-  formatRecommendations(recommendations: any[]): Array<{
-    text: string;
-    priority: string;
-    category: string;
-    icon: string;
-  }> {
-    return recommendations.map(rec => ({
-      text: rec.text || rec.description || rec.message || 'No description available',
-      priority: rec.priority || 'medium',
-      category: rec.category || rec.type || 'general',
-      icon: this.getRecommendationIcon(rec.category || rec.type || 'general'),
-    }));
+  // ==================== CONVENIENCE METHODS ====================
+
+  // Quick symptom checker
+  async quickSymptomCheck(symptoms: string[], patientHistory?: any) {
+    return this.analyzeSymptoms({
+      symptoms,
+      patient_history: patientHistory,
+      severity: 'moderate'
+    });
   }
 
-  /**
-   * Get icon for recommendation category
-   */
-  private getRecommendationIcon(category: string): string {
-    const iconMap: Record<string, string> = {
-      lifestyle: '🏃‍♂️',
-      medical: '🏥',
-      monitoring: '📊',
-      nutrition: '🥗',
-      exercise: '💪',
-      medication: '💊',
-      general: '💡',
-      urgent: '🚨',
-      routine: '📅',
-    };
-    
-    return iconMap[category.toLowerCase()] || '💡';
+  // Quick health risk assessment
+  async quickRiskAssessment(patientData: any) {
+    return this.predictHealthRisks({
+      patient_data: patientData,
+      timeframe: '6m'
+    });
+  }
+
+  // Quick AI consultation
+  async quickAIConsultation(medicalQuestion: string, patientContext?: any) {
+    return this.chatWithAI({
+      message: medicalQuestion,
+      context: {
+        type: 'medical_consultation',
+        patient_context: patientContext
+      },
+      model: 'deepseek-r1:1.5b'
+    });
+  }
+
+  // Generate patient health summary
+  async generatePatientSummary(patientId: string, dataPoints: any[]) {
+    return this.generateHealthInsights({
+      patient_id: patientId,
+      data_points: dataPoints,
+      insight_type: 'all'
+    });
+  }
+
+  // Create comprehensive health visualization
+  async createHealthDashboard(patientData: any) {
+    return this.generateVisualization({
+      type: 'timeline',
+      data: patientData,
+      options: {
+        theme: 'bioverse',
+        interactive: true,
+        export_formats: ['png', 'svg', 'html']
+      }
+    });
   }
 }
 
-// Create and export singleton instance
+// Create singleton instance
 export const aiService = new AIService();
-export default aiService;
+
+// Export types for use in components
+export type {
+  HealthTwinData,
+  HealthTwinUpdate,
+  SymptomAnalysis,
+  HealthRiskPrediction,
+  HealthInsights,
+  AIChat,
+  AIAnalysis,
+  VisualizationRequest,
+  InteractiveChart
+};

@@ -1,0 +1,50 @@
+{
+  "name": "bioverse",
+  "version": "1.0.0",
+  "description": "BioVerse - AI-Powered Predictive Health Twin Network",
+  "author": "Fred Solami <fredsolami@bioverse.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "start": "./start-bioverse.sh",
+    "dev": "./start-bioverse.sh",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "test": "cd server && npm test",
+    "lint": "cd client && npm run lint && cd ../server && npm run lint",
+    "clean": "rm -rf client/node_modules server/node_modules client/dist logs/*.log .client.pid .server.pid",
+    "reset": "npm run clean && npm run install:all",
+    "db:setup": "cd server && npm run seed",
+    "health": "curl -f http://localhost:3000/health && curl -f http://localhost:5173",
+    "logs:client": "tail -f logs/client.log",
+    "logs:server": "tail -f logs/server.log",
+    "logs:all": "tail -f logs/*.log"
+  },
+  "keywords": [
+    "healthcare",
+    "ai",
+    "health-twins",
+    "telemedicine",
+    "zambia",
+    "africa",
+    "react",
+    "nodejs",
+    "typescript",
+    "postgresql"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cipheraith/BioVerse.git"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

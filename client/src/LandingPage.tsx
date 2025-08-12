@@ -4,8 +4,12 @@ import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionV
 import { 
   HeartPulse, BrainCircuit, Activity, Users, Sparkles, Zap, Shield, Globe,
   ArrowRight, Play, CheckCircle, TrendingUp, Eye, Cpu, Database,
-  Brain, Dna, Target, Award, Star, Wifi, Layers, Atom, Microscope
+  Brain, Dna, Target, Award, Star, Wifi, Layers, Atom, Microscope, Rocket, 
+  Heart, Calendar, Phone, MapPin, Clock, User, Bell, BarChart3
 } from 'lucide-react';
+import Card from './components/ui/Card';
+import Button from './components/ui/Button';
+import GlowingOrb from './components/ui/GlowingOrb';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,55 +49,70 @@ const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans overflow-x-hidden">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white font-sans overflow-x-hidden relative">
+      {/* Enhanced Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [-100, 100, -100],
-            y: [-50, 50, -50],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+        <GlowingOrb size="xl" color="blue" className="absolute top-20 left-10 opacity-20" />
+        <GlowingOrb size="xl" color="purple" className="absolute bottom-20 right-10 opacity-30" />
+        <GlowingOrb size="lg" color="cyan" className="absolute top-1/2 left-1/2 opacity-25" />
+        <GlowingOrb size="md" color="pink" className="absolute top-1/4 right-1/4 opacity-20" />
+        <GlowingOrb size="sm" color="green" className="absolute bottom-1/4 left-1/4 opacity-30" />
+        
+        {/* Enhanced floating particles */}
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+            animate={{
+              x: [0, Math.random() * 200 - 100],
+              y: [0, Math.random() * 200 - 100],
+              opacity: [0, 1, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: Math.random() * 15 + 10,
+              repeat: Infinity,
+              delay: Math.random() * 10,
+            }}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
+        
+        {/* Neural network lines */}
+        <svg className="absolute inset-0 w-full h-full opacity-10">
+          {[...Array(20)].map((_, i) => (
+            <motion.line
+              key={i}
+              x1={`${Math.random() * 100}%`}
+              y1={`${Math.random() * 100}%`}
+              x2={`${Math.random() * 100}%`}
+              y2={`${Math.random() * 100}%`}
+              stroke="url(#gradient)"
+              strokeWidth="1"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.3 }}
+              transition={{ duration: 2, delay: i * 0.1, repeat: Infinity, repeatType: "reverse" }}
+            />
+          ))}
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" />
+              <stop offset="100%" stopColor="#8b5cf6" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
 
       {/* Header */}
-      <header className="relative z-10 container mx-auto px-6 md:px-8 py-6 flex justify-center items-center">
-        <div className="flex items-center space-x-3">
+      <header className="relative z-10 mobile-container px-4 sm:px-6 md:px-8 py-4 sm:py-6 flex justify-center items-center">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <motion.img 
             src="/bio.png" 
             alt="BioVerse Logo" 
-            className="h-16 w-16" 
+            className="h-12 w-12 sm:h-16 sm:w-16" 
             animate={{ 
               rotate: [0, 360],
               scale: [1, 1.1, 1]
@@ -109,7 +128,7 @@ const LandingPage: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.span 
-              className="text-4xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"
+              className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"
               animate={{ 
                 backgroundPosition: ['0%', '200%', '0%']
               }}
@@ -127,16 +146,16 @@ const LandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 container mx-auto px-6 md:px-8 py-20 md:py-32">
-        <div className="text-center mb-16">
+      <main className="relative z-10 mobile-container px-4 sm:px-6 md:px-8 py-12 sm:py-20 md:py-32">
+        <div className="text-center mb-12 sm:mb-16">
           <motion.div
-            className="inline-flex items-center bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-full px-6 py-2 mb-8"
+            className="inline-flex items-center bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-full px-4 sm:px-6 py-2 mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Sparkles className="w-4 h-4 text-blue-400 mr-2" />
-            <span className="text-sm text-blue-300 font-medium">World's First AI-Powered Health Twin Network</span>
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 mr-2" />
+            <span className="text-xs sm:text-sm text-blue-300 font-medium">World's First AI-Powered Health Twin Network</span>
             <motion.div
               className="ml-2 w-2 h-2 bg-green-400 rounded-full"
               animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
@@ -145,17 +164,16 @@ const LandingPage: React.FC = () => {
           </motion.div>
 
           <motion.h1 
-            className="text-6xl md:text-8xl font-black leading-tight mb-8"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 sm:mb-8 px-2"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <span className="bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent block">
               The Future of
             </span>
-            <br />
             <motion.span 
-              className="bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent"
+              className="bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent block"
               animate={{
                 backgroundPosition: ['0%', '200%', '0%']
               }}
@@ -170,7 +188,7 @@ const LandingPage: React.FC = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
@@ -181,27 +199,27 @@ const LandingPage: React.FC = () => {
           </motion.p>
 
           <motion.div 
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12 sm:mb-16 px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             <motion.button
               onClick={() => setIsVideoPlaying(true)}
-              className="group bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 flex items-center space-x-3 shadow-lg"
+              className="mobile-button group bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg w-full sm:w-auto"
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 15px 30px rgba(6, 182, 212, 0.25)"
               }}
               whileTap={{ scale: 0.95 }}
             >
-              <Play className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
               <span>Watch Demo</span>
             </motion.button>
             
             <motion.button
               onClick={() => navigate('/register')}
-              className="group bg-gradient-to-r from-purple-700 to-pink-700 hover:from-purple-800 hover:to-pink-800 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 flex items-center space-x-3 shadow-lg"
+              className="mobile-button group bg-gradient-to-r from-purple-700 to-pink-700 hover:from-purple-800 hover:to-pink-800 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg w-full sm:w-auto"
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 15px 30px rgba(147, 51, 234, 0.25)"
@@ -209,13 +227,13 @@ const LandingPage: React.FC = () => {
               whileTap={{ scale: 0.95 }}
             >
               <span>Start Your Health Journey</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </motion.div>
 
           {/* Breakthrough Features Showcase */}
           <motion.div
-            className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto"
+            className="mobile-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto px-4"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}

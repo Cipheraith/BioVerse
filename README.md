@@ -206,7 +206,7 @@ Year 5: $52.6M ARR | 750,000 users   | 48% profit margin
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/BioVerse.git
+git clone https://github.com/Cipheraith/BioVerse.git
 cd BioVerse
 
 # Install dependencies
@@ -395,7 +395,7 @@ We welcome contributions from developers, healthcare professionals, and advocate
 - 📧 **Email**: support@bioverse.com
 - 💬 **Discord**: [BioVerse Community](https://discord.gg/bioverse)
 - 📱 **WhatsApp**: +260-XXX-XXXX (for urgent support)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/fredmwila/bioverse/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/Cipheraith/BioVerse/issues)
 
 ### 💼 **Business Inquiries**
 - 🏢 **Partnerships**: partnerships@bioverse.com

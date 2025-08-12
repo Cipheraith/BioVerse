@@ -17,7 +17,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     // Only connect if we have a valid API URL and token
-    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
     const token = localStorage.getItem('token');
     
     // Don't establish socket connection if no token (user not logged in)

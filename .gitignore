@@ -1,0 +1,104 @@
+# Dependencies
+node_modules/
+*/node_modules/
+client/node_modules/
+server/node_modules/
+python-ai/venv/
+python-ai/__pycache__/
+
+# Build outputs
+client/dist/
+client/build/
+server/dist/
+server/build/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+client/.env.local
+server/.env
+python-ai/.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+server/server.log
+server/server_output.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+.client.pid
+.server.pid
+.python.pid
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+server/bioverse.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ML Models
+python-ai/models/
+*.pkl
+*.joblib
+*.h5
+*.pb
+
+# Temporary files
+temp_3d_model.png
+*.png.tmp
+demo-optimization.json
