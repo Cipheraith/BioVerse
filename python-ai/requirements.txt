@@ -69,6 +69,7 @@ black==23.11.0
 isort==5.12.0
 
 # Security
+bandit==1.7.5
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 

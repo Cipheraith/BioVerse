@@ -59,7 +59,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ userRole }) => {
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-40 bg-black/20 backdrop-blur-xl border-t border-white/10 safe-area-pb"
+      className="fixed bottom-0 left-0 right-0 z-40 bg-black/40 sm:bg-black/20 backdrop-blur-xl border-t border-white/10 safe-area-pb"
     >
       <div className="flex items-center justify-around px-2 py-2">
         {navItems.map((item) => {
@@ -96,7 +96,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ userRole }) => {
               key={item.id}
               onClick={() => handleNavigation(item.path)}
               className={`
-                flex flex-col items-center justify-center p-2 rounded-xl min-w-[60px] transition-all
+                flex flex-col items-center justify-center p-2 rounded-xl min-w-[56px] sm:min-w-[60px] transition-all
                 ${active 
                   ? 'bg-white/10 text-white' 
                   : 'text-gray-400 hover:text-white hover:bg-white/5'

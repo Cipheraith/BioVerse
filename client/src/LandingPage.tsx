@@ -340,7 +340,7 @@ const LandingPage: React.FC = () => {
           ))}
         </div>
 
-        <div className="container mx-auto px-6 md:px-8 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
           <motion.div
             className="text-center mb-20"
             initial={{ opacity: 0, y: 30 }}
@@ -357,7 +357,7 @@ const LandingPage: React.FC = () => {
               <span className="text-sm text-orange-300 font-medium">Breakthrough Innovation</span>
             </motion.div>
 
-            <h2 className="text-5xl md:text-7xl font-black mb-8">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-black mb-8">
               <span className="bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
                 Why BioVerse is
               </span>
@@ -367,7 +367,7 @@ const LandingPage: React.FC = () => {
               </span>
             </h2>
 
-            <div className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+            <div className="text-base sm:text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed px-4">
               <p className="mb-6">
                 BioVerse stands at the forefront of healthcare innovation by combining 
                 <span className="text-cyan-400 font-semibold"> AI</span>, 
@@ -412,7 +412,7 @@ const LandingPage: React.FC = () => {
           </motion.div>
 
           {/* Revolutionary Features Grid */}
-          <div className="grid lg:grid-cols-2 gap-16 mb-20">
+          <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16 mb-16 lg:mb-20">
             {/* 3D Health Visualization */}
             <motion.div
               className="relative"
@@ -421,16 +421,16 @@ const LandingPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-8 h-full">
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
                 <motion.div
-                  className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6"
+                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6"
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 >
                   <Eye className="w-8 h-8 text-white" />
                 </motion.div>
                 
-                <h3 className="text-3xl font-bold text-white mb-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
                   3D Health Visualization
                 </h3>
                 <p className="text-gray-300 text-lg mb-6 leading-relaxed">
@@ -479,16 +479,16 @@ const LandingPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-8 h-full">
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
                 <motion.div
-                  className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6"
+                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6"
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
                   <BrainCircuit className="w-8 h-8 text-white" />
                 </motion.div>
                 
-                <h3 className="text-3xl font-bold text-white mb-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
                   AI Prediction Engine
                 </h3>
                 <p className="text-gray-300 text-lg mb-6 leading-relaxed">
@@ -546,16 +546,16 @@ const LandingPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-8 h-full">
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
                 <motion.div
-                  className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6"
+                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6"
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                 >
                   <Dna className="w-8 h-8 text-white" />
                 </motion.div>
                 
-                <h3 className="text-3xl font-bold text-white mb-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
                   Molecular Health Analysis
                 </h3>
                 <p className="text-gray-300 text-lg mb-6 leading-relaxed">
@@ -598,16 +598,16 @@ const LandingPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-8 h-full">
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
                 <motion.div
-                  className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6"
+                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 >
                   <Globe className="w-8 h-8 text-white" />
                 </motion.div>
                 
-                <h3 className="text-3xl font-bold text-white mb-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
                   National Health Network
                 </h3>
                 <p className="text-gray-300 text-lg mb-6 leading-relaxed">
@@ -763,7 +763,7 @@ const LandingPage: React.FC = () => {
 
           {/* Impact Statistics */}
           <motion.div
-            className="bg-gradient-to-r from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700 rounded-3xl p-12"
+            className="bg-gradient-to-r from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 lg:p-12"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -778,7 +778,7 @@ const LandingPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
               {[
                 { value: "85%", label: "Early Disease Detection", icon: Target, color: "text-green-400" },
                 { value: "70%", label: "Cost Reduction", icon: TrendingUp, color: "text-blue-400" },
@@ -794,14 +794,14 @@ const LandingPage: React.FC = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <motion.div
-                    className={`w-16 h-16 ${stat.color.replace('text-', 'bg-').replace('-400', '-500/20')} rounded-2xl flex items-center justify-center mx-auto mb-4`}
+                    className={`w-12 h-12 sm:w-16 sm:h-16 ${stat.color.replace('text-', 'bg-').replace('-400', '-500/20')} rounded-2xl flex items-center justify-center mx-auto mb-4`}
                     animate={{ scale: [1, 1.1, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
                   >
-                    <stat.icon className={`w-8 h-8 ${stat.color}`} />
+                    <stat.icon className={`w-6 h-6 sm:w-8 sm:h-8 ${stat.color}`} />
                   </motion.div>
                   <motion.div
-                    className={`text-4xl font-bold ${stat.color} mb-2`}
+                    className={`text-3xl sm:text-4xl font-bold ${stat.color} mb-2`}
                     animate={{ opacity: [0.8, 1, 0.8] }}
                     transition={{ duration: 3, repeat: Infinity, delay: index * 0.3 }}
                   >
@@ -883,7 +883,7 @@ const LandingPage: React.FC = () => {
             </motion.div>
 
             <motion.div
-              className="mt-12 flex justify-center items-center space-x-8 text-gray-400"
+              className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 text-gray-400 text-sm sm:text-base"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}

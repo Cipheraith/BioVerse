@@ -36,6 +36,7 @@ const feedbackRoutes = require('./feedback');
 const complianceRoutes = require('./compliance');
 const lumaRoutes = require('./luma');
 const aiRoutes = require('./ai');
+const voiceAnalysisRoutes = require('./health/voiceAnalysis');
 
 router.use('/auth', authRoutes);
 router.use('/patients', patientRoutes);
@@ -63,5 +64,6 @@ router.use('/feedback', feedbackRoutes);
 router.use('/compliance', complianceRoutes);
 router.use('/luma', lumaRoutes);
 router.use('/ai', aiRoutes);
+router.use('/health', voiceAnalysisRoutes);
 
 module.exports = router;

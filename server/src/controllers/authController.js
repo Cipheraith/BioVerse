@@ -5,7 +5,11 @@ const { OAuth2Client } = require('google-auth-library');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretjwtkey';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.warn('WARNING: JWT_SECRET is not set. Authentication tokens will be insecure. Set JWT_SECRET in environment.');
+}
 
 const register = async (req, res) => {
   // Handle both test format {email, password, name} and production format

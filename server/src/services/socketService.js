@@ -3,7 +3,11 @@ const jwt = require('jsonwebtoken');
 const { socket: logger } = require('./logger');
 const { getQuery } = require('../config/database');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretjwtkey';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  logger.warn('WARNING: JWT_SECRET is not set. Socket authentication will be insecure.');
+}
 
 let io;
 const connectedUsers = new Map();
@@ -134,7 +138,7 @@ const setupSocketIO = (server) => {
       let patientDetails = {};
       if (alertData.patientId) {
         try {
-          const patient = await getQuery('SELECT * FROM patients WHERE id = ?', [alertData.patientId]);
+          const patient = await getQuery('SELECT * FROM patients WHERE id = $1', [alertData.patientId]);
           if (patient) {
             patientDetails = {
               name: patient.name,

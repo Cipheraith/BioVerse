@@ -4,7 +4,55 @@ const { body, validationResult } = require('express-validator');
 const { getAllPatients, createPatient, getPatientById, updatePatient, createSymptomCheck, getMe, getPatientHealthTwin } = require('../controllers/patientController');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Patients
+ *   description: Patient management
+ */
+
+/**
+ * @swagger
+ * /patients:
+ *   get:
+ *     summary: Retrieve a list of all patients
+ *     description: Retrieve a list of all patients. Can be filtered by query parameters.
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of patients.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Patient'
+ */
 router.get('/', authenticateToken, authorizeRoles(['admin', 'health_worker', 'moh']), getAllPatients);
+
+/**
+ * @swagger
+ * /patients:
+ *   post:
+ *     summary: Create a new patient
+ *     description: Create a new patient record.
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NewPatient'
+ *     responses:
+ *       201:
+ *         description: Patient created successfully.
+ *       400:
+ *         description: Invalid input.
+ */
 router.post('/', authenticateToken, authorizeRoles(['admin', 'health_worker']), [
   body('name').notEmpty().withMessage('Patient name is required').isString().withMessage('Patient name must be a string'),
   body('dateOfBirth').isISO8601().withMessage('Date of birth must be a valid date (YYYY-MM-DD)'),

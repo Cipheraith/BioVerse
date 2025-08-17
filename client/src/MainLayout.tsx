@@ -46,7 +46,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-dark-background text-dark-text">
+    <div className="flex min-h-screen bg-dark-background text-dark-text">
       {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-64 flex-shrink-0 bg-dark-card border-r border-dark-border flex flex-col shadow-lg rounded-r-xl

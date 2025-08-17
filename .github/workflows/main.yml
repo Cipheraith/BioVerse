@@ -1,0 +1,67 @@
+name: BioVerse CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  client:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    - name: Install dependencies
+      run: npm install
+    - name: Audit dependencies
+      run: npm audit
+    - name: Lint
+      run: npm run lint
+
+  server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    - name: Install dependencies
+      run: npm install
+    - name: Audit dependencies
+      run: npm audit
+    - name: Test
+      run: npm test
+
+  python-ai:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./python-ai
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pip-audit
+    - name: Audit dependencies
+      run: pip-audit
+    - name: Lint
+      run: bandit -r .
+    - name: Test
+      run: pytest

@@ -214,7 +214,7 @@ const VideoCall: React.FC<VideoCallProps> = ({
   };
 
   return (
-    <div className={`relative h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+    <div className={`relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
       {/* Floating particles for ambiance */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(15)].map((_, i) => (
@@ -324,7 +324,7 @@ const VideoCall: React.FC<VideoCallProps> = ({
 
         {/* Enhanced Local Video (Picture-in-Picture) */}
         <motion.div 
-          className="absolute bottom-24 right-6 w-72 h-52 overflow-hidden"
+          className="absolute bottom-24 right-3 sm:right-6 w-40 h-28 sm:w-56 sm:h-40 md:w-64 md:h-48 lg:w-72 lg:h-52 overflow-hidden"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.05 }}
@@ -372,9 +372,9 @@ const VideoCall: React.FC<VideoCallProps> = ({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 400, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="w-96 flex flex-col"
+              className="w-full md:w-96 flex flex-col"
             >
-              <GlassCard className="h-full m-4 flex flex-col" gradient="blue">
+              <GlassCard className="h-[40vh] md:h-full m-2 md:m-4 flex flex-col" gradient="blue">
                 {/* Enhanced Panel Header */}
                 <div className="p-6 border-b border-white/10">
                   <div className="flex items-center justify-between">

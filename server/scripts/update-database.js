@@ -14,9 +14,13 @@ async function updateDatabase() {
     user: process.env.DB_USER || 'bioverse_admin',
     host: process.env.DB_HOST || 'localhost',
     database: process.env.DB_NAME || 'bioverse_zambia_db',
-    password: process.env.DB_PASSWORD || '2002Fred??',
+    password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT || 5432,
   });
+
+  if (!process.env.DB_PASSWORD) {
+    console.warn('WARNING: DB_PASSWORD is not set. Connecting without a password is insecure for production.');
+  }
 
   try {
     console.log('🔌 Connecting to database...');

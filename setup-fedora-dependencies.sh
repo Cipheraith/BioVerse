@@ -125,7 +125,14 @@ fi
 
 # Setup PostgreSQL database for BioVerse
 echo -e "${BLUE}🗄️  Setting up BioVerse database...${NC}"
-sudo -u postgres psql -c "CREATE USER bioverse_admin WITH PASSWORD '2002Fred??';" 2>/dev/null || echo "User already exists"
+echo "Please set a strong password for the 'bioverse_admin' database user."
+read -s -p "Enter password for bioverse_admin (leave empty to skip creation): " DB_PASS
+echo
+if [ -n "$DB_PASS" ]; then
+    sudo -u postgres psql -c "CREATE USER bioverse_admin WITH PASSWORD '$DB_PASS';" 2>/dev/null || echo "User already exists or creation failed"
+else
+    echo "Skipping user creation. If the user does not exist, create it manually with a secure password."
+fi
 sudo -u postgres psql -c "CREATE DATABASE bioverse_zambia_db OWNER bioverse_admin;" 2>/dev/null || echo "Database already exists"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE bioverse_zambia_db TO bioverse_admin;" 2>/dev/null
 

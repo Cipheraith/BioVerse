@@ -19,13 +19,13 @@ const getAllUsers = async (req, res) => {
     const whereConditions = [];
     
     if (role) {
-      whereConditions.push('role = ?');
+      whereConditions.push(`role = $${params.length + 1}`);
       params.push(role);
       countParams.push(role);
     }
-    
+
     if (search) {
-      whereConditions.push('(username LIKE ? OR email LIKE ?)');
+      whereConditions.push(`(username LIKE $${params.length + 1} OR email LIKE $${params.length + 2})`);
       params.push(`%${search}%`, `%${search}%`);
       countParams.push(`%${search}%`, `%${search}%`);
     }
@@ -37,11 +37,11 @@ const getAllUsers = async (req, res) => {
     }
     
     // Add pagination
-    query += ' ORDER BY createdAt DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(limit), parseInt(offset));
+  query += ` ORDER BY createdAt DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  params.push(parseInt(limit), parseInt(offset));
     
-    const users = await allQuery(query, params);
-    const [totalCount] = await allQuery(countQuery, countParams);
+  const users = await allQuery(query, params);
+  const [totalCount] = await allQuery(countQuery, countParams);
     
     res.json({
       users,
@@ -69,7 +69,7 @@ const getUserById = async (req, res) => {
     }
     
     const [user] = await allQuery(
-      'SELECT id, username, email, role, createdAt, lastLogin FROM users WHERE id = ?',
+      'SELECT id, username, email, role, createdAt, lastLogin FROM users WHERE id = $1',
       [id]
     );
     
@@ -99,7 +99,7 @@ const createUser = async (req, res) => {
     
     // Check if user already exists
     const [existingUser] = await allQuery(
-      'SELECT id FROM users WHERE email = ? OR username = ?',
+      'SELECT id FROM users WHERE email = $1 OR username = $2',
       [email, username]
     );
     
@@ -113,7 +113,7 @@ const createUser = async (req, res) => {
     
     // Create user
     const result = await runQuery(
-      'INSERT INTO users (username, email, password, role, createdAt) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO users (username, email, password, role, createdAt) VALUES ($1, $2, $3, $4, $5) RETURNING id',
       [username, email, hashedPassword, role, Date.now()]
     );
     
@@ -143,7 +143,7 @@ const updateUser = async (req, res) => {
     const { username, email, role, password } = req.body;
     
     // Check if user exists
-    const [existingUser] = await allQuery('SELECT * FROM users WHERE id = ?', [id]);
+  const [existingUser] = await allQuery('SELECT * FROM users WHERE id = $1', [id]);
     
     if (!existingUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -191,14 +191,18 @@ const updateUser = async (req, res) => {
     params.push(id);
     
     // Update user
+    // Build parameterized update query for Postgres ($1, $2...)
+    const setClause = updates.map((u, i) => u.replace(' = ?', ` = $${i + 1}`)).join(', ');
+    const updateParams = params.slice(0, params.length - 1); // last param is id
+    updateParams.push(params[params.length - 1]); // id at the end
     await runQuery(
-      `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
-      params
+      `UPDATE users SET ${setClause} WHERE id = $${updateParams.length}`,
+      updateParams
     );
     
     // Get updated user
     const [updatedUser] = await allQuery(
-      'SELECT id, username, email, role, createdAt, lastLogin FROM users WHERE id = ?',
+      'SELECT id, username, email, role, createdAt, lastLogin FROM users WHERE id = $1',
       [id]
     );
     
@@ -217,14 +221,14 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
     
     // Check if user exists
-    const [existingUser] = await allQuery('SELECT id FROM users WHERE id = ?', [id]);
+  const [existingUser] = await allQuery('SELECT id FROM users WHERE id = $1', [id]);
     
     if (!existingUser) {
       return res.status(404).json({ message: 'User not found' });
     }
     
     // Delete user
-    await runQuery('DELETE FROM users WHERE id = ?', [id]);
+  await runQuery('DELETE FROM users WHERE id = $1', [id]);
     
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
@@ -245,7 +249,7 @@ const getUserAuditLogs = async (req, res) => {
     const logs = await allQuery(
       `SELECT * FROM auditLogs 
        ORDER BY timestamp DESC 
-       LIMIT ? OFFSET ?`,
+       LIMIT $1 OFFSET $2`,
       [parseInt(limit), parseInt(offset)]
     );
     

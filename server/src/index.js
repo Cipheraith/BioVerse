@@ -69,11 +69,21 @@ app.use((req, res, next) => {
   if (process.env.ENABLE_REQUEST_LOGGING === "true") {
     logger.info(`${req.method} ${req.path} - ${req.ip}`);
   }
+  // attach request start time for performance/audit
+  req.startTime = Date.now();
   next();
 });
 
 // Performance monitoring middleware
 app.use(performanceMonitor);
+
+// Swagger/OpenAPI docs
+try {
+  const { setupSwagger } = require('./swagger');
+  setupSwagger(app);
+} catch (err) {
+  logger.warn('Swagger setup failed or swagger dependencies missing:', err.message);
+}
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -86,6 +96,21 @@ app.get("/health", (req, res) => {
 });
 
 // API Routes
+// Attach audit middleware for non-GETs to ensure actions are audited
+try {
+  const auditMiddleware = require('./middleware/auditLogger');
+  app.use('/api', (req, res, next) => {
+    // use generic audit for mutating requests
+    if (req.method !== 'GET') {
+      const mw = auditMiddleware.genericAction('api_request', 'api');
+      return mw(req, res, next);
+    }
+    return next();
+  });
+} catch (err) {
+  logger.warn('Audit middleware not available:', err.message);
+}
+
 app.use("/api", mainRouter);
 // Note: Luma is now handled by Python AI backend via /api/ai/chat
 

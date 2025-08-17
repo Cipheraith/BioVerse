@@ -19,16 +19,16 @@ const getPredictiveInsights = async (req, res) => {
     }
 
     // Get patient data
-    const patient = await getQuery("SELECT * FROM patients WHERE id = ?", [patientId]);
+  const patient = await getQuery("SELECT * FROM patients WHERE id = $1", [patientId]);
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
     }
 
     // Get patient history data
     const [symptomChecks, labResults] = await Promise.all([
-      allQuery("SELECT * FROM symptomChecks WHERE patientId = ?", [patientId]),
-      allQuery("SELECT * FROM labResults WHERE patientId = ?", [patientId]),
-      allQuery("SELECT * FROM appointments WHERE patientId = ?", [patientId])
+  allQuery("SELECT * FROM symptomChecks WHERE patientId = $1", [patientId]),
+  allQuery("SELECT * FROM labResults WHERE patientId = $1", [patientId]),
+  allQuery("SELECT * FROM appointments WHERE patientId = $1", [patientId])
     ]);
 
     // Prepare patient data for analysis
@@ -98,15 +98,15 @@ const getPotentialIssues = async (req, res) => {
     }
 
     // Get patient data
-    const patient = await getQuery("SELECT * FROM patients WHERE id = ?", [patientId]);
+  const patient = await getQuery("SELECT * FROM patients WHERE id = $1", [patientId]);
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
     }
 
     // Get patient history data
     const [symptomChecks, labResults] = await Promise.all([
-      allQuery("SELECT * FROM symptomChecks WHERE patientId = ?", [patientId]),
-      allQuery("SELECT * FROM labResults WHERE patientId = ?", [patientId])
+  allQuery("SELECT * FROM symptomChecks WHERE patientId = $1", [patientId]),
+  allQuery("SELECT * FROM labResults WHERE patientId = $1", [patientId])
     ]);
 
     // Prepare patient data for analysis
@@ -177,7 +177,7 @@ const getSymptomTrendAnalysis = async (req, res) => {
 
     // Get symptom checks for this patient
     const symptomChecks = await allQuery(
-      "SELECT * FROM symptomChecks WHERE patientId = ?",
+      "SELECT * FROM symptomChecks WHERE patientId = $1",
       [patientId]
     );
 
@@ -232,7 +232,7 @@ const getVitalTrendAnalysis = async (req, res) => {
 
     // Get lab results for this patient
     const labResults = await allQuery(
-      "SELECT * FROM labResults WHERE patientId = ?",
+      "SELECT * FROM labResults WHERE patientId = $1",
       [patientId]
     );
 
@@ -287,15 +287,15 @@ const getEarlyWarnings = async (req, res) => {
     }
 
     // Get patient data
-    const patient = await getQuery("SELECT * FROM patients WHERE id = ?", [patientId]);
+  const patient = await getQuery("SELECT * FROM patients WHERE id = $1", [patientId]);
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
     }
 
     // Get patient history data
     const [symptomChecks, labResults] = await Promise.all([
-      allQuery("SELECT * FROM symptomChecks WHERE patientId = ?", [patientId]),
-      allQuery("SELECT * FROM labResults WHERE patientId = ?", [patientId])
+      allQuery("SELECT * FROM symptomChecks WHERE patientId = $1", [patientId]),
+      allQuery("SELECT * FROM labResults WHERE patientId = $1", [patientId])
     ]);
 
     // Prepare patient data for analysis

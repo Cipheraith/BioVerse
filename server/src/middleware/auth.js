@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretjwtkey';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.warn('WARNING: JWT_SECRET is not set. Authentication tokens will be insecure. Set JWT_SECRET in environment variables.');
+}
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];

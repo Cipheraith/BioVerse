@@ -6,11 +6,20 @@ let pool;
 
 async function initializeDatabase() {
   try {
+    const dbUser = process.env.DB_USER || 'bioverse_admin';
+    const dbHost = process.env.DB_HOST || 'localhost';
+    const dbName = process.env.DB_NAME || 'bioverse_zambia_db';
+    const dbPassword = process.env.DB_PASSWORD;
+
+    if (!dbPassword) {
+      console.warn('WARNING: DB_PASSWORD is not set. Using empty password is insecure for production.');
+    }
+
     pool = new Pool({
-      user: process.env.DB_USER || 'bioverse_admin',
-      host: process.env.DB_HOST || 'localhost',
-      database: process.env.DB_NAME || 'bioverse_zambia_db',
-      password: process.env.DB_PASSWORD || '2002Fred??',
+      user: dbUser,
+      host: dbHost,
+      database: dbName,
+      password: dbPassword || '',
       port: process.env.DB_PORT || 5432,
       // Performance optimizations
       max: 20, // Maximum number of clients in the pool

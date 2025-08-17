@@ -24,7 +24,7 @@ const getAllPolicies = async (req, res) => {
     }
     
     if (search) {
-      whereConditions.push('(title LIKE ? OR description LIKE ?)');
+      whereConditions.push(`(title LIKE $${params.length + 1} OR description LIKE $${params.length + 2})`);
       params.push(`%${search}%`, `%${search}%`);
       countParams.push(`%${search}%`, `%${search}%`);
     }
@@ -36,8 +36,8 @@ const getAllPolicies = async (req, res) => {
     }
     
     // Add pagination
-    query += ' ORDER BY createdAt DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(limit), parseInt(offset));
+  query += ` ORDER BY createdAt DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  params.push(parseInt(limit), parseInt(offset));
     
     const policies = await allQuery(query, params);
     const [totalCount] = await allQuery(countQuery, countParams);
@@ -64,7 +64,7 @@ const getPolicyById = async (req, res) => {
   try {
     const { id } = req.params;
     
-    const [policy] = await allQuery('SELECT * FROM policies WHERE id = ?', [id]);
+  const [policy] = await allQuery('SELECT * FROM policies WHERE id = $1', [id]);
     
     if (!policy) {
       return res.status(404).json({ message: 'Policy not found' });
@@ -106,7 +106,7 @@ const createPolicy = async (req, res) => {
         effectiveDate, 
         createdAt, 
         createdBy
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
       [
         title, 
         description, 
@@ -119,7 +119,7 @@ const createPolicy = async (req, res) => {
       ]
     );
     
-    const [newPolicy] = await allQuery('SELECT * FROM policies WHERE id = ?', [result.lastID]);
+    const [newPolicy] = await allQuery('SELECT * FROM policies WHERE id = $1', [result.id]);
     
     res.status(201).json(newPolicy);
   } catch (error) {
@@ -137,7 +137,7 @@ const updatePolicy = async (req, res) => {
     const { title, description, content, status, targetAudience, effectiveDate } = req.body;
     
     // Check if policy exists
-    const [existingPolicy] = await allQuery('SELECT * FROM policies WHERE id = ?', [id]);
+  const [existingPolicy] = await allQuery('SELECT * FROM policies WHERE id = $1', [id]);
     
     if (!existingPolicy) {
       return res.status(404).json({ message: 'Policy not found' });
@@ -196,13 +196,14 @@ const updatePolicy = async (req, res) => {
     params.push(id);
     
     // Update policy
-    await runQuery(
-      `UPDATE policies SET ${updates.join(', ')} WHERE id = ?`,
-      params
-    );
+  // Build parameterized update for Postgres
+  const setClause = updates.map((u, i) => u.replace(' = ?', ` = $${i + 1}`)).join(', ');
+  const updateParams = params.slice(0, params.length - 1);
+  updateParams.push(params[params.length - 1]);
+  await runQuery(`UPDATE policies SET ${setClause} WHERE id = $${updateParams.length}`, updateParams);
     
-    // Get updated policy
-    const [updatedPolicy] = await allQuery('SELECT * FROM policies WHERE id = ?', [id]);
+  // Get updated policy
+  const [updatedPolicy] = await allQuery('SELECT * FROM policies WHERE id = $1', [id]);
     
     res.json(updatedPolicy);
   } catch (error) {
@@ -219,14 +220,14 @@ const deletePolicy = async (req, res) => {
     const { id } = req.params;
     
     // Check if policy exists
-    const [existingPolicy] = await allQuery('SELECT id FROM policies WHERE id = ?', [id]);
+  const [existingPolicy] = await allQuery('SELECT id FROM policies WHERE id = $1', [id]);
     
     if (!existingPolicy) {
       return res.status(404).json({ message: 'Policy not found' });
     }
     
     // Delete policy
-    await runQuery('DELETE FROM policies WHERE id = ?', [id]);
+  await runQuery('DELETE FROM policies WHERE id = $1', [id]);
     
     res.json({ message: 'Policy deleted successfully' });
   } catch (error) {
@@ -243,7 +244,7 @@ const publishPolicy = async (req, res) => {
     const { id } = req.params;
     
     // Check if policy exists
-    const [existingPolicy] = await allQuery('SELECT * FROM policies WHERE id = ?', [id]);
+  const [existingPolicy] = await allQuery('SELECT * FROM policies WHERE id = $1', [id]);
     
     if (!existingPolicy) {
       return res.status(404).json({ message: 'Policy not found' });
@@ -251,12 +252,12 @@ const publishPolicy = async (req, res) => {
     
     // Update policy status to published
     await runQuery(
-      'UPDATE policies SET status = ?, publishedAt = ?, publishedBy = ? WHERE id = ?',
+      'UPDATE policies SET status = $1, publishedAt = $2, publishedBy = $3 WHERE id = $4',
       ['published', Date.now(), req.user.id, id]
     );
     
     // Get updated policy
-    const [updatedPolicy] = await allQuery('SELECT * FROM policies WHERE id = ?', [id]);
+  const [updatedPolicy] = await allQuery('SELECT * FROM policies WHERE id = $1', [id]);
     
     res.json(updatedPolicy);
   } catch (error) {

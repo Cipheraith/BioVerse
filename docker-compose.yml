@@ -9,9 +9,9 @@ services:
     image: postgres:15-alpine
     container_name: bioverse-postgres
     environment:
-      POSTGRES_DB: bioverse_zambia_db
-      POSTGRES_USER: bioverse_admin
-      POSTGRES_PASSWORD: 2002Fred??
+      POSTGRES_DB: ${POSTGRES_DB:-bioverse_zambia_db}
+      POSTGRES_USER: ${POSTGRES_USER:-bioverse_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     ports:
       - "5432:5432"
@@ -51,25 +51,25 @@ services:
       dockerfile: Dockerfile
     container_name: bioverse-python-ai
     environment:
-      - PYTHON_AI_PORT=8000
-      - PYTHON_AI_HOST=0.0.0.0
-      - ENVIRONMENT=production
-      - DEBUG=false
-      - DATABASE_URL=postgresql://bioverse_admin:2002Fred??@postgres:5432/bioverse_zambia_db
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=bioverse_zambia_db
-      - DB_USER=bioverse_admin
-      - DB_PASSWORD=2002Fred??
-      - NODE_SERVER_URL=http://node-server:3000
-      - NODE_SERVER_API_KEY=bioverse-ai-key
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
-      - OLLAMA_MODEL=deepseek-r1:1.5b
-      - ENABLE_OLLAMA=true
-      - REDIS_URL=redis://redis:6379
-      - ENABLE_REDIS_CACHE=true
-      - LOG_LEVEL=INFO
-      - WORKER_PROCESSES=2
+      PYTHON_AI_PORT: 8000
+      PYTHON_AI_HOST: 0.0.0.0
+      ENVIRONMENT: production
+      DEBUG: 'false'
+      DATABASE_URL: ${PYTHON_DATABASE_URL}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-bioverse_zambia_db}
+      DB_USER: ${DB_USER:-bioverse_admin}
+      DB_PASSWORD: ${DB_PASSWORD}
+      NODE_SERVER_URL: http://node-server:3000
+      NODE_SERVER_API_KEY: ${PYTHON_AI_API_KEY}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: deepseek-r1:1.5b
+      ENABLE_OLLAMA: 'true'
+      REDIS_URL: redis://redis:6379
+      ENABLE_REDIS_CACHE: 'true'
+      LOG_LEVEL: INFO
+      WORKER_PROCESSES: '2'
     ports:
       - "8000:8000"
     volumes:
@@ -98,24 +98,24 @@ services:
       dockerfile: Dockerfile
     container_name: bioverse-node-server
     environment:
-      - PORT=3000
-      - NODE_ENV=production
-      - CORS_ORIGIN=http://localhost:5173
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=bioverse_zambia_db
-      - DB_USER=bioverse_admin
-      - DB_PASSWORD=2002Fred??
-      - JWT_SECRET=supersecretjwtkey
-      - JWT_EXPIRY=24h
-      - PYTHON_AI_URL=http://python-ai:8000
-      - PYTHON_AI_API_KEY=bioverse-ai-key
-      - PYTHON_AI_TIMEOUT=30000
-      - PYTHON_AI_RETRY_ATTEMPTS=3
-      - ENABLE_PYTHON_AI=true
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
-      - REDIS_URL=redis://redis:6379
-      - LOG_LEVEL=info
+      PORT: 3000
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost:5173
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-bioverse_zambia_db}
+      DB_USER: ${DB_USER:-bioverse_admin}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRY: 24h
+      PYTHON_AI_URL: ${PYTHON_AI_URL:-http://python-ai:8000}
+      PYTHON_AI_API_KEY: ${PYTHON_AI_API_KEY}
+      PYTHON_AI_TIMEOUT: '30000'
+      PYTHON_AI_RETRY_ATTEMPTS: '3'
+      ENABLE_PYTHON_AI: 'true'
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      REDIS_URL: redis://redis:6379
+      LOG_LEVEL: info
     ports:
       - "3000:3000"
     volumes:

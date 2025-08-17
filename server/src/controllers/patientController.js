@@ -67,7 +67,7 @@ const createPatient = async (req, res) => {
 
 const getPatientById = async (req, res) => {
   try {
-    const patient = await getQuery('SELECT * FROM patients WHERE id = ?', [req.params.id]);
+  const patient = await getQuery('SELECT * FROM patients WHERE id = $1', [req.params.id]);
     if (patient) {
       if (req.user.role === 'patient' && req.user.id !== patient.id.toString()) {
         return res.status(403).json({ message: 'Access Denied: Patients can only view their own data.' });
@@ -129,16 +129,19 @@ const updatePatient = async (req, res) => {
     filteredUpdates.isPregnant = Boolean(filteredUpdates.isPregnant);
   }
 
-  const setClause = Object.keys(filteredUpdates).map(key => `${key} = ?`).join(', ');
+  const setClause = Object.keys(filteredUpdates).map((key, i) => `${key} = $${i + 1}`).join(', ');
   const values = [...Object.values(filteredUpdates), id];
+
+  // The id parameter position is after the update values
+  const idPosition = values.length;
 
   try {
     const result = await runQuery(
-      `UPDATE patients SET ${setClause} WHERE id = ?`,
+      `UPDATE patients SET ${setClause} WHERE id = $${idPosition}`,
       values
     );
-    if (result.changes > 0) {
-      const updatedPatient = await getQuery('SELECT * FROM patients WHERE id = ?', [id]);
+    if (result.rowCount > 0) {
+      const updatedPatient = await getQuery('SELECT * FROM patients WHERE id = $1', [id]);
       res.json(parsePatient(updatedPatient));
     } else {
       res.status(404).send('Patient not found');
@@ -160,7 +163,7 @@ const createSymptomCheck = async (req, res) => {
   try {
     // Save the symptom check to the database
     await runQuery(
-      'INSERT INTO symptomChecks (patientId, symptoms, timestamp) VALUES (?, ?, ?)',
+      'INSERT INTO symptomChecks (patientId, symptoms, timestamp) VALUES ($1, $2, $3)',
       [id, JSON.stringify(symptoms), Date.now()]
     );
 
@@ -176,7 +179,7 @@ const createSymptomCheck = async (req, res) => {
 
 const getMe = async (req, res) => {
   try {
-    const patient = await getQuery('SELECT * FROM patients WHERE id = ?', [req.user.id]);
+  const patient = await getQuery('SELECT * FROM patients WHERE id = $1', [req.user.id]);
     if (patient) {
       res.json(parsePatient(patient));
     } else {

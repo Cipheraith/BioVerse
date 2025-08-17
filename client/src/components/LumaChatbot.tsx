@@ -82,7 +82,7 @@ const LumaChatbot: React.FC = () => {
 
       {/* Chat Window */}
       {isOpen && (
-<div className="fixed bottom-20 right-6 w-96 h-[500px] bg-dark-card border border-dark-border rounded-2xl shadow-2xl flex flex-col backdrop-blur-md">
+<div className="fixed bottom-24 sm:bottom-20 right-3 sm:right-6 w-[92vw] max-w-md sm:w-96 h-[70vh] sm:h-[500px] bg-dark-card border border-dark-border rounded-2xl shadow-2xl flex flex-col backdrop-blur-md">
           {/* Header */}
           <div className="bg-gradient-to-r from-secondary-500 to-primary-500 text-white p-4 rounded-t-2xl flex justify-between items-center animate-pulse-glow">
             <div className="flex items-center space-x-2">

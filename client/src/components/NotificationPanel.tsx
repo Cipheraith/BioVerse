@@ -201,7 +201,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="w-full max-w-sm sm:max-w-md h-full bg-card dark:bg-dark-card border-l border-border dark:border-dark-border shadow-2xl"
+          className="w-full max-w-xs sm:max-w-sm md:max-w-md h-full bg-card dark:bg-dark-card border-l border-border dark:border-dark-border shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col h-full">

@@ -52,7 +52,7 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
 
         {/* Main Content Area */}
         <motion.main
-          className={`flex-1 transition-all duration-300 ${
+          className={`flex-1 w-full transition-all duration-300 ${
             shouldShowNavigation 
               ? isMobile 
                 ? 'ml-0' 

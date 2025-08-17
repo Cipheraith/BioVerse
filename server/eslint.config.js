@@ -1,9 +1,11 @@
 const globals = require("globals");
 const js = require("@eslint/js");
 const jest = require("eslint-plugin-jest");
+const security = require("eslint-plugin-security");
 
 module.exports = [
   js.configs.recommended,
+  security.configs.recommended,
   {
     files: ["**/*.js"],
     languageOptions: {
