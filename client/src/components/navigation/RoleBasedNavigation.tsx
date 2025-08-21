@@ -26,6 +26,7 @@ import {
   UserCheck,
   Sparkles,
   Zap,
+  Pill,
   type LucideIcon
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -66,6 +67,7 @@ const roleConfigs: Record<string, RoleConfig> = {
       { id: 'health-twin', label: 'Health Twin', icon: Brain, path: '/health-twin', gradient: 'pink', description: 'AI-powered health insights' },
       { id: 'symptoms', label: 'Symptom Checker', icon: Activity, path: '/symptoms', gradient: 'orange', description: 'Check symptoms & get guidance' },
       { id: 'emergency', label: 'Emergency', icon: AlertTriangle, path: '/emergency', gradient: 'pink', description: 'Emergency services & contacts' },
+      { id: 'my-prescriptions', label: 'My Prescriptions', icon: Pill, path: '/prescriptions/my', gradient: 'orange', description: 'View your prescriptions' },
     ]
   },
   health_worker: {
@@ -79,6 +81,7 @@ const roleConfigs: Record<string, RoleConfig> = {
       { id: 'patients', label: 'Patients', icon: Users, path: '/patients', gradient: 'blue', description: 'Manage patient records' },
       { id: 'appointments', label: 'Appointments', icon: Calendar, path: '/appointments', gradient: 'purple', description: 'Schedule & manage appointments' },
       { id: 'telemedicine', label: 'Telemedicine', icon: Video, path: '/telemedicine', gradient: 'cyan', description: 'Virtual consultations' },
+      { id: 'create-prescription', label: 'Create Prescription', icon: Pill, path: '/prescriptions/create', gradient: 'orange', description: 'Issue new prescriptions' },
       { id: 'health-twins', label: 'Health Twins', icon: Brain, path: '/health-twins', gradient: 'pink', description: 'AI health monitoring' },
       { id: 'maternal-health', label: 'Maternal Health', icon: Heart, path: '/maternal-health', gradient: 'orange', description: 'Pregnancy & maternal care' },
       { id: 'reports', label: 'Reports', icon: BarChart3, path: '/reports', gradient: 'purple', description: 'Health analytics & reports' },
@@ -112,6 +115,7 @@ const roleConfigs: Record<string, RoleConfig> = {
       { id: 'disease-surveillance', label: 'Disease Surveillance', icon: Monitor, path: '/disease-surveillance', gradient: 'purple', description: 'Disease tracking & monitoring' },
       { id: 'health-facilities', label: 'Health Facilities', icon: Shield, path: '/health-facilities', gradient: 'cyan', description: 'Healthcare facility management' },
       { id: 'emergency-response', label: 'Emergency Response', icon: AlertTriangle, path: '/emergency-response', gradient: 'pink', description: 'National emergency coordination' },
+      { id: 'prescription-oversight', label: 'Prescription Oversight', icon: Pill, path: '/prescriptions/manage', gradient: 'orange', description: 'Oversee prescription fulfillment' },
       { id: 'analytics', label: 'Health Analytics', icon: BarChart3, path: '/analytics', gradient: 'green', description: 'National health analytics' },
       { id: 'policies', label: 'Health Policies', icon: FileText, path: '/policies', gradient: 'purple', description: 'Health policy management' },
     ]
@@ -127,6 +131,7 @@ const roleConfigs: Record<string, RoleConfig> = {
       { id: 'dispatch', label: 'Dispatch Map', icon: MapPin, path: '/dispatch-map', gradient: 'blue', description: 'Live emergency locations' },
       { id: 'emergency-calls', label: 'Emergency Calls', icon: Phone, path: '/emergency-calls', gradient: 'orange', description: 'Active emergency calls' },
       { id: 'patient-transport', label: 'Patient Transport', icon: Truck, path: '/patient-transport', gradient: 'purple', description: 'Patient transportation logs' },
+      { id: 'prescription-delivery', label: 'Prescription Delivery', icon: Pill, path: '/prescriptions/manage', gradient: 'orange', description: 'Manage prescription deliveries' },
       { id: 'medical-equipment', label: 'Medical Equipment', icon: Stethoscope, path: '/medical-equipment', gradient: 'cyan', description: 'Equipment status & inventory' },
       { id: 'trip-history', label: 'Trip History', icon: BarChart3, path: '/trip-history', gradient: 'green', description: 'Completed emergency responses' },
     ]
@@ -140,7 +145,7 @@ const roleConfigs: Record<string, RoleConfig> = {
     navigationItems: [
       { id: 'dashboard', label: 'Pharmacy Dashboard', icon: Home, path: '/dashboard', gradient: 'cyan', description: 'Pharmacy operations overview' },
       { id: 'inventory', label: 'Inventory', icon: Pill, path: '/inventory', gradient: 'blue', description: 'Medication inventory management' },
-      { id: 'prescriptions', label: 'Prescriptions', icon: FileText, path: '/prescriptions', gradient: 'purple', description: 'Prescription management' },
+      { id: 'prescriptions', label: 'Prescriptions', icon: FileText, path: '/prescriptions/manage', gradient: 'purple', description: 'Prescription management' },
       { id: 'orders', label: 'Orders', icon: Calendar, path: '/orders', gradient: 'green', description: 'Medication orders & requests' },
       { id: 'patients', label: 'Patients', icon: Users, path: '/patients', gradient: 'orange', description: 'Patient medication history' },
       { id: 'reports', label: 'Reports', icon: BarChart3, path: '/reports', gradient: 'pink', description: 'Pharmacy analytics & reports' },

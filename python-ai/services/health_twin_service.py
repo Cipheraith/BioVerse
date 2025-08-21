@@ -16,6 +16,11 @@ from .ollama_service import OllamaService
 from .ml_service import MLService
 from .database_service import DatabaseService
 
+# Forward declaration to avoid circular imports
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .advanced_prediction_service import AdvancedPredictionService
+
 class HealthTwinData(BaseModel):
     patient_id: str
     vitals: Dict[str, float]
@@ -24,6 +29,10 @@ class HealthTwinData(BaseModel):
     lifestyle: Dict[str, Any]
     symptoms: List[str]
     lab_results: Dict[str, float]
+    # New fields for advanced predictions
+    genetic_markers: Optional[Dict[str, Any]] = None
+    environmental_data: Optional[Dict[str, Any]] = None
+    social_determinants: Optional[Dict[str, Any]] = None
 
 class HealthTwin(BaseModel):
     id: str
@@ -36,15 +45,20 @@ class HealthTwin(BaseModel):
     recommendations: List[str]
     ai_insights: Dict[str, Any]
     visualization_data: Dict[str, Any]
+    # New fields for advanced predictions
+    life_expectancy: Optional[float] = None
+    quality_of_life_score: Optional[float] = None
+    optimal_interventions: Optional[List[Dict[str, Any]]] = None
 
 class HealthTwinService(BaseService):
     """Service for creating and managing digital health twins"""
     
-    def __init__(self, ollama_service: OllamaService, ml_service: MLService, db_service: DatabaseService):
+    def __init__(self, ollama_service: OllamaService, ml_service: MLService, db_service: DatabaseService, advanced_prediction_service: "AdvancedPredictionService"):
         super().__init__("HealthTwinService")
         self.ollama = ollama_service
         self.ml = ml_service
         self.db = db_service
+        self.advanced_prediction = advanced_prediction_service
         self.twins_cache = {}
         
     async def initialize(self):
@@ -439,6 +453,9 @@ class HealthTwinService(BaseService):
             recommendations = await self._generate_recommendations(twin_data, ai_insights)
             visualization_data = await self._create_visualization_data(twin_data, health_score, risk_factors)
             
+            # Generate advanced predictions from the quantum health predictor concepts
+            advanced_predictions = await self._generate_advanced_predictions(twin_data)
+
             # Update twin
             updated_twin = HealthTwin(
                 id=twin_id,
@@ -450,7 +467,11 @@ class HealthTwinService(BaseService):
                 predictions=predictions,
                 recommendations=recommendations,
                 ai_insights=ai_insights,
-                visualization_data=visualization_data
+                visualization_data=visualization_data,
+                # Add advanced prediction data
+                life_expectancy=advanced_predictions.get("life_expectancy"),
+                quality_of_life_score=advanced_predictions.get("quality_of_life_score"),
+                optimal_interventions=advanced_predictions.get("optimal_interventions")
             )
             
             # Update cache
@@ -470,3 +491,9 @@ class HealthTwinService(BaseService):
     async def get_patient_twins(self, patient_id: str) -> List[HealthTwin]:
         """Get all health twins for a patient"""
         return [twin for twin in self.twins_cache.values() if twin.patient_id == patient_id]
+
+    async def _generate_advanced_predictions(self, twin_data: HealthTwinData) -> Dict[str, Any]:
+        """
+        Generates advanced predictions by calling the AdvancedPredictionService.
+        """
+        return await self.advanced_prediction.generate_advanced_predictions(twin_data)

@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ci": "vitest run --ci --reporter=dot",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@langchain/core": "^0.3.66",

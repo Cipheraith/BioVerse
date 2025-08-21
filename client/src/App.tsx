@@ -30,6 +30,9 @@ import VideoCall from './components/VideoCall';
 import HealthTwinsPage from './pages/HealthTwinsPage';
 import ResponsiveLayout from './components/layout/ResponsiveLayout';
 import ResponsiveDashboard from './components/dashboard/ResponsiveDashboard';
+import PrescriptionForm from './components/prescriptions/PrescriptionForm';
+import PatientPrescriptions from './components/prescriptions/PatientPrescriptions';
+import PharmacyPrescriptions from './components/prescriptions/PharmacyPrescriptions';
 
 
 const App: React.FC = () => {
@@ -70,6 +73,7 @@ const App: React.FC = () => {
           {/* Patient-specific routes */}
           <Route element={<ProtectedRoute allowedRoles={['patient']} />}>
             <Route path="/luma" element={<LumaChatbot />} />
+            <Route path="/prescriptions/my" element={<PatientPrescriptions />} />
           </Route>
 
           {/* Public health routes */}
@@ -122,10 +126,17 @@ const App: React.FC = () => {
             <Route path="/symptoms" element={<LumaChatbot />} />
           </Route>
 
+          {/* Prescription Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['doctor', 'admin']} />}>
+            <Route path="/prescriptions/create" element={<PrescriptionForm />} />
+          </Route>
+          <Route element={<ProtectedRoute allowedRoles={['pharmacy', 'ambulance_driver', 'admin', 'moh']} />}>
+            <Route path="/prescriptions/manage" element={<PharmacyPrescriptions />} />
+          </Route>
+
           {/* Additional role-specific routes */}
           <Route element={<ProtectedRoute allowedRoles={['pharmacy']} />}>
             <Route path="/inventory" element={<div>Pharmacy Inventory</div>} />
-            <Route path="/prescriptions" element={<div>Prescriptions</div>} />
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={['moh']} />}>
@@ -140,3 +151,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

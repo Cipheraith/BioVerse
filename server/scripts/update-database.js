@@ -7,16 +7,10 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { Pool } = require('pg');
+const pool = require('../src/database'); // Import the shared pool
 
 async function updateDatabase() {
-  const pool = new Pool({
-    user: process.env.DB_USER || 'bioverse_admin',
-    host: process.env.DB_HOST || 'localhost',
-    database: process.env.DB_NAME || 'bioverse_zambia_db',
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT || 5432,
-  });
+  // No need to create a new pool here, use the imported one
 
   if (!process.env.DB_PASSWORD) {
     console.warn('WARNING: DB_PASSWORD is not set. Connecting without a password is insecure for production.');

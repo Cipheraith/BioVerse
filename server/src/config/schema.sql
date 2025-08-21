@@ -92,7 +92,9 @@ CREATE TABLE IF NOT EXISTS locations (
     type VARCHAR(255) NOT NULL,
     position JSONB,
     bedsAvailable INTEGER,
-    medicationStock JSONB
+    medicationStock JSONB,
+    equipmentAvailable JSONB, -- New field for specialized equipment
+    specialistsAvailable JSONB -- New field for available specialists
 );
 
 -- Telemedicine and Remote Monitoring Tables
@@ -323,3 +325,40 @@ CREATE INDEX IF NOT EXISTS idx_push_notifications_user_id ON push_notifications(
 CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON audit_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp);
 CREATE INDEX IF NOT EXISTS idx_data_requests_user_id ON data_requests(user_id);
+
+CREATE TABLE IF NOT EXISTS prescriptions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    patient_id INTEGER NOT NULL REFERENCES patients(id),
+    doctor_id INTEGER NOT NULL REFERENCES users(id),
+    pharmacy_id INTEGER REFERENCES users(id), -- Nullable, assigned later
+    medications JSONB NOT NULL, -- Array of {name, dosage, quantity}
+    status VARCHAR(50) NOT NULL DEFAULT 'issued', -- 'issued', 'pending_pharmacy', 'filled', 'in_delivery', 'delivered', 'cancelled'
+    issue_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    delivery_address TEXT,
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS wards (
+    id SERIAL PRIMARY KEY,
+    location_id INTEGER NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    capacity INTEGER NOT NULL,
+    type VARCHAR(100), -- e.g., 'ICU', 'General', 'Pediatric', 'Maternity'
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS rooms (
+    id SERIAL PRIMARY KEY,
+    ward_id INTEGER NOT NULL REFERENCES wards(id) ON DELETE CASCADE,
+    room_number VARCHAR(50) NOT NULL,
+    beds_total INTEGER NOT NULL,
+    beds_occupied INTEGER DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'available', -- 'available', 'occupied', 'cleaning', 'maintenance'
+    equipment JSONB, -- e.g., { "ventilator": true, "monitor": true }
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(ward_id, room_number) -- Ensure room numbers are unique within a ward
+);

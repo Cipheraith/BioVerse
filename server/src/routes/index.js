@@ -48,6 +48,8 @@ router.use('/messages', messageRoutes);
 router.use('/locations', locationRoutes);
 router.use('/labs', labRoutes);
 router.use('/health-twin', healthTwinRoutes);
+// Alias for pluralized path used by some clients
+router.use('/health-twins', healthTwinRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/predictive', predictiveRoutes);
 router.use('/policies', policyRoutes);

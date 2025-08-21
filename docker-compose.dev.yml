@@ -16,6 +16,13 @@ services:
     ports:
       - '6379:6379'
 
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+
   server:
     build: ./server
     environment:
@@ -26,6 +33,7 @@ services:
       DB_USER: "${DB_USER:-bioverse_admin}"
       DB_PASSWORD: "${DB_PASSWORD:-}"
       DB_NAME: "${DB_NAME:-bioverse_zambia_db}"
+      MONGO_URI: "mongodb://mongo:27017/bioverse_mongo_db" # New MongoDB URI
       ENABLE_REQUEST_LOGGING: "true"
       ENABLE_RATE_LIMITING: "false"
     ports:
@@ -33,6 +41,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - mongo # Added dependency on mongo
     volumes:
       - ./server:/usr/src/app
 
@@ -47,4 +56,6 @@ services:
 
 volumes:
   pgdata:
+    driver: local
+  mongodb_data: # New volume for MongoDB
     driver: local

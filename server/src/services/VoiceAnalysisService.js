@@ -2,11 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { logger } = require('./logger');
-const { DatabaseService } = require('./databaseService');
+const databaseService = require('./databaseService');
 
 class VoiceAnalysisService {
   constructor() {
-    this.databaseService = new DatabaseService();
+    this.databaseService = databaseService;
     this.tempDir = path.join(__dirname, '../../temp');
     this.initializeTempDir();
   }
@@ -898,4 +898,4 @@ class VoiceAnalysisService {
   }
 }
 
-module.exports = { VoiceAnalysisService };
+module.exports = VoiceAnalysisService;

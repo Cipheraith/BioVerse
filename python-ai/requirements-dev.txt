@@ -1,0 +1,12 @@
+# Development and test dependencies for python-ai CI
+# Keep lightweight tooling here so CI doesn't try to install heavy ML libs
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.5.1
+pip-audit==2.6.0
+bandit==1.7.5
+python-dotenv==1.0.0
+httpx==0.25.2

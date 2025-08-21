@@ -104,7 +104,10 @@ async def update_health_twin(
             medications=request.medications or [],
             lifestyle=request.lifestyle or {},
             symptoms=request.symptoms or [],
-            lab_results=request.lab_results or {}
+            lab_results=request.lab_results or {},
+            genetic_markers=request.genetic_markers,
+            environmental_data=request.environmental_data,
+            social_determinants=request.social_determinants
         )
         
         # Update health twin

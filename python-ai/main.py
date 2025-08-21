@@ -22,7 +22,9 @@ from services.health_twin_service import HealthTwinService
 from services.ml_service import MLService
 from services.visualization_service import VisualizationService
 from services.database_service import DatabaseService
-from routes import health_twins, ml_models, visualizations, analytics
+from services.generative_quantum_state_service import GenerativeQuantumStateService
+from services.advanced_prediction_service import AdvancedPredictionService
+from routes import health_twins, ml_models, visualizations, analytics, vision, federated
 from middleware.auth import verify_api_key
 from middleware.logging import setup_logging
 from middleware.metrics import setup_metrics
@@ -36,11 +38,13 @@ health_twin_service = None
 ml_service = None
 viz_service = None
 db_service = None
+generative_quantum_state_service = None
+advanced_prediction_service = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
-    global ollama_service, health_twin_service, ml_service, viz_service, db_service
+    global ollama_service, health_twin_service, ml_service, viz_service, db_service, advanced_prediction_service
     
     logger.info("🚀 Starting BioVerse Python AI Service...")
     
@@ -68,8 +72,13 @@ async def lifespan(app: FastAPI):
         await ml_service.initialize()
         logger.info("✅ ML service initialized")
         
+        # Initialize Advanced Prediction service
+        advanced_prediction_service = AdvancedPredictionService()
+        await advanced_prediction_service.initialize()
+        logger.info("✅ Advanced Prediction service initialized")
+        
         # Initialize Health Twin service
-        health_twin_service = HealthTwinService(ollama_service, ml_service, db_service)
+        health_twin_service = HealthTwinService(ollama_service, ml_service, db_service, advanced_prediction_service)
         await health_twin_service.initialize()
         logger.info("✅ Health Twin service initialized")
         
@@ -78,12 +87,19 @@ async def lifespan(app: FastAPI):
         await viz_service.initialize()
         logger.info("✅ Visualization service initialized")
         
+        # Initialize Generative Quantum State service
+        generative_quantum_state_service = GenerativeQuantumStateService()
+        # No async initialize method for now, but good to keep consistent pattern
+        logger.info("✅ Generative Quantum State service initialized")
+        
         # Store services in app state
         app.state.ollama = ollama_service
         app.state.health_twins = health_twin_service
         app.state.ml = ml_service
         app.state.viz = viz_service
         app.state.db = db_service
+        app.state.generative_quantum_state = generative_quantum_state_service
+        app.state.advanced_prediction = advanced_prediction_service
         
         logger.info("🎉 All services initialized successfully!")
         
@@ -162,6 +178,8 @@ app.include_router(health_twins.router, prefix="/api/v1/health-twins", tags=["He
 app.include_router(ml_models.router, prefix="/api/v1/ml", tags=["Machine Learning"])
 app.include_router(visualizations.router, prefix="/api/v1/viz", tags=["Visualizations"])
 app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["Analytics"])
+app.include_router(vision.router, prefix="/api/v1/vision", tags=["Medical Vision"])
+app.include_router(federated.router, prefix="/api/v1/federated", tags=["Federated Learning"])
 
 # Error handlers
 @app.exception_handler(HTTPException)

@@ -68,6 +68,9 @@ app.use(performanceMonitor);
 // Import routers
 const mainRouter = require('./src/routes/index');
 const lumaRouter = require('./src/routes/luma');
+const prescriptionsRouter = require('./src/routes/prescriptions');
+const resourcesRouter = require('./src/routes/resources');
+const wardsRouter = require('./src/routes/wards'); // Import wards router
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -82,5 +85,8 @@ app.get("/health", (req, res) => {
 // API Routes
 app.use("/api", mainRouter);
 app.use("/api/luma", lumaRouter);
+app.use("/api/prescriptions", prescriptionsRouter);
+app.use("/api/resources", resourcesRouter);
+app.use("/api/wards", wardsRouter); // Register wards router
 
 module.exports = app;

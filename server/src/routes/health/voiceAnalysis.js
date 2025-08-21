@@ -5,7 +5,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { logger } = require('../../services/logger');
 const { authenticateToken } = require('../../middleware/auth');
-const { VoiceAnalysisService } = require('../../services/VoiceAnalysisService');
+const VoiceAnalysisService = require('../../services/VoiceAnalysisService');
 
 const router = express.Router();
 

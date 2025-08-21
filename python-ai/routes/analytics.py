@@ -9,8 +9,35 @@ from datetime import datetime, timedelta
 
 from services.ollama_service import OllamaService
 from services.ml_service import MLService
+from services.generative_quantum_state_service import GenerativeQuantumStateService
 
 router = APIRouter()
+
+class GenerateSyntheticDataRequest(BaseModel):
+    num_patients: int = 1
+
+class GenerateSyntheticDataResponse(BaseModel):
+    success: bool
+    synthetic_patients: List[Dict[str, Any]]
+
+@router.post("/generate-synthetic-data", response_model=GenerateSyntheticDataResponse)
+async def generate_synthetic_data(
+    request: GenerateSyntheticDataRequest,
+    generative_service: GenerativeQuantumStateService = Depends(lambda: router.app.state.generative_quantum_state)
+):
+    """Generate synthetic patient data for population health analysis."""
+    try:
+        synthetic_patients_data = await generative_service.generate_synthetic_patient_data(request.num_patients)
+        
+        # For now, we return the raw synthetic patient data. In a more complete flow,
+        # this might also trigger the generation of quantum states for these patients.
+        
+        return {
+            "success": True,
+            "synthetic_patients": synthetic_patients_data
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 class AnalyzeSymptomsRequest(BaseModel):
     symptoms: List[str]
