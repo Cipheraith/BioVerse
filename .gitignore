@@ -102,3 +102,16 @@ python-ai/models/
 temp_3d_model.png
 *.png.tmp
 demo-optimization.json
+
+# Personal and confidential documents
+docs/founder-story.md
+docs/funding-action-plan.md
+docs/pitch-templates.md
+
+# Private funding and investor materials
+*-pitch.md
+*-proposal.md
+funder-*
+investor-*
+personal-*
+private-*
