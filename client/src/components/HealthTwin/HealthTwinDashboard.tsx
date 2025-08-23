@@ -17,7 +17,7 @@ import {
   Shield,
   Zap,
   BarChart3,
-  History,
+  Timeline,
   Beaker,
   Pill,
   Clipboard,
@@ -90,7 +90,7 @@ const HealthTwinDashboard: React.FC<HealthTwinDashboardProps> = ({
     {
       id: 'timeline' as TabType,
       name: 'Timeline',
-      icon: History,
+      icon: Timeline,
       description: 'Health history',
     },
     {

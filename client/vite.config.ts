@@ -66,7 +66,7 @@ export default defineConfig(({ mode }) => {
       'process.env.VITE_API_BASE_URL': JSON.stringify(env.VITE_API_BASE_URL),
     },
     optimizeDeps: {
-      include: ['lucide-react'],
+      exclude: ['lucide-react'],
     },
     server: {
       proxy: {

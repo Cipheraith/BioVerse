@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  Users, Calendar, Activity, AlertTriangle, TrendingUp, RefreshCw, Heart, Brain, Shield, Eye, Sparkles, Zap
+  Users, Calendar, Activity, AlertTriangle, TrendingUp, RefreshCw, Heart, Brain, Shield, Eye
 } from 'lucide-react';
-import GlassCard from '../components/ui/GlassCard';
-import GlassButton from '../components/ui/GlassButton';
-import FloatingParticles from '../components/ui/FloatingParticles';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -17,36 +13,18 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ icon, title, value, change }) => (
-  <GlassCard gradient="blue" glow hover className="relative overflow-hidden">
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex-1">
-        <h3 className="text-lg font-bold text-gray-300 mb-2">{title}</h3>
-        <motion.p 
-          className="text-3xl font-black text-white"
-          animate={{ scale: [1, 1.02, 1] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          {value}
-        </motion.p>
-        <p className="text-sm text-gray-400 mt-1">{change}</p>
-      </div>
-      <motion.div 
-        className="p-4 rounded-2xl bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-sm"
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      >
-        <div className="text-white drop-shadow-lg">{icon}</div>
-      </motion.div>
+  <motion.div
+    className="bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border cursor-pointer"
+    whileHover={{ scale: 1.03, boxShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
+    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+  >
+    <div className="flex items-center justify-between mb-2 sm:mb-4">
+      <h3 className="text-md sm:text-lg font-semibold text-muted dark:text-dark-muted">{title}</h3>
+      <div className="text-primary dark:text-primary-300">{icon}</div>
     </div>
-    
-    {/* Animated background elements */}
-    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-2xl" />
-    <motion.div
-      className="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-white/10 to-transparent rounded-full"
-      animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-      transition={{ duration: 3, repeat: Infinity }}
-    />
-  </GlassCard>
+    <p className="text-2xl sm:text-3xl font-bold text-text dark:text-dark-text">{value}</p>
+    <p className="text-xs sm:text-sm text-muted dark:text-dark-muted">{change}</p>
+  </motion.div>
 );
 
 interface RecentActivity {
@@ -220,401 +198,279 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <LoadingSpinner fullScreen size="xl" color="purple" text="Loading Admin Dashboard..." />;
+    return <div className="text-center text-text dark:text-dark-text">Loading...</div>;
   }
 
   if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <GlassCard gradient="pink" className="text-center p-8">
-          <AlertTriangle size={64} className="mx-auto text-red-400 mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-4">Dashboard Error</h2>
-          <p className="text-gray-400 mb-6">{error}</p>
-          <GlassButton variant="danger" onClick={fetchData}>
-            Retry
-          </GlassButton>
-        </GlassCard>
-      </div>
-    );
+    return <div className="text-center text-destructive dark:text-dark-destructive">Error: {error}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 relative overflow-hidden">
-      <FloatingParticles count={25} colors={['cyan', 'blue', 'purple', 'pink']} />
-      
-      <div className="relative z-10 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Enhanced Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8 text-center"
-          >
-            <motion.div
-              className="inline-flex items-center bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-full px-6 py-2 mb-6"
-              animate={{ scale: [1, 1.02, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen flex flex-col items-center bg-background dark:bg-dark-background p-4 sm:p-8"
+    >
+      <div className="w-full max-w-6xl bg-card dark:bg-dark-card p-4 sm:p-8 rounded-lg shadow-lg border border-border dark:border-dark-border">
+        <div className="flex justify-between items-center mb-4 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-text dark:text-dark-text">Dashboard Overview</h1>
+          <div className="flex items-center">
+            {lastUpdated && (
+              <span className="text-xs text-muted dark:text-dark-muted mr-3">
+                Last updated: {lastUpdated.toLocaleString()}
+              </span>
+            )}
+            <button 
+              onClick={fetchData}
+              disabled={refreshing}
+              className="flex items-center bg-primary hover:bg-primary-700 text-primary-text font-medium py-1 px-3 rounded-lg transition-all duration-300 text-sm"
             >
-              <Sparkles className="w-4 h-4 text-blue-400 mr-2" />
-              <span className="text-sm text-blue-300 font-medium">Administrative Control Center</span>
-              <motion.div
-                className="ml-2 w-2 h-2 bg-green-400 rounded-full"
-                animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>
+              <RefreshCw size={16} className={`mr-1 ${refreshing ? 'animate-spin' : ''}`} />
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-4 sm:mb-8">
+          <StatCard icon={<Users size={24} />} title="Total Patients" value={stats.totalPatients.toString()} change={`+${stats.patientsToday} today`} />
+          <StatCard icon={<Calendar size={24} />} title="Appointments" value={stats.totalAppointments.toString()} change={`+${stats.appointmentsToday} today`} />
+          <StatCard icon={<Activity size={24} />} title="Symptom Reports" value={stats.totalSymptomChecks.toString()} change={`+${stats.symptomChecksToday} today`} />
+          <StatCard icon={<AlertTriangle size={24} />} title="High-Risk Alerts" value={stats.highRiskAlerts.toString()} change={`${stats.riskPercentChange > '0' ? '+' : ''}${stats.riskPercentChange}% from yesterday`} />
+          <StatCard icon={<TrendingUp size={24} />} title="Predicted Patient Load" value={stats.predictedPatientLoad?.toString() || "0"} change={`+${stats.predictedChangePercent || 0}% next week`} />
+        </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-4">
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                Admin
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">
-                Dashboard
-              </span>
-            </h1>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <motion.p 
-                className="text-xl text-gray-300"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-8">
+          <div className="lg:col-span-2 bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-text dark:text-dark-text">Recent Activity</h2>
+            <ul className="space-y-2 sm:space-y-3">
+              {recentActivity.length > 0 ? (
+                recentActivity.map((activity, index) => (
+                  <li key={index} className="flex items-center text-muted dark:text-dark-muted text-sm sm:text-base">
+                    {activity.type === 'patient' && <Users size={18} className="mr-2 text-blue-400" />}
+                    {activity.type === 'symptomCheck' && <Activity size={18} className="mr-2 text-green-400" />}
+                    {activity.type === 'appointment' && <Calendar size={18} className="mr-2 text-purple-400" />}
+                    <span>
+                      {activity.type === 'patient' && `New patient registered: ${activity.name}`}
+                      {activity.type === 'symptomCheck' && `Symptom check for: ${activity.name || 'Unknown'}`}
+                      {activity.type === 'appointment' && `Appointment for: ${activity.name || 'Unknown'}`}
+                      <span className="text-xs sm:text-sm text-gray-500 ml-2">
+                        ({activity.formattedTime || new Date(activity.timestamp).toLocaleString()})
+                      </span>
+                    </span>
+                  </li>
+                ))
+              ) : (
+                <p className="text-muted dark:text-dark-muted text-sm sm:text-base">No recent activity.</p>
+              )}
+            </ul>
+          </div>
+          <div className="bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-text dark:text-dark-text">Quick Actions</h2>
+            <div className="flex flex-col space-y-2 sm:space-y-3">
+              <button
+                onClick={() => navigate('/patients')}
+                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
               >
-                Comprehensive Healthcare Management System
-              </motion.p>
-              
-              <div className="flex items-center space-x-4">
-                {lastUpdated && (
-                  <span className="text-sm text-gray-400">
-                    Last updated: {lastUpdated.toLocaleString()}
-                  </span>
-                )}
-                <GlassButton
-                  variant="primary"
-                  size="sm"
-                  onClick={fetchData}
-                  disabled={refreshing}
-                  loading={refreshing}
-                  icon={<RefreshCw size={16} />}
-                >
-                  {refreshing ? 'Refreshing...' : 'Refresh'}
-                </GlassButton>
-              </div>
-            </div>
-          </motion.div>
-          {/* Enhanced Stats Grid */}
-          <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, staggerChildren: 0.1 }}
-          >
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}>
-              <StatCard icon={<Users size={24} />} title="Total Patients" value={stats.totalPatients.toString()} change={`+${stats.patientsToday} today`} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6 }}>
-              <StatCard icon={<Calendar size={24} />} title="Appointments" value={stats.totalAppointments.toString()} change={`+${stats.appointmentsToday} today`} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.7 }}>
-              <StatCard icon={<Activity size={24} />} title="Symptom Reports" value={stats.totalSymptomChecks.toString()} change={`+${stats.symptomChecksToday} today`} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.8 }}>
-              <StatCard icon={<AlertTriangle size={24} />} title="High-Risk Alerts" value={stats.highRiskAlerts.toString()} change={`${stats.riskPercentChange > '0' ? '+' : ''}${stats.riskPercentChange}% from yesterday`} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.9 }}>
-              <StatCard icon={<TrendingUp size={24} />} title="Predicted Patient Load" value={stats.predictedPatientLoad?.toString() || "0"} change={`+${stats.predictedChangePercent || 0}% next week`} />
-            </motion.div>
-          </motion.div>
-
-          {/* Enhanced Activity and Quick Actions */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-            <div className="xl:col-span-2">
-              <GlassCard gradient="blue" glow>
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <Activity className="mr-3 text-blue-400" size={28} />
-                  Recent Activity
-                </h2>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {recentActivity.length > 0 ? (
-                    recentActivity.map((activity, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors"
-                      >
-                        <div className="p-2 rounded-xl mr-4 bg-white/10">
-                          {activity.type === 'patient' && <Users size={20} className="text-blue-400" />}
-                          {activity.type === 'symptomCheck' && <Activity size={20} className="text-green-400" />}
-                          {activity.type === 'appointment' && <Calendar size={20} className="text-purple-400" />}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-white font-semibold text-sm">
-                            {activity.type === 'patient' && `New patient registered: ${activity.name}`}
-                            {activity.type === 'symptomCheck' && `Symptom check for: ${activity.name || 'Unknown'}`}
-                            {activity.type === 'appointment' && `Appointment for: ${activity.name || 'Unknown'}`}
-                          </p>
-                          <p className="text-gray-400 text-xs mt-1">
-                            {activity.formattedTime || new Date(activity.timestamp).toLocaleString()}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8">
-                      <Activity size={48} className="mx-auto text-gray-400 mb-4" />
-                      <p className="text-gray-400">No recent activity.</p>
-                    </div>
-                  )}
-                </div>
-              </GlassCard>
-            </div>
-
-            <div>
-              <GlassCard gradient="purple" glow>
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <Zap className="mr-3 text-purple-400" size={28} />
-                  Quick Actions
-                </h2>
-                <div className="space-y-3">
-                  <GlassButton
-                    variant="primary"
-                    className="w-full justify-start"
-                    icon={<Users size={18} />}
-                    onClick={() => navigate('/patients')}
-                  >
-                    Manage Patients
-                  </GlassButton>
-                  <GlassButton
-                    variant="secondary"
-                    className="w-full justify-start"
-                    icon={<Calendar size={18} />}
-                    onClick={() => navigate('/appointments')}
-                  >
-                    Manage Appointments
-                  </GlassButton>
-                  <GlassButton
-                    variant="success"
-                    className="w-full justify-start"
-                    icon={<BarChart3 size={18} />}
-                    onClick={() => navigate('/symptom-trends')}
-                  >
-                    View Analytics
-                  </GlassButton>
-                  <GlassButton
-                    variant="warning"
-                    className="w-full justify-start"
-                    icon={<Heart size={18} />}
-                    onClick={fetchHealthTwins}
-                    glow
-                  >
-                    Health Twins
-                  </GlassButton>
-                </div>
-              </GlassCard>
+                Manage Patients
+              </button>
+              <button
+                onClick={() => navigate('/add-patient')}
+                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
+              >
+                Add New Patient
+              </button>
+              <button
+                onClick={() => navigate('/appointments')}
+                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
+              >
+                Manage Appointments
+              </button>
+              <button
+                onClick={() => navigate('/symptom-trends')}
+                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
+              >
+                View Symptom Trends
+              </button>
+              <button
+                onClick={fetchHealthTwins}
+                className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base flex items-center justify-center"
+              >
+                <Heart className="h-4 w-4 mr-2" />
+                View Health Twins
+              </button>
             </div>
           </div>
+        </div>
 
-          {/* Enhanced Risk Distribution */}
-          <GlassCard gradient="orange" glow className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-              <Shield className="mr-3 text-orange-400" size={28} />
-              Patient Risk Level Distribution
+        <div className="mt-4 sm:mt-8 bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-text dark:text-dark-text">Patient Risk Level Distribution</h2>
+          <div className="flex items-center h-32 mt-4">
+            <div 
+              className="bg-red-500 h-full rounded-l" 
+              style={{ width: `${(stats.riskDistribution.high / stats.totalPatients) * 100 || 0}%` }}
+            ></div>
+            <div 
+              className="bg-yellow-500 h-full" 
+              style={{ width: `${(stats.riskDistribution.medium / stats.totalPatients) * 100 || 0}%` }}
+            ></div>
+            <div 
+              className="bg-green-500 h-full rounded-r" 
+              style={{ width: `${(stats.riskDistribution.low / stats.totalPatients) * 100 || 0}%` }}
+            ></div>
+          </div>
+          <div className="flex justify-between mt-2 text-sm">
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+              <span>High Risk ({stats.riskDistribution.high})</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+              <span>Medium Risk ({stats.riskDistribution.medium})</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
+              <span>Low Risk ({stats.riskDistribution.low})</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Health Twins Management Section */}
+        <div className="mt-4 sm:mt-8 bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-text dark:text-dark-text flex items-center">
+              <Heart className="h-6 w-6 text-red-500 mr-2" />
+              Health Twins Management
             </h2>
-            
-            <div className="relative">
-              <div className="flex items-center h-16 bg-white/10 rounded-2xl overflow-hidden mb-4">
-                <motion.div 
-                  className="bg-gradient-to-r from-red-500 to-red-600 h-full flex items-center justify-center text-white font-bold text-sm"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(stats.riskDistribution.high / (stats.totalPatients || 1)) * 100}%` }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                >
-                  {stats.riskDistribution.high > 0 && `${stats.riskDistribution.high}`}
-                </motion.div>
-                <motion.div 
-                  className="bg-gradient-to-r from-yellow-500 to-yellow-600 h-full flex items-center justify-center text-white font-bold text-sm"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(stats.riskDistribution.medium / (stats.totalPatients || 1)) * 100}%` }}
-                  transition={{ duration: 1, delay: 0.7 }}
-                >
-                  {stats.riskDistribution.medium > 0 && `${stats.riskDistribution.medium}`}
-                </motion.div>
-                <motion.div 
-                  className="bg-gradient-to-r from-green-500 to-green-600 h-full flex items-center justify-center text-white font-bold text-sm"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(stats.riskDistribution.low / (stats.totalPatients || 1)) * 100}%` }}
-                  transition={{ duration: 1, delay: 0.9 }}
-                >
-                  {stats.riskDistribution.low > 0 && `${stats.riskDistribution.low}`}
-                </motion.div>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="flex items-center justify-center p-4 bg-red-500/20 rounded-xl border border-red-500/30">
-                  <div className="w-4 h-4 bg-red-500 rounded-full mr-3"></div>
-                  <div>
-                    <p className="text-white font-bold">{stats.riskDistribution.high}</p>
-                    <p className="text-red-300 text-sm">High Risk</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center p-4 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
-                  <div className="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
-                  <div>
-                    <p className="text-white font-bold">{stats.riskDistribution.medium}</p>
-                    <p className="text-yellow-300 text-sm">Medium Risk</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center p-4 bg-green-500/20 rounded-xl border border-green-500/30">
-                  <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                  <div>
-                    <p className="text-white font-bold">{stats.riskDistribution.low}</p>
-                    <p className="text-green-300 text-sm">Low Risk</p>
-                  </div>
-                </div>
-              </div>
+            <button
+              onClick={fetchHealthTwins}
+              disabled={healthTwinsLoading}
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 text-sm"
+            >
+              <Brain className={`h-4 w-4 mr-1 ${healthTwinsLoading ? 'animate-spin' : ''}`} />
+              {healthTwinsLoading ? 'Loading...' : 'View All Health Twins'}
+            </button>
+          </div>
+          
+          {healthTwinsLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+              <p className="text-lg font-medium text-text dark:text-dark-text">Loading Health Twins...</p>
             </div>
-          </GlassCard>
-
-          {/* Enhanced Health Twins Management */}
-          <GlassCard gradient="pink" glow>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-2 flex items-center">
-                  <Heart className="mr-3 text-pink-400" size={28} />
-                  Health Twins Management
-                </h2>
-                <p className="text-gray-300">AI-powered digital health replicas</p>
-              </div>
-              <GlassButton
-                variant="secondary"
-                onClick={fetchHealthTwins}
-                disabled={healthTwinsLoading}
-                loading={healthTwinsLoading}
-                icon={<Brain size={18} />}
-                glow
-              >
-                {healthTwinsLoading ? 'Loading...' : 'Refresh Twins'}
-              </GlassButton>
-            </div>
-            {healthTwinsLoading ? (
-              <div className="flex justify-center items-center py-16">
-                <LoadingSpinner size="lg" color="pink" text="Loading Health Twins..." />
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {healthTwins.length > 0 ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {healthTwins.map((twin, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="cursor-pointer"
-                        onClick={() => navigate(`/patients/${twin.patientId}`)}
-                      >
-                        <GlassCard gradient="blue" hover className="h-full">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center">
-                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mr-4">
-                                <span className="text-white font-bold text-lg">{twin.patientName.charAt(0)}</span>
-                              </div>
-                              <div>
-                                <h3 className="text-white font-bold text-lg">{twin.patientName}</h3>
-                                <p className="text-gray-300 text-sm">{twin.age} years old, {twin.gender}</p>
-                              </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Patient
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Health Score
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Risk Level
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Alerts
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Last Updated
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                  {healthTwins.map((twin, idx) => (
+                    <motion.tr
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                      onClick={() => navigate(`/patients/${twin.patientId}`)}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                              <span className="text-white font-medium text-sm">{twin.patientName.charAt(0)}</span>
                             </div>
-                            <motion.div
-                              className={`px-3 py-1 rounded-full text-xs font-bold ${
-                                twin.riskLevel === 'low' ? 'bg-green-500/20 text-green-300 border border-green-500/30' :
-                                twin.riskLevel === 'medium' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' :
-                                twin.riskLevel === 'high' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-                                'bg-red-500/20 text-red-300 border border-red-500/30'
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">{twin.patientName}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">{twin.age} years old, {twin.gender}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
+                            <div 
+                              className={`h-2.5 rounded-full ${
+                                twin.healthScore >= 80 ? 'bg-green-500' :
+                                twin.healthScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
                               }`}
-                              animate={{ scale: twin.riskLevel === 'high' ? [1, 1.05, 1] : 1 }}
-                              transition={{ duration: 2, repeat: Infinity }}
-                            >
-                              {twin.riskLevel.toUpperCase()}
-                            </motion.div>
+                              style={{ width: `${twin.healthScore}%` }}
+                            ></div>
                           </div>
-
-                          <div className="space-y-4">
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <span className="text-gray-300 text-sm">Health Score</span>
-                                <span className="text-white font-bold">{twin.healthScore}</span>
-                              </div>
-                              <div className="w-full bg-white/10 rounded-full h-3">
-                                <motion.div 
-                                  className={`h-3 rounded-full ${
-                                    twin.healthScore >= 80 ? 'bg-gradient-to-r from-green-500 to-green-600' :
-                                    twin.healthScore >= 60 ? 'bg-gradient-to-r from-yellow-500 to-yellow-600' : 
-                                    'bg-gradient-to-r from-red-500 to-red-600'
-                                  }`}
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${twin.healthScore}%` }}
-                                  transition={{ duration: 1, delay: idx * 0.1 }}
-                                />
-                              </div>
-                            </div>
-
-                            {twin.activeAlerts > 0 && (
-                              <div className="flex items-center p-3 bg-red-500/20 rounded-xl border border-red-500/30">
-                                <AlertTriangle className="w-5 h-5 text-red-400 mr-2" />
-                                <span className="text-red-300 font-semibold text-sm">
-                                  {twin.activeAlerts} Active Alert{twin.activeAlerts > 1 ? 's' : ''}
-                                </span>
-                              </div>
-                            )}
-
-                            <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                              <span className="text-gray-400 text-xs">Last updated: {twin.lastUpdated}</span>
-                              <GlassButton
-                                variant="ghost"
-                                size="sm"
-                                icon={<Eye size={16} />}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigate(`/patients/${twin.patientId}`);
-                                }}
-                              >
-                                View
-                              </GlassButton>
-                            </div>
-                          </div>
-                        </GlassCard>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <motion.div
-                      animate={{ y: [0, -10, 0] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                    >
-                      <Heart size={80} className="mx-auto text-pink-400 mb-6" />
-                    </motion.div>
-                    <h3 className="text-2xl font-bold text-white mb-4">No Health Twins Found</h3>
-                    <p className="text-gray-400 mb-6">Health twins will appear here once patients are registered and their health data is processed.</p>
-                    <GlassButton
-                      variant="primary"
-                      glow
-                      icon={<Brain size={18} />}
-                      onClick={fetchHealthTwins}
-                    >
-                      Initialize Health Twins
-                    </GlassButton>
-                  </div>
-                )}
-              </div>
-            )}
-          </GlassCard>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">{twin.healthScore}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          twin.riskLevel === 'low' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                          twin.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                          twin.riskLevel === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                        }`}>
+                          <Shield className="h-3 w-3 mr-1" />
+                          {twin.riskLevel.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {twin.activeAlerts > 0 ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                            <AlertTriangle className="h-3 w-3 mr-1" />
+                            {twin.activeAlerts} Alert{twin.activeAlerts > 1 ? 's' : ''}
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-500 dark:text-gray-400">No alerts</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {twin.lastUpdated}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/patients/${twin.patientId}`);
+                          }}
+                          className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          View Twin
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+              
+              {healthTwins.length === 0 && !healthTwinsLoading && (
+                <div className="text-center py-12">
+                  <Heart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Health Twins Found</p>
+                  <p className="text-gray-500 dark:text-gray-400">Health twins will appear here once patients are registered and their health data is processed.</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

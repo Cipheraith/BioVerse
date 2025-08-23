@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Video,
   VideoOff,
@@ -10,11 +10,8 @@ import {
   MessageSquare,
   Brain,
   Maximize,
-  Minimize,
-  Clock
+  Minimize
 } from 'lucide-react';
-import GlassCard from './ui/GlassCard';
-import GlassButton from './ui/GlassButton';
 
 interface VideoCallProps {
   consultationId: number;
@@ -26,6 +23,8 @@ interface VideoCallProps {
 
 const VideoCall: React.FC<VideoCallProps> = ({
   consultationId,
+  // patientId,
+  // doctorId,
   userType,
   onCallEnd
 }) => {
@@ -58,25 +57,6 @@ const VideoCall: React.FC<VideoCallProps> = ({
   const chatInputRef = useRef<HTMLInputElement>(null);
   const callTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const endCall = useCallback(async () => {
-    try {
-      // End the video call session
-      if (callTimerRef.current) {
-        clearInterval(callTimerRef.current);
-      }
-      
-      // Clean up streams
-      if (localVideoRef.current?.srcObject) {
-        const stream = localVideoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(track => track.stop());
-      }
-
-      onCallEnd?.();
-    } catch (error) {
-      console.error('Error ending call:', error);
-    }
-  }, [onCallEnd]);
-
   // Initialize call on component mount
   useEffect(() => {
     initializeCall();
@@ -106,6 +86,8 @@ const VideoCall: React.FC<VideoCallProps> = ({
       // Initialize video call (would integrate with WebRTC, Agora, Twilio, etc.)
       setConnectionStatus('connected');
       
+      // Mock participants data is not stored in state
+
       // Get user media (camera/microphone)
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -180,6 +162,25 @@ const VideoCall: React.FC<VideoCallProps> = ({
     }
   };
 
+  const endCall = useCallback(async () => {
+    try {
+      // End the video call session
+      if (callTimerRef.current) {
+        clearInterval(callTimerRef.current);
+      }
+      
+      // Clean up streams
+      if (localVideoRef.current?.srcObject) {
+        const stream = localVideoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+
+      onCallEnd?.();
+    } catch (error) {
+      console.error('Error ending call:', error);
+    }
+  }, [onCallEnd]);
+
   const sendChatMessage = () => {
     if (chatInputRef.current?.value) {
       const message = {
@@ -214,274 +215,171 @@ const VideoCall: React.FC<VideoCallProps> = ({
   };
 
   return (
-    <div className={`relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      {/* Floating particles for ambiance */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-cyan-400/60 rounded-full"
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.3, 1, 0.3],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 3 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.3,
-            }}
-            style={{
-              left: `${10 + i * 6}%`,
-              top: `${20 + (i % 3) * 20}%`,
-            }}
-          />
-        ))}
-      </div>
-
+    <div className={`relative h-screen bg-gray-900 ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
       {/* Video Streams */}
       <div className="relative h-full flex">
         {/* Remote Video (Main) */}
         <div className="flex-1 relative">
           <video
             ref={remoteVideoRef}
-            className="w-full h-full object-cover bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl"
+            className="w-full h-full object-cover bg-gray-800"
             autoPlay
             playsInline
           />
           
-          {/* Enhanced Connection Status */}
-          <motion.div 
-            className="absolute top-6 left-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <GlassCard 
-              className={`px-4 py-2 ${
-                connectionStatus === 'connected' 
-                  ? 'border-green-500/30' 
-                  : connectionStatus === 'connecting'
-                  ? 'border-yellow-500/30'
-                  : 'border-red-500/30'
-              }`}
-              gradient={connectionStatus === 'connected' ? 'green' : connectionStatus === 'connecting' ? 'orange' : 'pink'}
-            >
-              <div className="flex items-center space-x-2">
-                <motion.div 
-                  className={`w-3 h-3 rounded-full ${
-                    connectionStatus === 'connected' ? 'bg-green-400' :
-                    connectionStatus === 'connecting' ? 'bg-yellow-400' : 'bg-red-400'
-                  }`}
-                  animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-                <span className="text-white font-semibold text-sm">
-                  {connectionStatus.charAt(0).toUpperCase() + connectionStatus.slice(1)}
-                </span>
-              </div>
-            </GlassCard>
-          </motion.div>
+          {/* Connection Status */}
+          <div className="absolute top-4 left-4">
+            <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center ${
+              connectionStatus === 'connected' 
+                ? 'bg-green-500 text-white' 
+                : connectionStatus === 'connecting'
+                ? 'bg-yellow-500 text-white'
+                : 'bg-red-500 text-white'
+            }`}>
+              <div className="w-2 h-2 rounded-full bg-current mr-2 animate-pulse"></div>
+              {connectionStatus.charAt(0).toUpperCase() + connectionStatus.slice(1)}
+            </div>
+          </div>
 
-          {/* Enhanced Call Duration */}
-          <motion.div 
-            className="absolute top-6 right-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <GlassCard className="px-4 py-2" gradient="blue">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-cyan-400" />
-                <span className="text-white font-mono font-bold">
-                  {formatDuration(callDuration)}
-                </span>
-              </div>
-            </GlassCard>
-          </motion.div>
+          {/* Call Duration */}
+          <div className="absolute top-4 right-4">
+            <div className="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm font-mono">
+              {formatDuration(callDuration)}
+            </div>
+          </div>
 
-          {/* Enhanced Recording Indicator */}
-          <AnimatePresence>
-            {isRecording && (
-              <motion.div 
-                className="absolute top-6 left-1/2 transform -translate-x-1/2"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-              >
-                <GlassCard className="px-4 py-2" gradient="pink">
-                  <div className="flex items-center space-x-2">
-                    <motion.div 
-                      className="w-3 h-3 rounded-full bg-red-400"
-                      animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    />
-                    <span className="text-white font-bold text-sm">Recording</span>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Enhanced Local Video (Picture-in-Picture) */}
-        <motion.div 
-          className="absolute bottom-24 right-3 sm:right-6 w-40 h-28 sm:w-56 sm:h-40 md:w-64 md:h-48 lg:w-72 lg:h-52 overflow-hidden"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        >
-          <GlassCard className="h-full p-2" gradient="cyan" glow>
-            <div className="relative h-full rounded-xl overflow-hidden">
-              <video
-                ref={localVideoRef}
-                className="w-full h-full object-cover rounded-xl"
-                autoPlay
-                playsInline
-                muted
-              />
-              {!isVideoOn && (
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl flex items-center justify-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <VideoOff size={40} className="text-gray-400" />
-                  </motion.div>
-                </motion.div>
-              )}
-              
-              {/* User indicator */}
-              <div className="absolute bottom-2 left-2">
-                <div className="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
-                  <span className="text-white text-xs font-semibold">You</span>
-                </div>
+          {/* Recording Indicator */}
+          {isRecording && (
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
+              <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
+                <div className="w-2 h-2 rounded-full bg-white mr-2 animate-pulse"></div>
+                Recording
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+          )}
+        </div>
 
-        {/* Enhanced Side Panel (Chat/AI) */}
-        <AnimatePresence>
-          {(showChat || showAI) && (
-            <motion.div
-              initial={{ x: 400, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 400, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="w-full md:w-96 flex flex-col"
-            >
-              <GlassCard className="h-[40vh] md:h-full m-2 md:m-4 flex flex-col" gradient="blue">
-                {/* Enhanced Panel Header */}
-                <div className="p-6 border-b border-white/10">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      {showChat ? (
-                        <MessageSquare className="w-6 h-6 text-cyan-400" />
-                      ) : (
-                        <Brain className="w-6 h-6 text-pink-400" />
-                      )}
-                      <h3 className="font-bold text-white text-lg">
-                        {showChat ? 'Chat' : 'AI Insights'}
-                      </h3>
-                    </div>
-                    <GlassButton
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setShowChat(false);
-                        setShowAI(false);
-                      }}
+        {/* Local Video (Picture-in-Picture) */}
+        <div className="absolute bottom-20 right-4 w-64 h-48 bg-gray-800 rounded-lg overflow-hidden border-2 border-white shadow-lg">
+          <video
+            ref={localVideoRef}
+            className="w-full h-full object-cover"
+            autoPlay
+            playsInline
+            muted
+          />
+          {!isVideoOn && (
+            <div className="absolute inset-0 bg-gray-700 flex items-center justify-center">
+              <VideoOff size={32} className="text-white" />
+            </div>
+          )}
+        </div>
+
+        {/* Side Panel (Chat/AI) */}
+        {(showChat || showAI) && (
+          <motion.div
+            initial={{ x: 400 }}
+            animate={{ x: 0 }}
+            exit={{ x: 400 }}
+            className="w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col"
+          >
+            {/* Panel Header */}
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {showChat ? 'Chat' : 'AI Insights'}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowChat(false);
+                    setShowAI(false);
+                  }}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* Chat Content */}
+            {showChat && (
+              <>
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                  {chatMessages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex ${message.sender === userType ? 'justify-end' : 'justify-start'}`}
                     >
-                      ×
-                    </GlassButton>
+                      <div
+                        className={`max-w-xs px-3 py-2 rounded-lg ${
+                          message.sender === userType
+                            ? 'bg-primary-600 text-white'
+                            : 'bg-gray-200 text-gray-900'
+                        }`}
+                      >
+                        <p className="text-sm">{message.text}</p>
+                        <p className="text-xs opacity-75 mt-1">
+                          {new Date(message.timestamp).toLocaleTimeString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex space-x-2">
+                    <input
+                      ref={chatInputRef}
+                      type="text"
+                      placeholder="Type a message..."
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                    />
+                    <button
+                      onClick={sendChatMessage}
+                      className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    >
+                      Send
+                    </button>
                   </div>
                 </div>
+              </>
+            )}
 
-                {/* Chat Content */}
-                {showChat && (
-                  <>
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                      {chatMessages.map((message) => (
-                        <div
-                          key={message.id}
-                          className={`flex ${message.sender === userType ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div
-                            className={`max-w-xs px-3 py-2 rounded-lg ${
-                              message.sender === userType
-                                ? 'bg-primary-600 text-white'
-                                : 'bg-gray-200 text-gray-900'
-                            }`}
-                          >
-                            <p className="text-sm">{message.text}</p>
-                            <p className="text-xs opacity-75 mt-1">
-                              {new Date(message.timestamp).toLocaleTimeString()}
-                            </p>
-                          </div>
+            {/* AI Insights Content */}
+            {showAI && (
+              <div className="flex-1 overflow-y-auto p-4">
+                <button
+                  onClick={getAIInsights}
+                  className="w-full mb-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center"
+                >
+                  <Brain size={18} className="mr-2" />
+                  Generate AI Insights
+                </button>
+                
+                {aiInsights.length > 0 ? (
+                  <div className="space-y-4">
+                    {aiInsights.map((insight, index) => (
+                      <div key={index} className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                          AI Analysis
+                        </h4>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <p>Processing consultation data...</p>
                         </div>
-                      ))}
-                    </div>
-                    
-                    <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                      <div className="flex space-x-2">
-                        <input
-                          ref={chatInputRef}
-                          type="text"
-                          placeholder="Type a message..."
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
-                        />
-                        <button
-                          onClick={sendChatMessage}
-                          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-                        >
-                          Send
-                        </button>
                       </div>
-                    </div>
-                  </>
-                )}
-
-                {/* AI Insights Content */}
-                {showAI && (
-                  <div className="flex-1 overflow-y-auto p-4">
-                    <button
-                      onClick={getAIInsights}
-                      className="w-full mb-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center"
-                    >
-                      <Brain size={18} className="mr-2" />
-                      Generate AI Insights
-                    </button>
-                    
-                    {aiInsights.length > 0 ? (
-                      <div className="space-y-4">
-                        {aiInsights.map((_, index) => (
-                          <div key={index} className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-                            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                              AI Analysis
-                            </h4>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                              <p>Processing consultation data...</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-8">
-                        <Brain size={48} className="mx-auto text-gray-400 mb-3" />
-                        <p className="text-gray-500">No AI insights generated yet</p>
-                      </div>
-                    )}
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Brain size={48} className="mx-auto text-gray-400 mb-3" />
+                    <p className="text-gray-500">No AI insights generated yet</p>
                   </div>
                 )}
-              </GlassCard>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
+            )}
+          </motion.div>
+        )}
       </div>
 
       {/* Controls */}

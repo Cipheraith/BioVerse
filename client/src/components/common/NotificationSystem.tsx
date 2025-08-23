@@ -172,7 +172,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({ className = 
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute right-0 mt-2 w-full max-w-sm md:max-w-md lg:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50"
+            className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50"
           >
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
@@ -367,7 +367,7 @@ export const ToastNotifications: React.FC<ToastNotificationsProps> = ({ classNam
   );
 
   return (
-    <div className={`fixed top-4 right-2 sm:right-4 z-50 space-y-2 ${className}`}>
+    <div className={`fixed top-4 right-4 z-50 space-y-2 ${className}`}>
       <AnimatePresence>
         {toastNotifications.map((notification) => (
           <motion.div
