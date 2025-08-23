@@ -291,4 +291,5 @@ export class ApiService {
   }
 }
 
+export { apiClient };
 export default ApiService;

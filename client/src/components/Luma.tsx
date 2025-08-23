@@ -19,7 +19,7 @@ import {
   Settings,
   Trash2
 } from "lucide-react";
-import { useSocket } from "./SocketContext";
+import { useSocket } from "../contexts/SocketContext.tsx";
 
 interface Message {
   id: string;

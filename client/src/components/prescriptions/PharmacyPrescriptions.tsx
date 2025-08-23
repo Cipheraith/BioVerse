@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import PrescriptionService, { Prescription } from '../../services/prescriptionService';
 import { toast } from 'react-toastify';
 

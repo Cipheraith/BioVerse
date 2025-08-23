@@ -6,6 +6,9 @@ server/node_modules/
 python-ai/venv/
 python-ai/__pycache__/
 
+# Mobile app (Flutter/Dart)
+bioverse_mobile/
+
 # Build outputs
 client/dist/
 client/build/

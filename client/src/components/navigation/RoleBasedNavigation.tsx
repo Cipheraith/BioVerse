@@ -26,7 +26,6 @@ import {
   UserCheck,
   Sparkles,
   Zap,
-  Pill,
   type LucideIcon
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
