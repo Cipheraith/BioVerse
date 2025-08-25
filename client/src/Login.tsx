@@ -4,7 +4,8 @@ import axios from "axios";
 import { useAuth } from "./hooks/useAuth";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, Mail, Phone, Lock, Sparkles, ArrowRight } from 'lucide-react';
+import { Mail, Phone, Lock, Sparkles, ArrowRight, Heart } from 'lucide-react';
+import { ModernButton, ModernInput, ModernCard, ModernAlert } from './components/modern/ModernComponents';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
@@ -59,65 +60,68 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      {/* Animated Background */}
+    <div className="min-h-screen relative overflow-hidden bg-gray-950">
+      {/* Modern gradient overlay matching landing page */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900/80 to-gray-950"></div>
+      
+      {/* Interactive particle system */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Interactive floating orbs */}
+        {/* Dynamic floating orbs */}
         <motion.div
-          className="absolute w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute w-[600px] h-[600px] bg-gradient-to-r from-blue-500/8 to-cyan-500/8 rounded-full blur-3xl"
           animate={{
-            x: mousePosition.x * 0.1,
-            y: mousePosition.y * 0.1,
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            x: { type: "spring", stiffness: 50 },
-            y: { type: "spring", stiffness: 50 },
-            scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-          }}
-          style={{
-            left: '10%',
-            top: '20%',
-          }}
-        />
-        <motion.div
-          className="absolute w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * -0.05,
+            x: mousePosition.x * 0.08,
             y: mousePosition.y * 0.08,
-            scale: [1.2, 1, 1.2],
+            scale: [0.8, 1.2, 0.8],
           }}
           transition={{
             x: { type: "spring", stiffness: 30 },
             y: { type: "spring", stiffness: 30 },
-            scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+            scale: { duration: 8, repeat: Infinity, ease: "easeInOut" }
           }}
           style={{
-            right: '15%',
-            bottom: '25%',
+            left: '5%',
+            top: '15%',
+          }}
+        />
+        <motion.div
+          className="absolute w-[400px] h-[400px] bg-gradient-to-r from-purple-500/6 to-pink-500/6 rounded-full blur-3xl"
+          animate={{
+            x: mousePosition.x * -0.06,
+            y: mousePosition.y * 0.1,
+            scale: [1.1, 0.9, 1.1],
+          }}
+          transition={{
+            x: { type: "spring", stiffness: 20 },
+            y: { type: "spring", stiffness: 20 },
+            scale: { duration: 10, repeat: Infinity, ease: "easeInOut" }
+          }}
+          style={{
+            right: '10%',
+            bottom: '20%',
           }}
         />
       </div>
 
-      {/* Floating particles */}
+      {/* Premium floating particles */}
       <div className="absolute inset-0">
-        {[...Array(12)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-cyan-400/60 rounded-full"
+            className="absolute w-1 h-1 bg-gradient-to-r from-blue-400/60 to-cyan-400/60 rounded-full"
             animate={{
-              y: [0, -20, 0],
-              opacity: [0.3, 1, 0.3],
-              scale: [1, 1.5, 1],
+              y: [0, -30, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [0.5, 1.5, 0.5],
             }}
             transition={{
-              duration: 3 + i * 0.5,
+              duration: 4 + i * 0.3,
               repeat: Infinity,
-              delay: i * 0.3,
+              delay: i * 0.2,
             }}
             style={{
-              left: `${10 + i * 7}%`,
-              top: `${20 + (i % 3) * 20}%`,
+              left: `${5 + i * 4.5}%`,
+              top: `${10 + (i % 4) * 25}%`,
             }}
           />
         ))}
@@ -126,19 +130,16 @@ const Login: React.FC = () => {
       {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          initial={{ opacity: 0, y: 60, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="w-full max-w-md"
         >
-          {/* Login Card */}
-          <motion.div
-            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 sm:p-10 shadow-2xl"
-            whileHover={{ 
-              boxShadow: "0 25px 50px rgba(6, 182, 212, 0.15)",
-              borderColor: "rgba(6, 182, 212, 0.3)"
-            }}
-            transition={{ duration: 0.3 }}
+          {/* Premium Login Card */}
+          <ModernCard
+            className="bg-gray-950/80 backdrop-blur-2xl border-gray-800/30 shadow-2xl"
+            padding="lg"
+            hover={false}
           >
             {/* Header */}
             <div className="text-center mb-8">
@@ -153,14 +154,14 @@ const Login: React.FC = () => {
                   className="w-full h-full object-contain" 
                 />
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-purple-600/20 rounded-full blur-lg"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-600/20 rounded-full blur-lg"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 />
               </motion.div>
               
               <motion.h1
-                className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-2"
+                className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-500 to-emerald-600 mb-2"
                 animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
                 transition={{ duration: 5, repeat: Infinity }}
               >
@@ -168,7 +169,7 @@ const Login: React.FC = () => {
               </motion.h1>
               
               <motion.p
-                className="text-gray-400 text-lg"
+                className="text-gray-300 text-lg"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -184,24 +185,24 @@ const Login: React.FC = () => {
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6 text-center"
+                  className="bg-danger-500/10 border border-danger-500/20 rounded-xl p-4 mb-6 text-center"
                 >
-                  <p className="text-red-400 text-sm font-medium">{error}</p>
+                  <p className="text-danger-400 text-sm font-medium">{error}</p>
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* Login Type Toggle */}
             <motion.div 
-              className="flex bg-slate-800/50 rounded-2xl p-1 mb-6"
+              className="flex bg-gray-800/50 rounded-2xl p-1 mb-6"
               layout
             >
               <motion.button
                 type="button"
                 className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   loginType === 'username'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-gradient-to-r from-charcoal-500 to-charcoal-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:text-gray-300'
                 }`}
                 onClick={() => setLoginType('username')}
                 whileTap={{ scale: 0.98 }}
@@ -213,8 +214,8 @@ const Login: React.FC = () => {
                 type="button"
                 className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   loginType === 'phoneNumber'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-gradient-to-r from-charcoal-500 to-charcoal-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:text-gray-300'
                 }`}
                 onClick={() => setLoginType('phoneNumber')}
                 whileTap={{ scale: 0.98 }}
@@ -235,20 +236,15 @@ const Login: React.FC = () => {
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <label className="block text-sm font-semibold text-cyan-400 mb-2">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="email"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-4 pl-12 text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
-                        placeholder="Enter your email"
-                        required
-                      />
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    </div>
+                    <ModernInput
+                      label="Email Address"
+                      type="email"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                      icon={<Mail className="w-5 h-5" />}
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -258,20 +254,15 @@ const Login: React.FC = () => {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <label className="block text-sm font-semibold text-cyan-400 mb-2">
-                      Phone Number
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="tel"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-4 pl-12 text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
-                        placeholder="Enter your phone number"
-                        required
-                      />
-                      <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    </div>
+                    <ModernInput
+                      label="Phone Number"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="Enter your phone number"
+                      required
+                      icon={<Phone className="w-5 h-5" />}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -281,53 +272,34 @@ const Login: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-4 pl-12 pr-12 text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <motion.button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </motion.button>
-                </div>
+                <ModernInput
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  icon={<Lock className="w-5 h-5" />}
+                />
               </motion.div>
 
-              <motion.button
-                type="submit"
-                disabled={isLoading}
-                className="group w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(6, 182, 212, 0.3)" }}
-                whileTap={{ scale: 0.98 }}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                {isLoading ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                  />
-                ) : (
-                  <>
-                    <span>Sign In</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </motion.button>
+                <ModernButton
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  loading={isLoading}
+                  disabled={isLoading}
+                >
+                  <span>Sign In</span>
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </ModernButton>
+              </motion.div>
             </form>
 
             {/* Footer */}
@@ -337,7 +309,7 @@ const Login: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <p className="text-gray-400">
+              <p className="text-gray-300">
                 Don't have an account?{" "}
                 <Link 
                   to="/register" 
@@ -348,7 +320,7 @@ const Login: React.FC = () => {
               </p>
               
               <motion.div
-                className="flex items-center justify-center space-x-2 mt-4 text-xs text-gray-500"
+                className="flex items-center justify-center space-x-2 mt-4 text-xs text-gray-300"
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
@@ -357,7 +329,7 @@ const Login: React.FC = () => {
                 <Sparkles className="w-4 h-4" />
               </motion.div>
             </motion.div>
-          </motion.div>
+          </ModernCard>
         </motion.div>
       </div>
     </div>

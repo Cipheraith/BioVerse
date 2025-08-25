@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Users, Calendar, Activity, AlertTriangle, TrendingUp, RefreshCw, Heart, Brain, Shield, Eye
 } from 'lucide-react';
+import { ModernCard, ModernButton } from '../components/modern/ModernComponents';
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -14,16 +15,30 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ icon, title, value, change }) => (
   <motion.div
-    className="bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border cursor-pointer"
-    whileHover={{ scale: 1.03, boxShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
+    className="relative bg-gradient-to-br from-dark-card/80 to-dark-card/60 backdrop-blur-xl p-6 rounded-2xl shadow-2xl border border-primary-500/20 cursor-pointer overflow-hidden group"
+    whileHover={{ 
+      scale: 1.05, 
+      boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)",
+      borderColor: "rgba(99, 102, 241, 0.5)"
+    }}
     transition={{ type: "spring", stiffness: 300, damping: 20 }}
   >
-    <div className="flex items-center justify-between mb-2 sm:mb-4">
-      <h3 className="text-md sm:text-lg font-semibold text-muted dark:text-dark-muted">{title}</h3>
-      <div className="text-primary dark:text-primary-300">{icon}</div>
+    {/* Animated background gradient */}
+    <div className="absolute inset-0 bg-gradient-to-br from-primary-600/10 via-transparent to-secondary-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    
+    {/* Glowing border effect */}
+    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary-500/20 to-secondary-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    
+    <div className="relative z-10">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-dark-muted group-hover:text-primary-300 transition-colors duration-300">{title}</h3>
+        <div className="p-3 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 text-primary-400 group-hover:from-primary-500/30 group-hover:to-secondary-500/30 transition-all duration-300">
+          {icon}
+        </div>
+      </div>
+      <p className="text-3xl font-bold text-dark-text mb-2 group-hover:text-primary-300 transition-colors duration-300">{value}</p>
+      <p className="text-sm text-dark-muted group-hover:text-secondary-400 transition-colors duration-300">{change}</p>
     </div>
-    <p className="text-2xl sm:text-3xl font-bold text-text dark:text-dark-text">{value}</p>
-    <p className="text-xs sm:text-sm text-muted dark:text-dark-muted">{change}</p>
   </motion.div>
 );
 
@@ -210,27 +225,43 @@ const AdminDashboard: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen flex flex-col items-center bg-background dark:bg-dark-background p-4 sm:p-8"
+      className="min-h-screen bg-gradient-to-br from-dark-background via-slate-900 to-dark-background p-4 sm:p-8"
     >
-      <div className="w-full max-w-6xl bg-card dark:bg-dark-card p-4 sm:p-8 rounded-lg shadow-lg border border-border dark:border-dark-border">
-        <div className="flex justify-between items-center mb-4 sm:mb-8">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-text dark:text-dark-text">Dashboard Overview</h1>
-          <div className="flex items-center">
-            {lastUpdated && (
-              <span className="text-xs text-muted dark:text-dark-muted mr-3">
-                Last updated: {lastUpdated.toLocaleString()}
-              </span>
-            )}
-            <button 
-              onClick={fetchData}
-              disabled={refreshing}
-              className="flex items-center bg-primary hover:bg-primary-700 text-primary-text font-medium py-1 px-3 rounded-lg transition-all duration-300 text-sm"
-            >
-              <RefreshCw size={16} className={`mr-1 ${refreshing ? 'animate-spin' : ''}`} />
-              {refreshing ? 'Refreshing...' : 'Refresh'}
-            </button>
+      <div className="w-full max-w-7xl mx-auto">
+        {/* Enhanced Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-gradient-to-r from-dark-card/80 to-dark-card/60 backdrop-blur-xl p-6 sm:p-8 rounded-2xl shadow-2xl border border-primary-500/20 mb-8"
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 bg-clip-text text-transparent mb-2">
+                Dashboard Overview
+              </h1>
+              <p className="text-dark-muted text-lg">Real-time health insights and analytics</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              {lastUpdated && (
+                <div className="text-right">
+                  <p className="text-xs text-dark-muted">Last updated</p>
+                  <p className="text-sm text-dark-text font-medium">{lastUpdated.toLocaleString()}</p>
+                </div>
+              )}
+              <motion.button 
+                onClick={fetchData}
+                disabled={refreshing}
+                className="flex items-center bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <RefreshCw size={18} className={`mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Refreshing...' : 'Refresh Data'}
+              </motion.button>
+            </div>
           </div>
-        </div>
+        </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-4 sm:mb-8">
           <StatCard icon={<Users size={24} />} title="Total Patients" value={stats.totalPatients.toString()} change={`+${stats.patientsToday} today`} />
           <StatCard icon={<Calendar size={24} />} title="Appointments" value={stats.totalAppointments.toString()} change={`+${stats.appointmentsToday} today`} />
@@ -264,42 +295,59 @@ const AdminDashboard: React.FC = () => {
               )}
             </ul>
           </div>
-          <div className="bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-text dark:text-dark-text">Quick Actions</h2>
-            <div className="flex flex-col space-y-2 sm:space-y-3">
-              <button
+          <ModernCard glass={true} padding="lg" hover={true}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white">Quick Actions</h2>
+            <div className="flex flex-col space-y-3">
+              <ModernButton
+                variant="primary"
+                size="md"
+                fullWidth
                 onClick={() => navigate('/patients')}
-                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
               >
+                <Users className="h-4 w-4 mr-2" />
                 Manage Patients
-              </button>
-              <button
+              </ModernButton>
+              
+              <ModernButton
+                variant="secondary"
+                size="md"
+                fullWidth
                 onClick={() => navigate('/add-patient')}
-                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
               >
                 Add New Patient
-              </button>
-              <button
+              </ModernButton>
+              
+              <ModernButton
+                variant="secondary"
+                size="md"
+                fullWidth
                 onClick={() => navigate('/appointments')}
-                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
               >
+                <Calendar className="h-4 w-4 mr-2" />
                 Manage Appointments
-              </button>
-              <button
+              </ModernButton>
+              
+              <ModernButton
+                variant="secondary"
+                size="md"
+                fullWidth
                 onClick={() => navigate('/symptom-trends')}
-                className="w-full bg-primary hover:bg-primary-700 text-primary-text font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base"
               >
+                <Activity className="h-4 w-4 mr-2" />
                 View Symptom Trends
-              </button>
-              <button
+              </ModernButton>
+              
+              <ModernButton
+                variant="danger"
+                size="md"
+                fullWidth
                 onClick={fetchHealthTwins}
-                className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm sm:text-base flex items-center justify-center"
               >
                 <Heart className="h-4 w-4 mr-2" />
                 View Health Twins
-              </button>
+              </ModernButton>
             </div>
-          </div>
+          </ModernCard>
         </div>
 
         <div className="mt-4 sm:mt-8 bg-card dark:bg-dark-card p-4 sm:p-6 rounded-xl shadow-lg border border-border dark:border-dark-border">

@@ -12,152 +12,168 @@ export default {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       colors: {
-        // 🖤 BIOVERSE MINIMALISTIC DARK SYSTEM
+        // 🧬 BIOVERSE COLOR SYSTEM - Modern Medical/Scientific UI
         // Pure blacks and whites for maximum contrast
         black: '#000000',
         white: '#ffffff',
         
-        // Charcoal/Slate Primary - ALL BUTTONS USE THIS SUBTLE COLOR
-        charcoal: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b', // Main charcoal for buttons
-          600: '#475569', // Darker hover state
-          700: '#334155', // Even darker for active states
-          800: '#1e293b', // Deep charcoal backgrounds
-          850: '#0f172a', // Very deep backgrounds
-          900: '#0f172a', // Darkest backgrounds
-          950: '#020617', // Almost black
-          DEFAULT: '#64748b',
+        // BioVerse Primary Teal - Main brand color
+        bioverse: {
+          50: '#eefcfb',
+          100: '#d5f5f4',
+          200: '#aeecea',
+          300: '#79ddd9',
+          400: '#40c9c4',
+          500: '#26b5b0', // BioVerse signature teal
+          600: '#1d9891',
+          700: '#1a7c77',
+          800: '#1a6461',
+          900: '#1a5352',
+          950: '#0a3534',
+          DEFAULT: '#26b5b0',
         },
         
-        // Slate variations for consistency
-        slate: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b', // Same as charcoal for consistency
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          850: '#0f172a',
-          900: '#0f172a',
-          950: '#020617',
-          DEFAULT: '#64748b',
+        // Deep Scientific Blue - Secondary color
+        deepblue: {
+          50: '#edf5ff',
+          100: '#d6e6ff',
+          200: '#b3d1ff',
+          300: '#80b3ff',
+          400: '#4d8bf9',
+          500: '#3366ff', // Deep scientific blue
+          600: '#1a4dff',
+          700: '#173be0',
+          800: '#1933b6',
+          900: '#1c3191',
+          950: '#101c56',
+          DEFAULT: '#3366ff',
         },
         
-        // Primary color - consistent charcoal across ALL interactions
+        // Premium dark grays (scientific app style)
+        gray: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937', // Dark card background
+          850: '#1a202c', // Slightly darker
+          900: '#111827', // Main dark background
+          925: '#0d1117', // GitHub dark
+          950: '#030712', // Almost black
+          DEFAULT: '#6b7280',
+        },
+        
+        // Primary color - consistent teal across app (ALL BUTTONS USE THIS)
         primary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b', // ALL BUTTONS USE THIS EXACT COLOR
-          600: '#475569', // Hover state
-          700: '#334155', // Active/pressed state
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
-          DEFAULT: '#64748b',
+          50: '#eefcfb',
+          100: '#d5f5f4',
+          200: '#aeecea',
+          300: '#79ddd9',
+          400: '#40c9c4',
+          500: '#26b5b0', // BioVerse teal - MAIN BUTTON COLOR
+          600: '#1d9891',
+          700: '#1a7c77',
+          800: '#1a6461',
+          900: '#1a5352',
+          950: '#0a3534',
+          DEFAULT: '#26b5b0',
         },
         
-        // Secondary - subtle blue for minimal accent use
+        // Secondary deep blue color
         secondary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Minimal blue accent (used sparingly)
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
-          DEFAULT: '#0ea5e9',
+          50: '#edf5ff',
+          100: '#d6e6ff',
+          200: '#b3d1ff',
+          300: '#80b3ff',
+          400: '#4d8bf9',
+          500: '#3366ff', // Scientific blue
+          600: '#1a4dff',
+          700: '#173be0',
+          800: '#1933b6',
+          900: '#1c3191',
+          950: '#101c56',
+          DEFAULT: '#3366ff',
         },
         
-        // Accent - very subtle purple (minimal use)
+        // Accent purple color
         accent: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7', // Minimal purple accent
-          600: '#9333ea',
-          700: '#7c3aed',
-          800: '#6b21b6',
-          900: '#581c87',
-          950: '#3b0764',
-          DEFAULT: '#a855f7',
+          50: '#f5f3ff',
+          100: '#ede8ff',
+          200: '#ddd6fe',
+          300: '#c4b5fd',
+          400: '#a78bfa',
+          500: '#8b5cf6', // Scientific purple
+          600: '#7c3aed',
+          700: '#6d28d9',
+          800: '#5b21b6',
+          900: '#4c1d95',
+          950: '#2e1065',
+          DEFAULT: '#8b5cf6',
         },
         
-        // Status colors - muted and subtle
+        // Status colors - using BioVerse palette
         success: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e', // Subtle green for success
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-          950: '#052e16',
-          DEFAULT: '#22c55e',
+          50: '#ecfdf5',
+          100: '#d1fadf',
+          200: '#a7f3d0',
+          300: '#6ee7b7',
+          400: '#34d399',
+          500: '#10b981', // BioVerse success
+          600: '#059669',
+          700: '#047857',
+          800: '#065f46',
+          900: '#064e3b',
+          950: '#022c22',
+          DEFAULT: '#10b981',
         },
         danger: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444', // Subtle red for errors
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
-          950: '#450a0a',
-          DEFAULT: '#ef4444',
+          50: '#fff1f2',
+          100: '#ffe4e6',
+          200: '#fecdd3',
+          300: '#fda4af',
+          400: '#fb7185',
+          500: '#f43f5e', // BioVerse danger
+          600: '#e11d48',
+          700: '#be123c',
+          800: '#9f1239',
+          900: '#881337',
+          950: '#4c0519',
+          DEFAULT: '#f43f5e',
         },
         warning: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b', // Subtle amber for warnings
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
-          950: '#451a03',
-          DEFAULT: '#f59e0b',
+          50: '#fefce8',
+          100: '#fef9c3',
+          200: '#fef08a',
+          300: '#fde047',
+          400: '#facc15',
+          500: '#eab308', // BioVerse warning
+          600: '#ca8a04',
+          700: '#a16207',
+          800: '#854d0e',
+          900: '#713f12',
+          950: '#422006',
+          DEFAULT: '#eab308',
         },
         info: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Same as secondary for consistency
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
-          DEFAULT: '#0ea5e9',
+          50: '#edf5ff',
+          100: '#d6e6ff',
+          200: '#b3d1ff',
+          300: '#80b3ff',
+          400: '#4d8bf9',
+          500: '#3366ff', // Same as secondary/deepblue for consistency
+          600: '#1a4dff',
+          700: '#173be0',
+          800: '#1933b6',
+          900: '#1c3191',
+          950: '#101c56',
+          DEFAULT: '#3366ff',
         },
         
-        // Light Mode Colors (minimal use - app is primarily dark)
+        // Light Mode Colors
         background: '#ffffff',
         'background-secondary': '#f8fafc',
         'background-tertiary': '#f1f5f9',
@@ -172,30 +188,30 @@ export default {
         'border-light': '#f1f5f9',
         divider: '#e2e8f0',
         input: '#ffffff',
-        ring: '#64748b', // Charcoal focus rings
+        ring: '#26b5b0', // BioVerse teal
         
-        // 🖤 BIOVERSE MINIMALISTIC DARK MODE COLORS
-        'dark-background': '#000000',           // Pure black main background
-        'dark-background-secondary': '#020617', // Almost black secondary
-        'dark-background-tertiary': '#0f172a',  // Deep charcoal tertiary
-        'dark-card': '#0f172a',                 // Card backgrounds
-        'dark-surface': '#1e293b',              // Surface elements
-        'dark-overlay': '#334155',              // Overlay elements
-        'dark-text': '#f8fafc',                 // Almost white text
-        'dark-text-secondary': '#e2e8f0',       // Secondary text
-        'dark-text-muted': '#cbd5e1',           // Muted text
-        'dark-text-disabled': '#94a3b8',        // Disabled text
-        'dark-border': '#334155',               // Subtle borders
-        'dark-border-light': '#475569',         // Slightly lighter borders
-        'dark-divider': '#1e293b',              // Subtle dividers
-        'dark-input': '#1e293b',                // Input backgrounds
-        'dark-ring': '#64748b',                 // Focus rings - charcoal
+        // 🧬 BIOVERSE DARK MODE COLORS - Scientific UI
+        'dark-background': '#000000',           // Pure black background
+        'dark-background-secondary': '#0a1a1a', // Very dark teal-tinted black
+        'dark-background-tertiary': '#101e1f',  // Slightly lighter
+        'dark-card': '#121c20',                 // Card background with teal tint
+        'dark-surface': '#1a2428',              // Surface elements
+        'dark-overlay': '#1c2a2e',              // Overlays
+        'dark-text': '#ffffff',                 // Pure white text
+        'dark-text-secondary': '#ecfeff',       // Secondary text with teal tint
+        'dark-text-muted': '#d1e5e7',           // Muted text
+        'dark-text-disabled': '#9cb0b3',        // Disabled text
+        'dark-border': '#1d3538',               // Borders with teal tint
+        'dark-border-light': '#274950',         // Light borders
+        'dark-divider': '#223c3f',              // Dividers
+        'dark-input': '#0f2226',                // Input backgrounds
+        'dark-ring': '#26b5b0',                 // Focus rings - BioVerse teal
         
-        // Minimal glass effects
-        'glass-white': 'rgba(248, 250, 252, 0.05)',
-        'glass-black': 'rgba(0, 0, 0, 0.3)',
-        'glass-primary': 'rgba(100, 116, 139, 0.1)', // Charcoal glass
-        'glass-secondary': 'rgba(14, 165, 233, 0.05)', // Minimal blue glass
+        // BioVerse Glass Colors
+        'glass-white': 'rgba(255, 255, 255, 0.1)',
+        'glass-black': 'rgba(0, 0, 0, 0.1)',
+        'glass-primary': 'rgba(38, 181, 176, 0.1)', // BioVerse teal glass
+        'glass-secondary': 'rgba(51, 102, 255, 0.1)', // Deep blue glass
       },
       fontSize: {
         'xs': ['12px', '16px'],
@@ -249,11 +265,11 @@ export default {
         '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         'inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
         
-        // Subtle charcoal glow effects
-        'glow-sm': '0 0 10px rgba(100, 116, 139, 0.15)', // Very subtle charcoal glow
-        'glow-md': '0 0 20px rgba(100, 116, 139, 0.2)',
-        'glow-lg': '0 0 40px rgba(100, 116, 139, 0.25)',
-        'glow-xl': '0 0 60px rgba(100, 116, 139, 0.3)',
+        // BioVerse glow effects
+        'glow-sm': '0 0 10px rgba(38, 181, 176, 0.3)', // BioVerse teal glow
+        'glow-md': '0 0 20px rgba(38, 181, 176, 0.4)',
+        'glow-lg': '0 0 40px rgba(38, 181, 176, 0.5)',
+        'glow-xl': '0 0 60px rgba(38, 181, 176, 0.6)',
         
         // Dark mode shadows
         'dark-xs': '0 1px 2px 0 rgba(0, 0, 0, 0.3)',
@@ -351,8 +367,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' }
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(100, 116, 139, 0.15)' }, // Subtle charcoal glow
-          '50%': { boxShadow: '0 0 40px rgba(100, 116, 139, 0.25), 0 0 80px rgba(14, 165, 233, 0.1)' } // With minimal blue
+          '0%, 100%': { boxShadow: '0 0 20px rgba(38, 181, 176, 0.3)' }, // BioVerse teal glow
+          '50%': { boxShadow: '0 0 40px rgba(38, 181, 176, 0.6), 0 0 80px rgba(51, 102, 255, 0.3)' } // With secondary blue
         },
         gradientShift: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
@@ -397,12 +413,12 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-primary': 'linear-gradient(135deg, #64748b, #475569)', // Subtle charcoal gradient
-        'gradient-secondary': 'linear-gradient(135deg, #0ea5e9, #0284c7)', // Minimal blue gradient
-        'gradient-danger': 'linear-gradient(135deg, #ef4444, #dc2626)', // Muted danger gradient
-        'gradient-warning': 'linear-gradient(135deg, #f59e0b, #d97706)', // Muted warning gradient
-        'gradient-dark': 'linear-gradient(135deg, #020617, #0f172a, #1e293b)', // Deep dark gradient
-        'gradient-glass': 'linear-gradient(135deg, rgba(248, 250, 252, 0.05), rgba(248, 250, 252, 0.02))',
+        'gradient-primary': 'linear-gradient(135deg, #26b5b0, #1a7c77)', // BioVerse teal gradient
+        'gradient-secondary': 'linear-gradient(135deg, #3366ff, #173be0)', // BioVerse blue gradient
+        'gradient-danger': 'linear-gradient(135deg, #f43f5e, #be123c)', // BioVerse danger gradient
+        'gradient-warning': 'linear-gradient(135deg, #eab308, #a16207)', // BioVerse warning gradient
+        'gradient-dark': 'linear-gradient(135deg, #0a1a1a, #121c20, #1c2a2e)', // BioVerse dark gradient
+        'gradient-glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
         'noise': "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjkiIG51bU9jdGF2ZXM9IjQiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wNSIvPjwvc3ZnPg==')",
       },
       backgroundSize: {
@@ -461,14 +477,14 @@ export default {
             height: '8px',
           },
           '&::-webkit-scrollbar-track': {
-            background: theme('colors.dark-background'),
+            background: theme('colors.background'),
           },
           '&::-webkit-scrollbar-thumb': {
-            background: theme('colors.charcoal.600'),
+            background: theme('colors.border'),
             'border-radius': '4px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: theme('colors.charcoal.500'),
+            background: theme('colors.text-muted'),
           },
         },
         '.line-clamp-1': {
@@ -497,28 +513,28 @@ export default {
         },
         '.glass-effect': {
           'backdrop-filter': 'blur(16px) saturate(180%)',
-          'background': 'rgba(248, 250, 252, 0.05)',
-          'border': '1px solid rgba(248, 250, 252, 0.1)',
+          'background': 'rgba(255, 255, 255, 0.1)',
+          'border': '1px solid rgba(255, 255, 255, 0.2)',
         },
         '.glass-dark': {
           'backdrop-filter': 'blur(16px) saturate(180%)',
-          'background': 'rgba(15, 23, 42, 0.8)',
-          'border': '1px solid rgba(51, 65, 85, 0.3)',
+          'background': 'rgba(30, 41, 59, 0.8)',
+          'border': '1px solid rgba(71, 85, 105, 0.3)',
         },
         '.text-gradient': {
-          'background': 'linear-gradient(135deg, #64748b, #0ea5e9)', // Charcoal to minimal blue
+          'background': 'linear-gradient(135deg, #26b5b0, #3366ff)', // BioVerse teal to blue
           'background-clip': 'text',
           '-webkit-background-clip': 'text',
           '-webkit-text-fill-color': 'transparent',
         },
         '.text-gradient-secondary': {
-          'background': 'linear-gradient(135deg, #0ea5e9, #a855f7)', // Blue to subtle purple
+          'background': 'linear-gradient(135deg, #3366ff, #8b5cf6)', // BioVerse blue to purple
           'background-clip': 'text',
           '-webkit-background-clip': 'text',
           '-webkit-text-fill-color': 'transparent',
         },
         '.border-gradient': {
-          'background': 'linear-gradient(135deg, #64748b, #0ea5e9) border-box', // Charcoal to blue
+          'background': 'linear-gradient(135deg, #26b5b0, #3366ff) border-box', // BioVerse teal to blue
           'border': '2px solid transparent',
           'background-clip': 'padding-box, border-box',
         },
@@ -536,56 +552,56 @@ export default {
           '&:focus': {
             outline: '2px solid transparent',
             outlineOffset: '2px',
-            boxShadow: `0 0 0 2px ${theme('colors.charcoal.500')}`, // Charcoal focus
+            boxShadow: `0 0 0 2px ${theme('colors.bioverse.500')}`, // BioVerse teal
           },
         },
         '.btn-primary': {
-          background: 'linear-gradient(135deg, #64748b, #475569)', // Subtle charcoal gradient
+          background: 'linear-gradient(135deg, #26b5b0, #1a7c77)', // BioVerse teal gradient
           color: theme('colors.white'),
-          boxShadow: '0 4px 12px rgba(100, 116, 139, 0.15)', // Very subtle shadow
+          boxShadow: '0 4px 12px rgba(38, 181, 176, 0.3)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #475569, #334155)', // Slightly darker on hover
-            boxShadow: '0 6px 16px rgba(100, 116, 139, 0.2)', // Subtle increase
+            background: 'linear-gradient(135deg, #1d9891, #1a6461)', // Darker teal on hover
+            boxShadow: '0 8px 20px rgba(38, 181, 176, 0.4)',
             transform: 'translateY(-1px)',
           },
           '&:active': {
             transform: 'translateY(0)',
-            boxShadow: '0 2px 8px rgba(100, 116, 139, 0.2)',
+            boxShadow: '0 2px 8px rgba(38, 181, 176, 0.4)',
           },
         },
         '.btn-secondary': {
-          background: 'transparent',
-          color: theme('colors.charcoal.400'),
-          border: `1px solid ${theme('colors.charcoal.600')}`,
+          background: theme('colors.background'),
+          color: theme('colors.bioverse.500'),
+          border: `2px solid ${theme('colors.bioverse.500')}`,
           '&:hover': {
-            background: theme('colors.charcoal.900'),
-            color: theme('colors.charcoal.300'),
-            borderColor: theme('colors.charcoal.500'),
+            background: theme('colors.bioverse.50'),
+            color: theme('colors.bioverse.600'),
+            borderColor: theme('colors.bioverse.600'),
           },
         },
         '.btn-ghost': {
           background: 'transparent',
-          color: theme('colors.charcoal.400'),
+          color: theme('colors.bioverse.500'),
           '&:hover': {
-            background: theme('colors.charcoal.900'),
-            color: theme('colors.charcoal.300'),
+            background: theme('colors.bioverse.50'),
+            color: theme('colors.bioverse.600'),
           },
         },
         '.btn-danger': {
-          background: 'linear-gradient(135deg, #ef4444, #dc2626)', // Subtle danger gradient
+          background: 'linear-gradient(135deg, #f43f5e, #e11d48)', // BioVerse danger gradient
           color: theme('colors.white'),
-          boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)',
+          boxShadow: '0 4px 12px rgba(244, 63, 94, 0.3)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
-            boxShadow: '0 6px 16px rgba(239, 68, 68, 0.2)',
+            background: 'linear-gradient(135deg, #e11d48, #be123c)', // Darker on hover
+            boxShadow: '0 8px 20px rgba(244, 63, 94, 0.4)',
             transform: 'translateY(-1px)',
           },
         },
         '.card': {
-          background: theme('colors.dark-card'),
+          background: theme('colors.card'),
           borderRadius: theme('borderRadius.xl'),
-          boxShadow: theme('boxShadow.dark-md'),
-          border: `1px solid ${theme('colors.dark-border')}`,
+          boxShadow: theme('boxShadow.md'),
+          border: `1px solid ${theme('colors.border')}`,
           padding: theme('spacing.6'),
           '.dark &': {
             background: theme('colors.dark-card'),
@@ -595,27 +611,26 @@ export default {
         },
         '.card-glass': {
           backdropFilter: 'blur(16px) saturate(180%)',
-          background: 'rgba(15, 23, 42, 0.8)',
-          border: '1px solid rgba(51, 65, 85, 0.3)',
+          background: 'rgba(255, 255, 255, 0.1)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
           borderRadius: theme('borderRadius.xl'),
           padding: theme('spacing.6'),
           '.dark &': {
-            background: 'rgba(15, 23, 42, 0.8)',
-            borderColor: 'rgba(51, 65, 85, 0.3)',
+            background: 'rgba(30, 41, 59, 0.8)',
+            borderColor: 'rgba(71, 85, 105, 0.3)',
           },
         },
         '.input': {
           width: '100%',
           padding: theme('spacing.3'),
           borderRadius: theme('borderRadius.md'),
-          border: `1px solid ${theme('colors.dark-border')}`,
-          background: theme('colors.dark-input'),
+          border: `1px solid ${theme('colors.border')}`,
+          background: theme('colors.input'),
           fontSize: theme('fontSize.sm')[0],
-          color: theme('colors.dark-text'),
           '&:focus': {
             outline: 'none',
-            borderColor: theme('colors.charcoal.500'),
-            boxShadow: `0 0 0 3px ${theme('colors.charcoal.500')}20`,
+            borderColor: theme('colors.bioverse.500'),
+            boxShadow: `0 0 0 3px ${theme('colors.bioverse.500')}20`,
           },
           '.dark &': {
             background: theme('colors.dark-input'),

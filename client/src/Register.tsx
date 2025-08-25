@@ -3,7 +3,8 @@ import logo from '/bio.png';
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Phone, Lock, User, Calendar, CreditCard, UserCheck, Eye, EyeOff, Sparkles, ArrowRight, CheckCircle } from 'lucide-react';
+import { Mail, Phone, Lock, User, Calendar, CreditCard, UserCheck, Sparkles, ArrowRight, CheckCircle, Heart } from 'lucide-react';
+import { ModernButton, ModernInput, ModernCard, ModernAlert, ModernSelect } from './components/modern/ModernComponents';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -70,41 +71,54 @@ const Register: React.FC = () => {
     }
   };
 
+  const roleOptions = [
+    { value: 'patient', label: 'Patient' },
+    { value: 'health_worker', label: 'Health Worker' },
+    { value: 'admin', label: 'Admin' },
+    { value: 'moh', label: 'Ministry of Health' },
+    { value: 'ambulance_driver', label: 'Ambulance Driver' },
+    { value: 'pharmacy', label: 'Pharmacy' }
+  ];
+
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      <div className="absolute inset-0 z-0">
+    <div className="min-h-screen relative overflow-hidden bg-gray-950">
+      {/* Modern gradient overlay matching landing page */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900/80 to-gray-950"></div>
+      
+      {/* Enhanced particle system */}
+      <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute w-[700px] h-[700px] bg-gradient-to-r from-blue-500/6 to-cyan-500/6 rounded-full blur-3xl"
           animate={{
-            x: mousePosition.x * 0.1,
-            y: mousePosition.y * 0.1,
-            scale: [1, 1.1, 1],
+            x: mousePosition.x * 0.06,
+            y: mousePosition.y * 0.06,
+            scale: [0.9, 1.3, 0.9],
           }}
           transition={{
-            x: { type: "spring", stiffness: 50 },
-            y: { type: "spring", stiffness: 50 },
-            scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            x: { type: "spring", stiffness: 25 },
+            y: { type: "spring", stiffness: 25 },
+            scale: { duration: 12, repeat: Infinity, ease: "easeInOut" }
           }}
           style={{
-            left: '20%',
-            top: '30%',
+            left: '15%',
+            top: '25%',
           }}
         />
         <motion.div
-          className="absolute w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"
+          className="absolute w-[500px] h-[500px] bg-gradient-to-r from-purple-500/5 to-red-500/5 rounded-full blur-3xl"
           animate={{
-            x: mousePosition.x * -0.05,
+            x: mousePosition.x * -0.04,
             y: mousePosition.y * 0.08,
-            scale: [1.2, 1, 1.2],
+            scale: [1.2, 0.8, 1.2],
           }}
           transition={{
-            x: { type: "spring", stiffness: 30 },
-            y: { type: "spring", stiffness: 30 },
-            scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+            x: { type: "spring", stiffness: 20 },
+            y: { type: "spring", stiffness: 20 },
+            scale: { duration: 15, repeat: Infinity, ease: "easeInOut" }
           }}
           style={{
-            right: '25%',
-            bottom: '35%',
+            right: '20%',
+            bottom: '30%',
           }}
         />
       </div>
@@ -116,13 +130,10 @@ const Register: React.FC = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-full max-w-2xl"
         >
-          <motion.div
-            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 sm:p-10 shadow-2xl"
-            whileHover={{ 
-              boxShadow: "0 25px 50px rgba(6, 182, 212, 0.15)",
-              borderColor: "rgba(6, 182, 212, 0.3)"
-            }}
-            transition={{ duration: 0.3 }}
+          <ModernCard
+            className="bg-gray-950/80 backdrop-blur-xl border-gray-800/50 shadow-2xl"
+            padding="lg"
+            hover={true}
           >
             <div className="text-center mb-8">
               <motion.img 
@@ -132,10 +143,10 @@ const Register: React.FC = () => {
                 animate={{ rotate: [0, -360] }}
                 transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
               />
-              <h1 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-2">
+              <h1 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-500 to-emerald-600 mb-2">
                 Join BioVerse
               </h1>
-              <p className="text-gray-400 text-lg">
+              <p className="text-gray-300 text-lg">
                 Create your account to access the future of healthcare
               </p>
             </div>
@@ -165,85 +176,111 @@ const Register: React.FC = () => {
             </AnimatePresence>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Form Fields */}
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">Full Name</label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12" />
-                </div>
+                <ModernInput
+                  label="Full Name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Enter your full name"
+                  required
+                  icon={<User className="w-5 h-5" />}
+                />
               </motion.div>
+              
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type="email" value={username} onChange={(e) => setUsername(e.target.value)} required className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12" />
-                </div>
+                <ModernInput
+                  label="Email Address"
+                  type="email"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  icon={<Mail className="w-5 h-5" />}
+                />
               </motion.div>
+              
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">Phone Number</label>
-                <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12" />
-                </div>
+                <ModernInput
+                  label="Phone Number"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="Enter your phone number"
+                  icon={<Phone className="w-5 h-5" />}
+                />
               </motion.div>
+              
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12 pr-12" />
-                  <motion.button type="button" onClick={() => setShowPassword(!showPassword)} whileTap={{ scale: 0.95 }} className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    {showPassword ? <EyeOff /> : <Eye />}
-                  </motion.button>
-                </div>
+                <ModernInput
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create a strong password"
+                  required
+                  icon={<Lock className="w-5 h-5" />}
+                />
               </motion.div>
+              
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">Date of Birth</label>
-                <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12" />
-                </div>
+                <ModernInput
+                  label="Date of Birth"
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                  required
+                  icon={<Calendar className="w-5 h-5" />}
+                />
               </motion.div>
+              
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}>
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">National ID</label>
-                <div className="relative">
-                  <CreditCard className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type="text" value={nationalId} onChange={(e) => setNationalId(e.target.value)} required className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12" />
-                </div>
+                <ModernInput
+                  label="National ID"
+                  value={nationalId}
+                  onChange={(e) => setNationalId(e.target.value)}
+                  placeholder="Enter your national ID"
+                  required
+                  icon={<CreditCard className="w-5 h-5" />}
+                />
               </motion.div>
+              
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="sm:col-span-2">
-                <label className="block text-sm font-semibold text-cyan-400 mb-2">Role</label>
-                <div className="relative">
-                  <UserCheck className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 pl-12">
-                    <option value="patient">Patient</option>
-                    <option value="health_worker">Health Worker</option>
-                    <option value="admin">Admin</option>
-                    <option value="moh">Ministry of Health</option>
-                    <option value="ambulance_driver">Ambulance Driver</option>
-                    <option value="pharmacy">Pharmacy</option>
-                  </select>
-                </div>
+                <ModernSelect
+                  label="Role"
+                  value={role}
+                  onChange={(value) => setRole(value)}
+                  options={roleOptions}
+                  placeholder="Select your role"
+                  required
+                />
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="sm:col-span-2">
-                <button type="submit" disabled={isLoading} className="group w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 rounded-xl flex items-center justify-center">
-                  {isLoading ? <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" /> : <><span>Create Account</span><ArrowRight className="w-5 h-5 ml-2" /></>}
-                </button>
+                <ModernButton
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  loading={isLoading}
+                  disabled={isLoading}
+                >
+                  <span>Create Account</span>
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </ModernButton>
               </motion.div>
             </form>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-8 text-center">
-              <p className="text-gray-400">
-                Already have an account? <Link to="/login" className="text-cyan-400 hover:underline">Login here</Link>
+              <p className="text-gray-300">
+                Already have an account? <Link to="/login" className="text-cyan-400 hover:text-cyan-300 hover:underline transition-colors">Login here</Link>
               </p>
-              <div className="flex items-center justify-center space-x-2 mt-4 text-xs text-gray-500">
+              <div className="flex items-center justify-center space-x-2 mt-4 text-xs text-gray-300">
                 <Sparkles className="w-4 h-4" />
                 <span>Join the future of healthcare</span>
                 <Sparkles className="w-4 h-4" />
               </div>
             </motion.div>
-          </motion.div>
+          </ModernCard>
         </motion.div>
       </div>
     </div>

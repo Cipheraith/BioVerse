@@ -18,7 +18,7 @@ import MainLayout from './MainLayout';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import LandingPage from './LandingPage';
+import ModernLandingPage from './components/modern/ModernLandingPage';
 import AboutPage from './AboutPage'; // Import AboutPage
 import ApiDocsPage from './ApiDocsPage';
 import ContactPage from './ContactPage';
@@ -39,7 +39,7 @@ const App: React.FC = () => {
     return (
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<ModernLandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<AboutPage />} />
