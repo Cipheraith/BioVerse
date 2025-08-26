@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1071067852182",
+    "project_id": "bioverse-ai",
+    "storage_bucket": "bioverse-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071067852182:android:534bf1584ebf287a3dc1b7",
+        "android_client_info": {
+          "package_name": "com.bioverse.bioverse_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA89rl_1O4-B1R8FEDWeF7jT-hFmKs1QLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,6 +9,11 @@ class AppTheme {
   static const Color primaryLight = Color(0xFF3B82F6); // Blue 500
   static const Color primaryDark = Color(0xFF1D4ED8); // Blue 700
   
+  // Legacy color aliases for compatibility
+  static const Color primaryColor = primaryBlue;
+  static const Color accentColor = primaryCyan;
+  static const Color secondaryColor = primaryCyan;
+  
   // Charcoal Background System - Matching Web App Exactly
   static const Color backgroundColor = Color(0xFF0F172A); // Gray 950 - Web app background
   static const Color cardColor = Color(0xFF1E293B); // Gray 800 - Matching web cards
@@ -53,6 +58,11 @@ class AppTheme {
   static const List<Color> buttonGradient = [
     Color(0xFF2563EB), // Blue 600 - Matching web buttons
     Color(0xFF06B6D4), // Cyan 500
+  ];
+  
+  static const List<Color> accentGradient = [
+    Color(0xFF06B6D4), // Cyan 500
+    Color(0xFF2563EB), // Blue 600
   ];
 
   static ThemeData get darkTheme {

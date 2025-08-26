@@ -7,7 +7,6 @@ python-ai/venv/
 python-ai/__pycache__/
 
 # Mobile app (Flutter/Dart)
-bioverse_mobile/
 
 # Build outputs
 client/dist/
@@ -60,7 +59,6 @@ develop-eggs/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -118,3 +116,31 @@ funder-*
 investor-*
 personal-*
 private-*
+
+# Mobile app source (track this)
+# bioverse_mobile/ is now tracked
+
+# But exclude Flutter/Dart dependencies and build files
+bioverse_mobile/.dart_tool/
+bioverse_mobile/.flutter-plugins
+bioverse_mobile/.flutter-plugins-dependencies
+bioverse_mobile/.pub-cache/
+bioverse_mobile/.pub/
+bioverse_mobile/build/
+bioverse_mobile/android/.gradle/
+bioverse_mobile/android/app/build/
+bioverse_mobile/android/build/
+bioverse_mobile/ios/Pods/
+bioverse_mobile/ios/.symlinks/
+bioverse_mobile/ios/Flutter/Flutter.framework/
+bioverse_mobile/ios/Flutter/Flutter.podspec
+bioverse_mobile/macos/Flutter/ephemeral/
+bioverse_mobile/windows/flutter/ephemeral/
+bioverse_mobile/linux/flutter/ephemeral/
+bioverse_mobile/web/.dart_tool/
+bioverse_mobile/web/build/
+
+# Exclude all node_modules
+node_modules/
+server/node_modules/
+client/node_modules/

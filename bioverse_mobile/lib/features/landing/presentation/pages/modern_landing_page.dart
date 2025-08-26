@@ -194,12 +194,16 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           }),
           
           // Main content
-          Padding(
+          SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 100),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: size.height,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: size.height * 0.1),
                 
                 // Badge
                 FadeTransition(
@@ -228,7 +232,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'AI-Powered Predictive Health Twin Network',
+                          'Your Personal Health Companion',
                           style: GoogleFonts.inter(
                             color: AppTheme.primaryBlue,
                             fontSize: 12,
@@ -259,7 +263,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                     child: Column(
                       children: [
                         Text(
-                          "Africa's First",
+                          "Your Health,",
                           style: GoogleFonts.inter(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -272,7 +276,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Health Twin Network",
+                          "Reimagined",
                           style: GoogleFonts.inter(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -295,7 +299,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                 FadeTransition(
                   opacity: _fadeInAnimation,
                   child: Text(
-                    "Create your Living Digital Health Twin that predicts health events before they happen. Transforming Africa's healthcare from reactive treatment to proactive prevention at population scale.",
+                    "Take control of your health with AI-powered predictions, instant access to doctors, and personalized health insights. Get the care you deserve, when you need it.",
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: AppTheme.textPrimary,
@@ -329,7 +333,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Create Your Health Twin',
+                                'Start Your Health Journey',
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -362,7 +366,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                               const Icon(Icons.play_arrow, size: 18),
                               const SizedBox(width: 8),
                               Text(
-                                'Watch Demo',
+                                'Learn More',
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -388,7 +392,9 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                     );
                   },
                 ),
+                SizedBox(height: size.height * 0.1),
               ],
+              ),
             ),
           ),
         ],
@@ -398,10 +404,10 @@ class _ModernLandingPageState extends State<ModernLandingPage>
 
   Widget _buildStats() {
     final stats = [
-      {'number': '\$259B', 'label': 'Africa Healthcare Market Value', 'icon': Icons.public},
-      {'number': '400M+', 'label': 'Africans Without Quality Healthcare', 'icon': Icons.people},
-      {'number': '1.4B', 'label': 'Target Population Across 54 Countries', 'icon': Icons.check_circle},
-      {'number': '95%+', 'label': 'System Reliability & AI Accuracy', 'icon': Icons.timeline},
+      {'number': '24/7', 'label': 'Access to Healthcare Services', 'icon': Icons.access_time},
+      {'number': '1000+', 'label': 'Verified Healthcare Providers', 'icon': Icons.verified_user},
+      {'number': '< 5min', 'label': 'Average Response Time', 'icon': Icons.speed},
+      {'number': '99.9%', 'label': 'Service Uptime', 'icon': Icons.check_circle},
     ];
 
     return GridView.builder(
@@ -462,26 +468,26 @@ class _ModernLandingPageState extends State<ModernLandingPage>
     final features = [
       {
         'icon': Icons.psychology,
-        'title': 'Predictive AI Engine',
-        'description': 'Quantum-inspired algorithms predict health events months before symptoms appear',
+        'title': 'AI Health Assistant',
+        'description': 'Get instant health advice and personalized recommendations powered by advanced AI',
         'gradient': [const Color(0xFFEF4444), const Color(0xFFEC4899)],
       },
       {
-        'icon': Icons.people_outline,
-        'title': 'Population Health Modeling',
-        'description': 'Individual to community-wide health insights across Africa\'s 1.4B people',
+        'icon': Icons.video_call,
+        'title': 'Virtual Consultations',
+        'description': 'Connect with certified doctors and specialists from the comfort of your home',
         'gradient': [AppTheme.primaryBlue, AppTheme.primaryCyan],
       },
       {
         'icon': Icons.shield_outlined,
-        'title': 'Federated Learning Privacy',
-        'description': 'Your data stays local while contributing to collective health intelligence',
+        'title': 'Secure & Private',
+        'description': 'Your health data is encrypted and protected with bank-level security',
         'gradient': [const Color(0xFF10B981), const Color(0xFF059669)],
       },
       {
-        'icon': Icons.language,
-        'title': 'Africa-Ready Infrastructure',
-        'description': 'Works offline with SMS/USSD support for rural and urban healthcare',
+        'icon': Icons.emergency,
+        'title': 'Emergency Response',
+        'description': 'Quick access to ambulance services and emergency care when you need it most',
         'gradient': [const Color(0xFFF59E0B), const Color(0xFFEF4444)],
       },
     ];
@@ -491,7 +497,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
       child: Column(
         children: [
           Text(
-            'Revolutionary Healthcare Technology',
+            'Healthcare Made Simple',
             style: GoogleFonts.inter(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -504,7 +510,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 8),
           Text(
-            'World\'s first quantum-inspired health prediction engine transforming healthcare across Africa',
+            'Everything you need to stay healthy, all in one app',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -623,7 +629,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 24),
           Text(
-            'Beyond Traditional Telemedicine',
+            'Healthcare That Understands You',
             style: GoogleFonts.inter(
               fontSize: 32,
               fontWeight: FontWeight.bold,
@@ -636,7 +642,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           Text(
-            'While competitors like Teladoc and Babylon Health focus on virtual consultations, BioVerse revolutionizes healthcare with AI-powered predictive analytics specifically designed for African healthcare challenges.',
+            'BioVerse combines the best of modern medicine with AI technology to give you personalized health insights and predictions tailored to your unique needs.',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -692,11 +698,11 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           ...[
-            'Predictive AI - Prevents diseases before symptoms',
-            'Digital Health Twins - Personalized health models',
-            'Africa-First Design - Built for local challenges',
-            'Blockchain Security - Military-grade protection',
-            'Low-bandwidth Optimized - Works in rural areas',
+            'AI Predictions - Know health risks before symptoms appear',
+            'Personal Health Twin - Your digital health companion',
+            'Local Doctors - Connect with healthcare providers near you',
+            'Secure & Private - Your health data is protected',
+            'Works Everywhere - Even with slow internet connection',
           ].map((feature) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Row(
@@ -726,7 +732,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
       child: Column(
         children: [
           Text(
-            'Transforming Africa\'s Healthcare',
+            'Your Health, Our Priority',
             style: GoogleFonts.inter(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -739,7 +745,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           Text(
-            'From reactive treatment to proactive prevention - BioVerse creates Living Digital Health Twins that continuously learn and predict health events before they happen across 54 African nations.',
+            'Join thousands of users who have taken control of their health with BioVerse. From prevention to treatment, we\'re with you every step of your health journey.',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -749,10 +755,10 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 32),
           ...[
-            'World\'s first quantum-inspired health prediction engine',
-            'API-driven architecture with React, Node.js, Python FastAPI stack',
-            'Offline-capable with multilingual SMS/USSD support',
-            'Privacy-first federated learning with blockchain security',
+            'Track vital signs and get health insights in real-time',
+            'Book appointments with verified healthcare providers',
+            'Access your medical records anytime, anywhere',
+            'Get emergency help with one-touch SOS feature',
           ].map((item) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
@@ -789,10 +795,10 @@ class _ModernLandingPageState extends State<ModernLandingPage>
               crossAxisSpacing: 16,
               childAspectRatio: 1.5,
               children: [
-                _buildImpactStat('\$259B', 'Africa Market Size', const Color(0xFF10B981)),
-                _buildImpactStat('1.4B', 'Target Population', AppTheme.primaryBlue),
-                _buildImpactStat('400M+', 'Without Quality Care', AppTheme.primaryCyan),
-                _buildImpactStat('1st', 'In Africa', const Color(0xFF8B5CF6)),
+                _buildImpactStat('50K+', 'Happy Users', const Color(0xFF10B981)),
+                _buildImpactStat('4.8★', 'User Rating', AppTheme.primaryBlue),
+                _buildImpactStat('1M+', 'Consultations', AppTheme.primaryCyan),
+                _buildImpactStat('#1', 'Health App', const Color(0xFF8B5CF6)),
               ],
             ),
           ),
@@ -853,7 +859,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           Text(
-            'Join the revolution transforming Africa\'s healthcare landscape with AI-powered predictive health twins and government-ready scalable infrastructure.',
+            'Join thousands of users who trust BioVerse for their healthcare needs. Start your journey to better health today.',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -914,7 +920,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                       const Icon(Icons.phone, size: 18),
                       const SizedBox(width: 8),
                       Text(
-                        'Partner With Us',
+                        'Schedule a Demo',
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -998,7 +1004,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           Divider(color: AppTheme.borderColor),
           const SizedBox(height: 16),
           Text(
-            '© 2024 BioVerse. World\'s first quantum-inspired predictive health twin network for Africa.',
+            '© 2024 BioVerse. Your trusted health companion.',
             style: GoogleFonts.inter(
               color: AppTheme.textPrimary,
               fontSize: 14,

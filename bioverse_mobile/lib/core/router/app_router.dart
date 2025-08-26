@@ -42,30 +42,66 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final hasRole = authState.user?.role != null;
       final currentPath = state.matchedLocation;
       
+      print('=== ROUTER REDIRECT DEBUG ===');
+      print('Current path: $currentPath');
+      print('Is logged in: $isLoggedIn');
+      print('Has role: $hasRole');
+      print('User: ${authState.user?.email}');
+      print('Auth loading: ${authState.isLoading}');
+      
+      // Always allow splash page
+      if (currentPath == '/splash') {
+        return null;
+      }
+      
+      // If auth is still loading, stay on current route
+      if (authState.isLoading) {
+        return null;
+      }
+      
       // Public routes that don't require authentication
-      final publicRoutes = ['/landing', '/splash', '/login', '/register', '/roles'];
+      final publicRoutes = ['/landing', '/login', '/register'];
       
       if (publicRoutes.contains(currentPath)) {
         // If user is logged in and has role, redirect to dashboard
         if (isLoggedIn && hasRole) {
+          print('Redirecting to dashboard (user has role)');
           return '/dashboard';
         }
         // If user is logged in but no role, redirect to role selection
         if (isLoggedIn && !hasRole) {
+          print('Redirecting to /roles (user logged in but no role)');
           return '/roles';
         }
+        print('Staying on public route');
         return null; // Stay on current public route
+      }
+      
+      // Role selection page - only accessible if logged in without role
+      if (currentPath == '/roles') {
+        if (!isLoggedIn) {
+          print('Redirecting to /landing (not logged in)');
+          return '/landing';
+        }
+        if (hasRole) {
+          print('Redirecting to /dashboard (already has role)');
+          return '/dashboard';
+        }
+        return null; // Stay on roles page
       }
       
       // Protected routes
       if (!isLoggedIn) {
+        print('Redirecting to /landing (protected route, not logged in)');
         return '/landing';
       }
       
       if (!hasRole) {
+        print('Redirecting to /roles (protected route, no role)');
         return '/roles';
       }
       
+      print('Allowing navigation to protected route');
       return null; // Allow navigation to protected route
     },
     routes: [
