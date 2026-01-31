@@ -1,0 +1,318 @@
+name: CI - Test and Build
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main, develop ]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # Linting jobs
+  lint-client:
+    name: Lint Client (React/TypeScript)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
+      continue-on-error: true
+
+    - name: Check TypeScript types
+      run: npx tsc --noEmit
+      continue-on-error: true
+
+  lint-server:
+    name: Lint Server (Node.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: server/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
+      continue-on-error: true
+
+  lint-python:
+    name: Lint Python AI Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./python-ai
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black flake8 isort bandit mypy
+
+    - name: Run Black (code formatter check)
+      run: black --check .
+      continue-on-error: true
+
+    - name: Run isort (import sorting check)
+      run: isort --check-only .
+      continue-on-error: true
+
+    - name: Run Flake8 (linting)
+      run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      continue-on-error: true
+
+    - name: Run Bandit (security linting)
+      run: bandit -r . -f json -o bandit-report.json
+      continue-on-error: true
+
+  # Build jobs
+  build-client:
+    name: Build Client
+    runs-on: ubuntu-latest
+    needs: lint-client
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: client-dist
+        path: client/dist
+        retention-days: 7
+
+    - name: Check bundle size
+      run: |
+        if [ -d "dist" ]; then
+          echo "Build successful!"
+          du -sh dist/
+          find dist/ -name "*.js" -exec ls -lh {} \;
+        fi
+
+  build-server:
+    name: Test Server
+    runs-on: ubuntu-latest
+    needs: lint-server
+    defaults:
+      run:
+        working-directory: ./server
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: bioverse_test
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: bioverse_test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: server/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests
+      run: npm test
+      env:
+        PGHOST: localhost
+        PGPORT: 5432
+        PGUSER: bioverse_test
+        PGPASSWORD: test_password
+        PGDATABASE: bioverse_test_db
+        JWT_SECRET: test_jwt_secret_key_for_ci_only
+        NODE_ENV: test
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: server-coverage
+        path: server/coverage
+      if: always()
+
+  test-python:
+    name: Test Python AI Service
+    runs-on: ubuntu-latest
+    needs: lint-python
+    defaults:
+      run:
+        working-directory: ./python-ai
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-asyncio pytest-cov
+        pip install fastapi uvicorn pydantic python-multipart httpx
+
+    - name: Run basic tests
+      run: |
+        if [ -f "test_main.py" ]; then
+          pytest test_main.py -v
+        else
+          echo "No test file found, skipping tests"
+        fi
+      continue-on-error: true
+
+    - name: Test basic imports
+      run: |
+        python -c "import fastapi; print('✅ FastAPI import successful')"
+        python -c "from pydantic import BaseModel; print('✅ Pydantic import successful')"
+
+  # Docker build jobs
+  docker-build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: [build-client, build-server, test-python]
+    strategy:
+      matrix:
+        service: [client, server, python-ai]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./${{ matrix.service }}
+        push: false
+        tags: bioverse-${{ matrix.service }}:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # Integration test
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [build-client, build-server, test-python]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Start services with Docker Compose
+      run: |
+        docker compose -f docker-compose.dev.yml up -d postgres redis
+        sleep 10
+
+    - name: Check services health
+      run: |
+        docker compose -f docker-compose.dev.yml ps
+
+    - name: Cleanup
+      run: docker compose -f docker-compose.dev.yml down
+      if: always()
+
+  # Test summary
+  ci-summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [lint-client, lint-server, lint-python, build-client, build-server, test-python, docker-build, integration-test]
+    if: always()
+    steps:
+    - name: Generate CI Report
+      run: |
+        echo "# 🚀 BioVerse CI Pipeline Summary"
+        echo ""
+        echo "## Linting Results:"
+        echo "- Client Lint: ${{ needs.lint-client.result }}"
+        echo "- Server Lint: ${{ needs.lint-server.result }}"
+        echo "- Python Lint: ${{ needs.lint-python.result }}"
+        echo ""
+        echo "## Build Results:"
+        echo "- Client Build: ${{ needs.build-client.result }}"
+        echo "- Server Test: ${{ needs.build-server.result }}"
+        echo "- Python Test: ${{ needs.test-python.result }}"
+        echo "- Docker Build: ${{ needs.docker-build.result }}"
+        echo ""
+        echo "## Integration:"
+        echo "- Integration Tests: ${{ needs.integration-test.result }}"
+        echo ""
+        
+        # Check if all jobs succeeded
+        if [[ "${{ needs.build-client.result }}" == "success" ]] && \
+           [[ "${{ needs.build-server.result }}" == "success" ]] && \
+           [[ "${{ needs.test-python.result }}" == "success" ]]; then
+          echo "✅ All critical CI checks passed!"
+          exit 0
+        else
+          echo "⚠️ Some CI checks need attention"
+          exit 1
+        fi

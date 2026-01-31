@@ -12,9 +12,19 @@ async def verify_api_key(credentials: HTTPAuthorizationCredentials = Depends(sec
     """Verify API key for authentication"""
     api_key = os.getenv("NODE_SERVER_API_KEY")
     
-    # If no API key is configured, allow all requests (development mode)
+    # In production, API key is required for security
+    # Only allow requests without API key in explicit development mode
+    is_dev_mode = os.getenv("ENVIRONMENT", "production").lower() == "development"
+    
     if not api_key:
-        return True
+        if is_dev_mode:
+            print("WARNING: Running without API key in development mode")
+            return True
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Server configuration error: API key not configured",
+            )
     
     if credentials.credentials != api_key:
         raise HTTPException(
