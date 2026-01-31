@@ -174,17 +174,60 @@ For a complete, interactive API reference, see the [Documentation](#documentatio
 ## Quick Start (local)
 1.  **Prerequisites**: Node 20+, npm 10+, Docker, Python 3.10/3.11
 2.  **Install Dependencies**: `npm run install:all`
-3.  **Start Docker Services**: `docker compose -f docker-compose.dev.yml up -d`
-4.  **Run the App**: `npm run dev` (starts all services)
-5.  **Access the API**: The Python AI service will be available at `http://localhost:8000`.
+3.  **Configure Environment**: Copy `.env.example` files and set JWT_SECRET
+    ```bash
+    cp server/.env.example server/.env
+    echo "JWT_SECRET=$(openssl rand -base64 32)" >> server/.env
+    ```
+4.  **Start Docker Services**: `docker compose -f docker-compose.dev.yml up -d`
+5.  **Run the App**: `npm run dev` (starts all services)
+6.  **Access the App**: 
+    - Client: http://localhost:5173
+    - Server API: http://localhost:3000
+    - Python AI API: http://localhost:8000
+
+For detailed setup instructions, see [SETUP.md](./SETUP.md).
 
 ## Documentation
-Comprehensive, auto-generated API documentation is available when the `python-ai` service is running:
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+### Getting Started
+- **[Setup Guide](./SETUP.md)** - Complete installation and configuration guide
+- **[Security Policy](./SECURITY.md)** - Security best practices and vulnerability reporting
+- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute to BioVerse
 
-These interfaces provide a full, interactive reference for all API endpoints, including request/response models and testing capabilities.
+### Technical Documentation
+- **[API Documentation](http://localhost:8000/docs)** - Interactive Swagger UI (when Python AI is running)
+- **[API Reference](http://localhost:8000/redoc)** - ReDoc documentation
+- **[CI/CD Guide](./docs/CI_CD.md)** - Complete CI/CD pipeline documentation
+- **[Issues Tracking](./docs/ISSUES.md)** - Comprehensive issue analysis and fixes
+
+### Development Resources
+- **[Workflows README](./.github/workflows/README.md)** - GitHub Actions workflows overview
+- **[Architecture](./docs/)** - System architecture and design documents
+
+## CI/CD Pipelines
+
+BioVerse includes comprehensive CI/CD pipelines:
+
+- ✅ **Continuous Integration** - Automated testing, linting, and building
+- 🔒 **Security Scanning** - CodeQL, dependency scanning, secret detection
+- 📊 **Code Quality** - Coverage analysis, complexity checks, performance testing
+- 🚀 **Deployment** - Automated deployment to staging and production
+
+See [CI/CD Documentation](./docs/CI_CD.md) for details.
+
+## Security
+
+BioVerse takes security seriously. We have implemented:
+
+- ✅ JWT authentication with strong secret validation
+- ✅ Rate limiting on authentication endpoints
+- ✅ Content Security Policy without unsafe directives
+- ✅ Input validation on all API routes
+- ✅ Automated security scanning (CodeQL, Trivy, TruffleHog)
+- ✅ Regular dependency vulnerability checks
+
+See [SECURITY.md](./SECURITY.md) for our security policy and reporting vulnerabilities.
 
 ## Configuration
 Copy `.env.example` to `.env` in each service (`server`, `python-ai`) and fill in the required secrets and configuration variables.

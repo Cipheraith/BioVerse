@@ -25,16 +25,20 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "blob:", "*"],
-        connectSrc: ["'self'", "http://localhost:5173", "ws://localhost:5173", "http://localhost:3000", "ws://localhost:3000"],
+        // Removed 'unsafe-inline' and 'unsafe-eval' for security
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "blob:", "https:"],
+        connectSrc: process.env.NODE_ENV === 'development' 
+          ? ["'self'", "http://localhost:5173", "ws://localhost:5173", "http://localhost:3000", "ws://localhost:3000"]
+          : ["'self'"],
         fontSrc: ["'self'"],
         objectSrc: ["'none'"],
         mediaSrc: ["'self'"],
         frameSrc: ["'none'"],
       },
     },
+    crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? false : true,
   }),
 );
 app.use(compression());

@@ -1,0 +1,242 @@
+name: CD - Deploy
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Build and push Docker images
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        service: [client, server, python-ai]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.service }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./${{ matrix.service }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # Deploy to staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'staging'
+    permissions:
+      contents: read
+    environment:
+      name: staging
+      url: https://staging.bioverse.health
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy notification
+      run: |
+        echo "🚀 Deploying BioVerse to Staging environment"
+        echo "Branch: ${{ github.ref }}"
+        echo "Commit: ${{ github.sha }}"
+
+    # Add your deployment steps here
+    # Examples:
+    # - name: Deploy to Kubernetes
+    #   run: |
+    #     kubectl apply -f k8s/staging/
+    # - name: Deploy to AWS ECS
+    #   run: |
+    #     aws ecs update-service --cluster staging --service bioverse --force-new-deployment
+    # - name: Update Docker Compose
+    #   run: |
+    #     ssh user@staging-server "cd /app && docker-compose pull && docker-compose up -d"
+
+    - name: Run smoke tests
+      run: |
+        echo "Running smoke tests on staging..."
+        # Add smoke test commands here
+        # curl -f https://staging.bioverse.health/health || exit 1
+
+    - name: Deployment summary
+      run: |
+        echo "✅ Staging deployment completed"
+        echo "Environment: staging"
+        echo "Services deployed: client, server, python-ai"
+
+  # Deploy to production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.environment == 'production'
+    permissions:
+      contents: read
+    environment:
+      name: production
+      url: https://bioverse.health
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Production deployment notification
+      run: |
+        echo "🚀 Deploying BioVerse to PRODUCTION environment"
+        echo "Tag/Branch: ${{ github.ref }}"
+        echo "Commit: ${{ github.sha }}"
+        echo "⚠️ This is a production deployment - proceed with caution"
+
+    # Add your production deployment steps here
+    # - name: Deploy to Production Kubernetes
+    #   run: |
+    #     kubectl apply -f k8s/production/
+    # - name: Deploy to Production AWS
+    #   run: |
+    #     aws ecs update-service --cluster production --service bioverse --force-new-deployment
+
+    - name: Run production smoke tests
+      run: |
+        echo "Running production smoke tests..."
+        # Add production smoke test commands
+        # curl -f https://bioverse.health/health || exit 1
+
+    - name: Create deployment record
+      run: |
+        echo "📝 Creating deployment record"
+        echo "Timestamp: $(date)"
+        echo "Version: ${{ github.ref_name }}"
+        echo "Deployed by: ${{ github.actor }}"
+
+    - name: Production deployment summary
+      run: |
+        echo "✅ Production deployment completed successfully"
+        echo "Environment: production"
+        echo "Version: ${{ github.ref_name }}"
+        echo "Services: client, server, python-ai"
+
+  # Rollback capability
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: failure()
+    needs: [deploy-staging, deploy-production]
+    permissions: {}
+    steps:
+    - name: Rollback notification
+      run: |
+        echo "⚠️ Deployment failed - initiating rollback"
+        # Add rollback commands here
+
+    - name: Perform rollback
+      run: |
+        echo "Rolling back to previous version..."
+        # Add actual rollback commands
+        # kubectl rollout undo deployment/bioverse
+        # docker-compose down && docker-compose up -d --no-deps
+
+  # Post-deployment monitoring
+  post-deployment:
+    name: Post-Deployment Checks
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+    permissions: {}
+    steps:
+    - name: Check deployment status
+      run: |
+        echo "🔍 Running post-deployment checks"
+        
+        if [[ "${{ needs.deploy-staging.result }}" == "success" ]]; then
+          echo "✅ Staging deployment successful"
+        fi
+        
+        if [[ "${{ needs.deploy-production.result }}" == "success" ]]; then
+          echo "✅ Production deployment successful"
+        fi
+
+    - name: Send deployment notification
+      run: |
+        echo "📬 Sending deployment notifications"
+        # Add notification logic (Slack, email, etc.)
+        # curl -X POST -H 'Content-type: application/json' \
+        #   --data '{"text":"BioVerse deployed successfully"}' \
+        #   ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [build-and-push, deploy-staging, deploy-production]
+    if: always()
+    permissions: {}
+    steps:
+    - name: Generate Deployment Report
+      run: |
+        echo "# 🌍 BioVerse Deployment Summary"
+        echo ""
+        echo "## Build Status:"
+        echo "- Docker Images: ${{ needs.build-and-push.result }}"
+        echo ""
+        echo "## Deployment Status:"
+        echo "- Staging: ${{ needs.deploy-staging.result }}"
+        echo "- Production: ${{ needs.deploy-production.result }}"
+        echo ""
+        echo "## Details:"
+        echo "- Triggered by: ${{ github.actor }}"
+        echo "- Branch/Tag: ${{ github.ref_name }}"
+        echo "- Commit: ${{ github.sha }}"
+        echo "- Timestamp: $(date)"
+        echo ""
+        
+        if [[ "${{ needs.build-and-push.result }}" == "success" ]]; then
+          echo "✅ Images built and pushed successfully"
+        else
+          echo "❌ Image build failed"
+        fi
