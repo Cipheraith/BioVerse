@@ -1,4 +1,5 @@
 const { runQuery } = require('../config/database');
+const { api: logger } = require('../services/logger');
 
 const createLabResult = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ const createLabResult = async (req, res) => {
     );
     res.status(201).json({ ...newLabResult, id: result.id });
   } catch (error) {
-    console.error('Error adding lab result:', error);
+    logger.error('Error adding lab result:', { error });
     res.status(400).json({ message: 'Invalid Patient ID format.' });
   }
 };

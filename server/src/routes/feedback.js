@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const databaseService = require('../services/databaseService');
+const { logger } = require('../services/logger');
 
 // Submit user feedback
 router.post('/submit', authenticateToken, async (req, res) => {
@@ -65,7 +66,7 @@ router.post('/submit', authenticateToken, async (req, res) => {
       feedback.id = `fb_${feedbackId}`;
       feedback.database_id = feedbackId;
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      logger.error('Database error:', { error: dbError });
       // Continue with mock data for demo
     }
 
@@ -170,7 +171,7 @@ router.post('/:feedbackId/respond', authenticateToken, authorizeRoles(['admin'])
     try {
       await databaseService.respondToFeedback(feedbackId, message, req.user.name || 'Admin Team');
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      logger.error('Database error:', { error: dbError });
     }
     res.json({
       response,

@@ -1,5 +1,6 @@
 const { allQuery, runQuery } = require('../config/database');
 const { sendTransportBookingNotification } = require('./notificationService');
+const { maternal: logger } = require('./logger');
 
 async function checkAndBookTransport() {
   try {
@@ -12,7 +13,7 @@ async function checkAndBookTransport() {
 
       // pregnancy.transportBooked is already a boolean from PostgreSQL
       if (daysUntilDue <= 7 && !pregnancy.transportBooked) {
-        console.log(`Booking transport for patient ${pregnancy.patientId} (Pregnancy ID: ${pregnancy.id})`);
+        logger.info(`Booking transport for patient ${pregnancy.patientId} (Pregnancy ID: ${pregnancy.id})`);
         
         // alerts is already an array/object from PostgreSQL JSONB type
         const alerts = pregnancy.alerts || [];
@@ -32,12 +33,12 @@ async function checkAndBookTransport() {
       }
     }
   } catch (error) {
-    console.error('Error in maternal health scheduler:', error);
+    logger.error('Error in maternal health scheduler:', { error });
   }
 }
 
 function startTransportScheduler() {
-  console.log('Starting maternal health scheduler...');
+  logger.info('Starting maternal health scheduler...');
   // Run once on startup
   checkAndBookTransport();
   // Then run every 24 hours
@@ -47,9 +48,9 @@ function startTransportScheduler() {
   setInterval(async () => {
     try {
       const activePregnancies = await allQuery('SELECT COUNT(*) as count FROM pregnancies WHERE transportBooked = false');
-      console.log(`Active pregnancies without transport booked: ${activePregnancies[0].count}`);
+      logger.info(`Active pregnancies without transport booked: ${activePregnancies[0].count}`);
     } catch (error) {
-      console.error('Error monitoring pregnancies:', error);
+      logger.error('Error monitoring pregnancies:', { error });
     }
   }, 60000); // Log active pregnancies every minute
 }

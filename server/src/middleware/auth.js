@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
+const { auth: logger } = require('../services/logger');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Critical: Fail immediately if JWT_SECRET is not set
 if (!JWT_SECRET) {
-  console.error('FATAL ERROR: JWT_SECRET is not set. Authentication cannot function securely.');
-  console.error('Set JWT_SECRET in your .env file before starting the server.');
+  logger.error('FATAL ERROR: JWT_SECRET is not set. Authentication cannot function securely.');
+  logger.error('Set JWT_SECRET in your .env file before starting the server.');
   throw new Error('JWT_SECRET environment variable is required');
 }
 

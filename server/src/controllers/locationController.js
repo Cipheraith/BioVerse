@@ -1,4 +1,5 @@
 const { allQuery } = require('../config/database');
+const { api: logger } = require('../services/logger');
 
 const getAllLocations = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ const getAllLocations = async (req, res) => {
       medicationStock: JSON.parse(l.medicationStock || '[]'),
     })));
   } catch (error) {
-    console.error('Error fetching locations:', error);
+    logger.error('Error fetching locations:', { error });
     res.status(500).json({ message: 'Error fetching locations.' });
   }
 };

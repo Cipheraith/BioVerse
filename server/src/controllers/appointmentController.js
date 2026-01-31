@@ -1,7 +1,7 @@
 const { runQuery, allQuery } = require('../config/database');
 const { sendAppointmentNotification } = require('../services/notificationService');
 const { sendToRole, sendToUser } = require('../services/socketService');
-const { app: logger } = require('../services/logger');
+const { api: logger } = require('../services/logger');
 
 const createAppointment = async (req, res) => {
   const { patientId, patientName, date, time, type, notes, healthWorkerId } = req.body;
@@ -79,7 +79,7 @@ const getAllAppointments = async (req, res) => {
     const appointments = await allQuery('SELECT * FROM appointments');
     res.json(appointments);
   } catch (error) {
-    console.error('Error fetching appointments:', error);
+    logger.error('Error fetching appointments:', { error });
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
@@ -89,7 +89,7 @@ const getMyAppointments = async (req, res) => {
     const appointments = await allQuery('SELECT * FROM appointments WHERE patientId = ?', [req.user.id]);
     res.json(appointments);
   } catch (error) {
-    console.error('Error fetching appointments:', error);
+    logger.error('Error fetching appointments:', { error });
     res.status(500).json({ message: 'Internal server error.' });
   }
 };

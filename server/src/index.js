@@ -13,11 +13,16 @@ const {
 const { logger } = require("./services/logger");
 const { setupSocketIO } = require("./services/socketService");
 const { performanceMonitor } = require("./middleware/performance");
+const { enforceHTTPS, securityHeaders } = require("./middleware/security");
 const http = require("http");
 
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
+
+// HTTPS enforcement and security headers (production only)
+app.use(enforceHTTPS);
+app.use(securityHeaders);
 
 // Security middleware
 app.use(

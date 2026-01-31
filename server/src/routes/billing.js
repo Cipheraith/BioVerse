@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { logger } = require('../services/logger');
 
 const databaseService = require('../services/databaseService');
 const paymentService = require('../services/paymentService');
@@ -80,7 +81,7 @@ router.post('/subscribe', authenticateToken, async (req, res) => {
         message: 'Subscription created successfully'
       });
     } catch (error) {
-      console.error('Error creating subscription:', error);
+      logger.error('Error creating subscription:', { error });
       res.status(500).json({ message: 'Failed to create subscription', error: error.message });
     }
 });
