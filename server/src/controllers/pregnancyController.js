@@ -1,4 +1,5 @@
 const { runQuery, getQuery, allQuery } = require('../config/database');
+const { api: logger } = require('../services/logger');
 
 const getAllPregnancies = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ const getAllPregnancies = async (req, res) => {
       transportBooked: Boolean(p.transportBooked)
     })));
   } catch (error) {
-    console.error('Error fetching pregnancies:', error);
+    logger.error('Error fetching pregnancies:', { error });
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
@@ -30,7 +31,7 @@ const getPregnancyByPatientId = async (req, res) => {
       res.status(404).send('No pregnancy record found for this patient.');
     }
   } catch (error) {
-    console.error('Error fetching pregnancy record:', error);
+    logger.error('Error fetching pregnancy record:', { error });
     res.status(400).json({ message: 'Invalid Patient ID format.' });
   }
 };
@@ -55,7 +56,7 @@ const createPregnancy = async (req, res) => {
     );
     res.status(201).json({ ...newPregnancy, id: result.id });
   } catch (error) {
-    console.error('Error creating pregnancy:', error);
+    logger.error('Error creating pregnancy:', { error });
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
@@ -84,7 +85,7 @@ const updatePregnancy = async (req, res) => {
       res.status(404).send('Pregnancy record not found');
     }
   } catch (error) {
-    console.error('Error updating pregnancy record:', error);
+    logger.error('Error updating pregnancy record:', { error });
     res.status(500).json({ message: 'Internal server error.' });
   }
 };

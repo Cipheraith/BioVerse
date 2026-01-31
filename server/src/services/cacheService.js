@@ -3,6 +3,8 @@
  * Free alternative to Redis for caching frequently accessed data
  */
 
+const { logger } = require('./logger');
+
 class InMemoryCache {
   constructor() {
     this.cache = new Map();
@@ -105,7 +107,7 @@ class InMemoryCache {
     expiredKeys.forEach(key => this.delete(key));
     
     if (expiredKeys.length > 0) {
-      console.log(`Cache cleanup: removed ${expiredKeys.length} expired entries`);
+      logger.info(`Cache cleanup: removed ${expiredKeys.length} expired entries`);
     }
   }
 

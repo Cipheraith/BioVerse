@@ -1,5 +1,6 @@
 const { getQuery, allQuery } = require('../config/database');
 const { calculatePatientRisk } = require('./predictiveService');
+const { logger } = require('./logger');
 
 // Helper function to parse JSON fields from patient data
 const parsePatient = (patient) => {
@@ -66,7 +67,7 @@ const generateHealthTwin = async (patientId) => {
 
     return healthTwin;
   } catch (error) {
-    console.error('Error generating health twin for patient', patientId, ':', error);
+    logger.error('Error generating health twin for patient', { patientId, error });
     throw new Error('Failed to generate health twin.');
   }
 };

@@ -8,6 +8,7 @@ const {
   createImmersiveMedicalTraining
 } = require('../controllers/telemedicineController');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { logger } = require('../services/logger');
 
 const router = express.Router();
 
@@ -88,7 +89,7 @@ router.get('/consultations', authenticateToken, authorizeRoles(['admin', 'health
     });
 
   } catch (error) {
-    console.error('Error getting consultations:', error);
+    logger.error('Error getting consultations:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -122,7 +123,7 @@ router.get('/consultations/:consultationId', authenticateToken, authorizeRoles([
     });
 
   } catch (error) {
-    console.error('Error getting consultation:', error);
+    logger.error('Error getting consultation:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -151,7 +152,7 @@ router.patch('/consultations/:consultationId', authenticateToken, authorizeRoles
     });
 
   } catch (error) {
-    console.error('Error updating consultation:', error);
+    logger.error('Error updating consultation:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -212,7 +213,7 @@ router.get('/monitoring/sessions', authenticateToken, authorizeRoles(['admin', '
     });
     
   } catch (error) {
-    console.error('Error getting monitoring sessions:', error);
+    logger.error('Error getting monitoring sessions:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -260,7 +261,7 @@ router.get('/monitoring/:sessionId', authenticateToken, authorizeRoles(['admin',
     });
 
   } catch (error) {
-    console.error('Error getting monitoring session:', error);
+    logger.error('Error getting monitoring session:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -298,7 +299,7 @@ router.get('/training/:traineeId', authenticateToken, authorizeRoles(['admin', '
     });
 
   } catch (error) {
-    console.error('Error getting training sessions:', error);
+    logger.error('Error getting training sessions:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -338,7 +339,7 @@ router.post('/video/generate-token', authenticateToken, authorizeRoles(['admin',
     });
 
   } catch (error) {
-    console.error('Error generating video token:', error);
+    logger.error('Error generating video token:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -375,7 +376,7 @@ router.post('/video/record-session', authenticateToken, authorizeRoles(['admin',
     });
 
   } catch (error) {
-    console.error('Error managing video recording:', error);
+    logger.error('Error managing video recording:', { error });
     res.status(500).json({ message: 'Internal server error' });
   }
 });

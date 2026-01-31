@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { runQuery, getQuery } = require('../config/database');
 const { OAuth2Client } = require('google-auth-library');
+const { auth: logger } = require('../services/logger');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
@@ -9,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Critical: Fail immediately if JWT_SECRET is not set
 if (!JWT_SECRET) {
-  console.error('FATAL ERROR: JWT_SECRET is not set. Authentication cannot function securely.');
+  logger.error('FATAL ERROR: JWT_SECRET is not set. Authentication cannot function securely.');
   throw new Error('JWT_SECRET environment variable is required');
 }
 
@@ -101,7 +102,7 @@ const login = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error logging in user:', error);
+    logger.error('Error logging in user:', { error });
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
@@ -134,7 +135,7 @@ const googleLogin = async (req, res) => {
     res.json({ token: jwtToken, role: user.role, id: user.id });
 
   } catch (error) {
-    console.error('Google authentication error:', error);
+    logger.error('Google authentication error:', { error });
     res.status(401).json({ message: 'Google authentication failed.' });
   }
 };

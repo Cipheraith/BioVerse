@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const databaseService = require('../services/databaseService');
+const { logger } = require('../services/logger');
 
 // Compliance standards supported
 const COMPLIANCE_STANDARDS = {
@@ -190,7 +191,7 @@ router.post('/privacy/data-request', authenticateToken, async (req, res) => {
       dataRequest.id = `req_${requestId}`;
       dataRequest.database_id = requestId;
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      logger.error('Database error:', { error: dbError });
     }
 
     res.status(201).json({
@@ -382,7 +383,7 @@ router.post('/incident/report', authenticateToken, authorizeRoles(['admin', 'sec
       incident.id = `inc_${incidentId}`;
       incident.database_id = incidentId;
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      logger.error('Database error:', { error: dbError });
     }
 
     res.status(201).json({

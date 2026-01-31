@@ -880,7 +880,7 @@ async function getLifestyleData(patientId) {
 }
 
 async function startRealTimeDataCollection(config) {
-  console.log(`Starting real-time data collection for session ${config.sessionId}`);
+  logger.info(`Starting real-time data collection for session ${config.sessionId}`);
   return { status: 'collecting', frequency: '1Hz', dataTypes: ['vital_signs', 'environmental'] };
 }
 
@@ -909,7 +909,7 @@ async function getRiskFactors(patientId) {
 }
 
 async function sendCriticalHealthAlert(config) {
-  console.log(`Critical alert sent for patient ${config.patientId}:`, config.anomalies);
+  logger.warn(`Critical alert sent for patient ${config.patientId}:`, { anomalies: config.anomalies });
   return { sent: true, recipients: ['primary_care_physician', 'emergency_contacts'] };
 }
 

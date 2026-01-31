@@ -1,5 +1,6 @@
 // Performance optimization for 2GB RAM demo environment
 const os = require('os');
+const { logger } = require('../services/logger');
 
 class PerformanceOptimizer {
   constructor() {
@@ -7,7 +8,7 @@ class PerformanceOptimizer {
     this.isLowResource = this.totalMemory < 3 * 1024 * 1024 * 1024; // Less than 3GB
     
     if (this.isLowResource) {
-      console.log('🔧 Low resource mode activated - optimizing for demo...');
+      logger.info('🔧 Low resource mode activated - optimizing for demo...');
       this.applyOptimizations();
     }
   }
@@ -24,7 +25,7 @@ class PerformanceOptimizer {
         const memUsage = process.memoryUsage();
         if (memUsage.heapUsed > 400 * 1024 * 1024) { // 400MB threshold
           global.gc();
-          console.log('🧹 Memory cleanup performed');
+          logger.info('🧹 Memory cleanup performed');
         }
       }, 30000); // Every 30 seconds
     }
@@ -66,11 +67,11 @@ class PerformanceOptimizer {
       const cpuUsage = process.cpuUsage();
       
       if (this.isLowResource) {
-        console.log(`📊 Memory: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB | CPU: ${Math.round(cpuUsage.user / 1000)}ms`);
+        logger.info(`📊 Memory: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB | CPU: ${Math.round(cpuUsage.user / 1000)}ms`);
         
         // Alert if memory usage is high
         if (memUsage.heapUsed > 600 * 1024 * 1024) {
-          console.warn('⚠️ High memory usage detected - consider restarting demo');
+          logger.warn('⚠️ High memory usage detected - consider restarting demo');
         }
       }
     }, 60000); // Every minute

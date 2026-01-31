@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const databaseService = require('../services/databaseService');
+const { logger } = require('../services/logger');
 
 // Mobile app registration and device management
 router.post('/register-device', authenticateToken, async (req, res) => {
@@ -39,7 +40,7 @@ router.post('/register-device', authenticateToken, async (req, res) => {
       deviceRegistration.id = `device_${deviceId}`;
       deviceRegistration.database_id = deviceId;
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      logger.error('Database error:', { error: dbError });
       // Continue with mock data for demo
     }
 
@@ -88,7 +89,7 @@ router.post('/push-notification', authenticateToken, authorizeRoles(['admin', 'h
       // Update status to sent
       await databaseService.updatePushNotificationStatus(notificationId, 'sent');
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      logger.error('Database error:', { error: dbError });
     }
     
     // TODO: Integrate with Firebase Cloud Messaging (FCM) for Android
@@ -256,7 +257,7 @@ router.post('/crash-report', authenticateToken, async (req, res) => {
       crashReport.id = `crash_${reportId}`;
       crashReport.database_id = reportId;
     } catch (dbError) {
-      console.error('Database error storing crash report:', dbError);
+      logger.error('Database error storing crash report:', { error: dbError });
     }
 
     res.status(201).json({

@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const { database: logger } = require('../services/logger');
 
 let pool;
 
@@ -12,7 +13,7 @@ async function initializeDatabase() {
     const dbPassword = process.env.DB_PASSWORD;
 
     if (!dbPassword) {
-      console.warn('WARNING: DB_PASSWORD is not set. Using empty password is insecure for production.');
+      logger.warn('WARNING: DB_PASSWORD is not set. Using empty password is insecure for production.');
     }
 
     pool = new Pool({
@@ -32,7 +33,7 @@ async function initializeDatabase() {
     });
 
     await pool.connect();
-    console.log('Connected to PostgreSQL database');
+    logger.info('Connected to PostgreSQL database');
 
     const schema = fs.readFileSync(path.resolve(__dirname, './schema.sql'), 'utf8');
     // Split schema into individual statements and execute them
@@ -40,10 +41,10 @@ async function initializeDatabase() {
     for (const statement of statements) {
       await pool.query(statement);
     }
-    console.log('Tables created or already exist.');
+    logger.info('Tables created or already exist.');
     await seedData();
   } catch (err) {
-    console.error('Failed to connect or initialize PostgreSQL database', err);
+    logger.error('Failed to connect or initialize PostgreSQL database', { error: err });
     throw err;
   }
 }
@@ -162,7 +163,7 @@ async function seedData() {
         0
       ]
     );
-    console.log('Patients seeded.');
+    logger.info('Patients seeded.');
   }
 
   const messageCountResult = await getQuery("SELECT COUNT(*) as count FROM messages");
@@ -186,7 +187,7 @@ async function seedData() {
         Date.now(),
       ]
     );
-    console.log('Messages seeded.');
+    logger.info('Messages seeded.');
   }
 
   const locationCountResult = await getQuery("SELECT COUNT(*) as count FROM locations");
@@ -218,7 +219,7 @@ async function seedData() {
         JSON.stringify([-15.4100, 28.2700]),
       ]
     );
-    console.log('Locations seeded.');
+    logger.info('Locations seeded.');
   }
 
   const userCountResult = await getQuery("SELECT COUNT(*) as count FROM users");
@@ -270,7 +271,7 @@ async function seedData() {
       ]
     );
     
-    console.log('Users seeded.');
+    logger.info('Users seeded.');
   }
 
   // Seed telemedicine data if tables are empty
@@ -321,11 +322,11 @@ async function seedData() {
         JSON.stringify({})
       ]
     );
-    console.log('Virtual consultations seeded.');
+    logger.info('Virtual consultations seeded.');
   }
 
   // Temporarily remove monitoring session seeding to debug column names
-  console.log('Telemedicine seeding completed - monitoring sessions seeding disabled for debugging');
+  logger.info('Telemedicine seeding completed - monitoring sessions seeding disabled for debugging');
 }
 
 module.exports = { initializeDatabase, getDB, runQuery, getQuery, allQuery };
