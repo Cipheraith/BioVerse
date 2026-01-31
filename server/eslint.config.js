@@ -18,7 +18,7 @@ module.exports = [
     },
     rules: {
       "no-unused-vars": "warn",
-      "no-console": "off",
+      "no-console": "warn", // Warn on console usage - use logger instead
     },
   },
   {
