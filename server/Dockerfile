@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
@@ -19,7 +19,7 @@ CMD ["node", "src/index.js"]
 # Multi-stage build for optimized production image
 
 # Build stage
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 
 # Set working directory
 WORKDIR /app
@@ -31,7 +31,7 @@ COPY package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 
 # Production stage
-FROM node:18-alpine as production
+FROM node:20-alpine as production
 
 # Install system dependencies
 RUN apk add --no-cache \

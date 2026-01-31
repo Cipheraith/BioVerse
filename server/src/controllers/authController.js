@@ -48,8 +48,8 @@ const register = async (req, res) => {
       [email, hashedPassword, finalRole, finalName, finalDob, finalNationalId, phoneNumber]
     );
     
-    // Generate JWT token
-    const token = jwt.sign({ id: result.id, username: email || phoneNumber, role: finalRole }, JWT_SECRET, { expiresIn: '24h' });
+    // Generate JWT token (standardized to 1h for security)
+    const token = jwt.sign({ id: result.id, username: email || phoneNumber, role: finalRole }, JWT_SECRET, { expiresIn: '1h' });
     
     res.status(201).json({ 
       message: 'User registered successfully.',
