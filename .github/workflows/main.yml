@@ -95,9 +95,6 @@ jobs:
   client-build:
     name: 🌐 Client Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./client
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -106,18 +103,21 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
+      run: npm ci
       continue-on-error: true
       
     - name: Build application
+      working-directory: ./client
       run: npm run build
       continue-on-error: true
       env:
         NODE_ENV: production
         
     - name: Build status
+      working-directory: ./client
       run: |
         if [ -d "dist" ]; then
           echo "✅ Client build successful - dist/ directory created"
@@ -133,9 +133,6 @@ jobs:
   server-test:
     name: 🚀 Server Test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -144,12 +141,14 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
+      run: npm ci
       continue-on-error: true
       
     - name: Validate server files
+      working-directory: ./server
       run: |
         echo "📋 Validating server structure..."
         [ -f "package.json" ] && echo "✅ package.json" || echo "❌ package.json"
