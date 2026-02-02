@@ -104,11 +104,21 @@ jobs:
         fetch-depth: 0
 
     - name: TruffleHog Secret Scanning
+      # Skip for scheduled runs since base/head will be the same
+      if: github.event_name != 'schedule'
       uses: trufflesecurity/trufflehog@main
       with:
         path: ./
         base: ${{ github.event.repository.default_branch }}
         head: HEAD
+        extra_args: --debug --only-verified
+    
+    - name: TruffleHog Full Repository Scan (Scheduled)
+      # Only run on schedule - scans entire repository history
+      if: github.event_name == 'schedule'
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
         extra_args: --debug --only-verified
 
   # Container image scanning
