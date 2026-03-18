@@ -1,5 +1,5 @@
 const { runQuery, getQuery, allQuery } = require('../config/database');
-const logger = require('../config/logger');
+const logger = require('../services/logger');
 
 // Helper function to parse JSONB fields if necessary (though pg handles it for direct queries)
 const parsePrescription = (prescription) => {

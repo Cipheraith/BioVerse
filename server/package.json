@@ -13,6 +13,8 @@
     "lint": "eslint src/",
     "type-check": "node -e \"console.log('No TS in server')\"",
     "migrate": "node scripts/update-database.js",
+    "migrate:coordination": "node scripts/run-migrations.js",
+    "test:coordination": "node scripts/test-coordination.js",
     "seed": "node scripts/seed.js",
     "perf:test": "node scripts/performance-test.js",
     "perf:test:quick": "TOTAL_REQUESTS=50 CONCURRENT_REQUESTS=5 node scripts/performance-test.js",

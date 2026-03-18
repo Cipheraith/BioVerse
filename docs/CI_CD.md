@@ -418,7 +418,7 @@ strategy:
     service: [client, server, python-ai]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Test ${{ matrix.service }}
         run: cd ${{ matrix.service }} && npm test

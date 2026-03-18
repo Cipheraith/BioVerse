@@ -1,10 +1,8 @@
 const axios = require('axios');
 const { ai: logger } = require('./logger');
-const ollamaService = require('./ollamaService');
 
-// AI service configuration - prefer Ollama, fallback to OpenAI, then mock
-const USE_OLLAMA = process.env.USE_OLLAMA !== 'false'; // Use Ollama by default
-const MOCK_AI_ENABLED = false; // Disable mock AI to force real AI usage
+// AI service configuration
+const MOCK_AI_ENABLED = false;
 
 // Common symptoms and their associated conditions
 const SYMPTOM_DATABASE = {
@@ -128,21 +126,7 @@ const analyzeSymptoms = async (symptoms, patientContext = {}) => {
       return await mockSymptomAnalysis(symptoms, patientContext);
     }
     
-    // Try Ollama first, then fallback to OpenAI
-    if (USE_OLLAMA) {
-      try {
-        logger.info('Using Ollama for symptom analysis');
-        return await ollamaService.analyzeSymptoms(symptoms, patientContext);
-      } catch (ollamaError) {
-        logger.warn('Ollama failed, falling back to OpenAI:', ollamaError.message);
-        if (process.env.OPENAI_API_KEY) {
-          return await realAIAnalysis(symptoms, patientContext);
-        }
-        throw ollamaError;
-      }
-    } else {
-      return await realAIAnalysis(symptoms, patientContext);
-    }
+    return await realAIAnalysis(symptoms, patientContext);
   } catch (error) {
     logger.error('Error in symptom analysis:', error);
     return {
@@ -196,17 +180,6 @@ const getLumaResponse = async (query) => {
   for (const [topic, response] of Object.entries(healthTopics)) {
     if (lowerCaseQuery.includes(topic) || lowerCaseQuery.includes(topic.replace(' ', ''))) {
       return { response, type: 'general_health' };
-    }
-  }
-
-  // Use Ollama (Llama 3.2) for comprehensive health questions
-  if (USE_OLLAMA) {
-    try {
-      logger.info('Using Ollama for Luma response');
-      return await ollamaService.getLumaResponse(query);
-    } catch (error) {
-      logger.warn('Ollama failed for Luma response, using fallback:', error.message);
-      // Continue to fallback responses below instead of throwing
     }
   }
 

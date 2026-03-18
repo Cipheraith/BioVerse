@@ -4,36 +4,37 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
-import LumaChatbot from './Luma';
-import DispatchMap from './DispatchMap';
-import SymptomTrends from './SymptomTrends';
-import Dashboard from './Dashboard';
-import RoleSelection from './RoleSelection';
-import PatientDetail from './PatientDetail';
-import AddAppointmentForm from './AddAppointmentForm';
-import AppointmentList from './AppointmentList';
-import PatientList from './PatientList';
 import { AnimatePresence } from 'framer-motion';
 import MainLayout from './MainLayout';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import ModernLandingPage from './components/modern/ModernLandingPage';
-import AboutPage from './AboutPage'; // Import AboutPage
+import AboutPage from './AboutPage';
 import ApiDocsPage from './ApiDocsPage';
 import ContactPage from './ContactPage';
 import SupportPage from './SupportPage';
 import PrivacyPage from './PrivacyPage';
 import DocsPage from './DocsPage';
-import SRHPage from './SRHPage';
 import SettingsPage from './pages/SettingsPage';
-import TelemedicineDashboard from './pages/TelemedicineDashboard';
-import VideoCall from './components/VideoCall';
+import CoordinationDashboard from './pages/CoordinationDashboard';
+import OverviewDashboard from './pages/OverviewDashboard';
+import FacilitiesPage from './pages/FacilitiesPage';
+import StockOverviewPage from './pages/StockOverviewPage';
+import DHIS2SyncPage from './pages/DHIS2SyncPage';
+import FacilityMapPage from './pages/FacilityMapPage';
+import OutbreakAlertsPage from './pages/OutbreakAlertsPage';
+import EmergencyLogisticsPage from './pages/EmergencyLogisticsPage';
+import MoHNationalDashboard from './pages/MoHNationalDashboard';
+import DistrictOfficerDashboard from './pages/DistrictOfficerDashboard';
+import FacilityManagerDashboard from './pages/FacilityManagerDashboard';
+import HealthWorkerDashboardPage from './pages/HealthWorkerDashboardPage';
 
+const allRoles = ['admin', 'moh', 'health_worker', 'facility_manager', 'logistics_coordinator', 'dhis2_admin'];
 
 const App: React.FC = () => {
   const location = useLocation();
-  const noLayoutRoutes = ['/', '/login', '/register', '/about', '/docs', '/contact', '/support', '/privacy', '/api']; // Add public routes
+  const noLayoutRoutes = ['/', '/login', '/register', '/about', '/docs', '/contact', '/support', '/privacy', '/api'];
 
   if (noLayoutRoutes.includes(location.pathname)) {
     return (
@@ -57,37 +58,66 @@ const App: React.FC = () => {
     <MainLayout>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'health_worker', 'patient', 'ambulance_driver', 'pharmacy']} />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+          {/* Dashboard / Overview */}
+          <Route element={<ProtectedRoute allowedRoles={allRoles} />}>
+            <Route path="/dashboard" element={<OverviewDashboard />} />
           </Route>
-          <Route element={<ProtectedRoute allowedRoles={['patient']} />}>
-            <Route path="/luma" element={<LumaChatbot />} />
+
+          {/* Coordination */}
+          <Route element={<ProtectedRoute allowedRoles={allRoles} />}>
+            <Route path="/coordination" element={<CoordinationDashboard />} />
           </Route>
-          <Route path="/srh" element={<SRHPage />} />
-          
-          {/* Telemedicine Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['health_worker', 'doctor', 'patient', 'admin']} />}>
-            <Route path="/telemedicine" element={<TelemedicineDashboard />} />
-            <Route path="/telemedicine/video-call/:consultationId" element={<VideoCall consultationId={1} patientId={1} doctorId={2} userType="doctor" />} />
+
+          {/* Facilities */}
+          <Route element={<ProtectedRoute allowedRoles={allRoles} />}>
+            <Route path="/facilities" element={<FacilitiesPage />} />
           </Route>
-          
-          <Route element={<ProtectedRoute allowedRoles={['ambulance_driver', 'moh']} />}>
-            <Route path="/dispatch-map" element={<DispatchMap />} />
+
+          {/* Stock Overview */}
+          <Route element={<ProtectedRoute allowedRoles={allRoles} />}>
+            <Route path="/stock" element={<StockOverviewPage />} />
           </Route>
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh']} />}>
-            <Route path="/symptom-trends" element={<SymptomTrends />} />
+
+          {/* DHIS2 Sync */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'dhis2_admin']} />}>
+            <Route path="/dhis2" element={<DHIS2SyncPage />} />
           </Route>
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'health_worker', 'moh']} />}>
-            <Route path="/patients" element={<PatientList />} />
-            <Route path="/patients/:id" element={<PatientDetail />} />
-            <Route path="/appointments" element={<AppointmentList />} />
-            <Route path="/appointments/add" element={<AddAppointmentForm />} />
+
+          {/* Facility Map */}
+          <Route element={<ProtectedRoute allowedRoles={allRoles} />}>
+            <Route path="/map" element={<FacilityMapPage />} />
           </Route>
-          {/* RoleSelection is now just a redirector, no specific role needed to access it */}
-          <Route path="/roles" element={<RoleSelection />} />
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'health_worker', 'patient', 'ambulance_driver', 'pharmacy']} />}>
+
+          {/* Outbreak Alerts */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'health_worker', 'dhis2_admin']} />}>
+            <Route path="/alerts" element={<OutbreakAlertsPage />} />
+          </Route>
+
+          {/* Emergency Logistics */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'logistics_coordinator', 'facility_manager']} />}>
+            <Route path="/logistics" element={<EmergencyLogisticsPage />} />
+          </Route>
+
+          {/* Settings */}
+          <Route element={<ProtectedRoute allowedRoles={allRoles} />}>
             <Route path="/settings" element={<SettingsPage />} />
+          </Route>
+
+          {/* Persona Dashboards */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'dhis2_admin']} />}>
+            <Route path="/moh-dashboard" element={<MoHNationalDashboard />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'facility_manager', 'logistics_coordinator']} />}>
+            <Route path="/district-dashboard" element={<DistrictOfficerDashboard />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'facility_manager', 'health_worker']} />}>
+            <Route path="/facility-dashboard" element={<FacilityManagerDashboard />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'moh', 'health_worker', 'facility_manager']} />}>
+            <Route path="/hw-dashboard" element={<HealthWorkerDashboardPage />} />
           </Route>
         </Routes>
       </AnimatePresence>

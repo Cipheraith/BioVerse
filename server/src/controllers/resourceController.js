@@ -1,5 +1,5 @@
 const { runQuery, getQuery, allQuery } = require('../config/database');
-const logger = require('../config/logger');
+const logger = require('../services/logger');
 const routingService = require('../services/routingService');
 
 // Helper function to parse JSONB fields if necessary

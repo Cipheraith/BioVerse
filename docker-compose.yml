@@ -272,6 +272,12 @@ services:
       # Monitoring
       ENABLE_METRICS: "true"
       METRICS_PORT: "9091"
+      # DHIS2 Integration
+      DHIS2_API_URL: "${DHIS2_API_URL:-https://play.dhis2.org/2.40.0}"
+      DHIS2_USERNAME: "${DHIS2_USERNAME:-admin}"
+      DHIS2_PASSWORD: "${DHIS2_PASSWORD:-district}"
+      DHIS2_STOCK_DATASET_ID: "${DHIS2_STOCK_DATASET_ID}"
+      DHIS2_ORG_UNIT_ID: "${DHIS2_ORG_UNIT_ID:-ImspTQPwCqd}"
     ports:
       - "3000:3000"
       - "9091:9091" # Metrics port

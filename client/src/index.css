@@ -1,54 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
     body {
-        @apply font-sans bg-background text-text transition-colors duration-500;
-        background: linear-gradient(135deg, #000000 0%, #020617 100%);
-        color-scheme: dark;
+        @apply font-sans bg-gray-50 text-gray-900;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        letter-spacing: 0.01em;
     }
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        @apply font-sans;
-        letter-spacing: 0.01em;
-        font-weight: 600; /* Slightly less bold for minimalistic feel */
+    
+    .dark body {
+        @apply bg-gray-900 text-gray-100;
     }
 
-    /* Minimalistic scrollbar with charcoal colors */
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-sans font-semibold tracking-tight;
+    }
+
+    /* Minimalist administrative scrollbar */
     ::-webkit-scrollbar {
-        width: 6px; /* Thinner for minimalistic feel */
+        width: 8px;
+        height: 8px;
     }
     ::-webkit-scrollbar-track {
-        background: #0f172a;
-    }
-    .dark ::-webkit-scrollbar-track {
-        background: #0f172a;
+        @apply bg-transparent;
     }
     ::-webkit-scrollbar-thumb {
-        background: #64748b; /* Subtle charcoal */
-        border-radius: 3px;
-        transition: background 0.2s;
-    }
-    .dark ::-webkit-scrollbar-thumb {
-        background: #64748b;
+        @apply bg-gray-300 rounded-full border-2 border-transparent bg-clip-padding;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #475569; /* Slightly darker on hover */
+        @apply bg-gray-400;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+        @apply bg-gray-700;
     }
     .dark ::-webkit-scrollbar-thumb:hover {
-        background: #475569;
+        @apply bg-gray-600;
     }
 
-    /* Hide scrollbar for minimalistic horizontal scrolling */
+    /* Base components without any glow/glass */
+    button, input, textarea, select {
+        font-family: inherit;
+    }
+
+    *:focus {
+        @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
+    }
+
+    /* Hide scrollbar utility */
     .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
@@ -56,331 +56,5 @@
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }
-
-    /* Minimalistic card styles - subtle and clean */
-    .bg-card,
-    .dark\:bg-dark-card {
-        background: linear-gradient(135deg, #0f172a 60%, #1e293b 100%);
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3); /* Subtle shadow */
-        border-radius: 0.75rem; /* Slightly less rounded for minimalism */
-        border: 1px solid #334155; /* Subtle border */
-        transition:
-            background 0.2s ease,
-            box-shadow 0.2s ease,
-            transform 0.2s ease;
-    }
-
-    /* MINIMALISTIC BUTTON STYLES - ALL BUTTONS USE SAME SUBTLE CHARCOAL */
-    button,
-    .btn,
-    .btn-primary {
-        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-        background-size: 100% 100%; /* No animation background */
-        color: #f8fafc;
-        font-weight: 500; /* Medium weight for subtlety */
-        border-radius: 0.5rem; /* Clean, minimal radius */
-        box-shadow: 0 2px 8px 0 rgba(100, 116, 139, 0.15); /* Very subtle shadow */
-        transition:
-            all 0.2s ease; /* Faster, smoother transitions */
-        outline: none;
-        position: relative;
-        overflow: hidden;
-        border: none;
-    }
-    
-    /* Subtle hover effect - very minimal */
-    button:hover,
-    .btn:hover,
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #475569 0%, #334155 100%); /* Slightly darker */
-        transform: translateY(-1px); /* Very subtle lift */
-        box-shadow: 0 4px 12px 0 rgba(100, 116, 139, 0.2); /* Slightly more shadow */
-    }
-    
-    /* Pressed state */
-    button:active,
-    .btn:active,
-    .btn-primary:active {
-        transform: translateY(0px); /* Return to normal position */
-        box-shadow: 0 1px 4px 0 rgba(100, 116, 139, 0.15); /* Less shadow when pressed */
-    }
-
-    /* Remove the shine effect for minimalistic approach */
-    button::before,
-    .btn::before,
-    .btn-primary::before {
-        display: none; /* No shine effect */
-    }
-
-    /* Minimalistic glassmorphism - very subtle */
-    .glass-card {
-        background: rgba(15, 23, 42, 0.7); /* More transparent */
-        backdrop-filter: blur(12px); /* Less blur for subtlety */
-        border: 1px solid rgba(100, 116, 139, 0.1); /* Very subtle border */
-        box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2); /* Subtle shadow */
-        transition: all 0.2s ease;
-    }
-
-    .glass-card:hover {
-        background: rgba(15, 23, 42, 0.8);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(100, 116, 139, 0.15);
-        box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.3);
-    }
-
-    /* Minimalistic floating animation */
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0px);
-        }
-        50% {
-            transform: translateY(-4px); /* Very subtle float */
-        }
-    }
-
-    .animate-float {
-        animation: float 6s ease-in-out infinite; /* Slower for elegance */
-    }
-
-    /* Subtle gradient text animation - minimalistic colors */
-    @keyframes gradient-shift {
-        0%, 100% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-    }
-
-    .animate-gradient {
-        background: linear-gradient(45deg, #64748b, #0ea5e9, #64748b); /* Charcoal to blue and back */
-        background-size: 200% 200%;
-        animation: gradient-shift 6s ease infinite; /* Slower animation */
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    /* Subtle pulse glow - minimalistic */
-    @keyframes pulse-glow {
-        0%, 100% {
-            box-shadow: 0 0 8px rgba(100, 116, 139, 0.1);
-        }
-        50% {
-            box-shadow: 0 0 16px rgba(100, 116, 139, 0.2);
-        }
-    }
-
-    .animate-pulse-glow {
-        animation: pulse-glow 3s ease-in-out infinite; /* Slower pulse */
-    }
-
-    /* Minimalistic input focus states */
-    input:focus,
-    textarea:focus,
-    select:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.2); /* Subtle charcoal glow */
-        border-color: #64748b; /* Charcoal border */
-        transform: none; /* No scale transform for minimalism */
-        transition: all 0.2s ease;
-    }
-
-    /* Smooth theme transitions */
-    html,
-    body,
-    #root {
-        transition:
-            background 0.3s ease,
-            color 0.3s ease;
-    }
-
-    /* Minimalistic card hover effects */
-    .minimal-card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .minimal-card:hover {
-        transform: translateY(-2px); /* Very subtle lift */
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Subtle loading shimmer */
-    @keyframes shimmer {
-        0% {
-            background-position: -200px 0;
-        }
-        100% {
-            background-position: 200px 0;
-        }
-    }
-
-    .animate-shimmer {
-        background: linear-gradient(90deg, #f8fafc 25%, #e2e8f0 50%, #f8fafc 75%);
-        background-size: 400px 100%;
-        animation: shimmer 1.5s infinite;
-    }
-
-    .dark .animate-shimmer {
-        background: linear-gradient(90deg, #0f172a 25%, #334155 50%, #0f172a 75%);
-        background-size: 400px 100%;
-    }
-    
-    /* Minimalistic hover effects */
-    .hover-lift {
-        transition: all 0.2s ease;
-    }
-    
-    .hover-lift:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(100, 116, 139, 0.15);
-    }
-    
-    .hover-glow {
-        transition: all 0.2s ease;
-    }
-    
-    .hover-glow:hover {
-        box-shadow: 0 0 16px rgba(100, 116, 139, 0.2);
-    }
-    
-    /* Clean responsive design */
-    @media (max-width: 640px) {
-        .mobile-hidden {
-            display: none !important;
-        }
-        
-        .mobile-full {
-            width: 100% !important;
-        }
-        
-        .mobile-center {
-            text-align: center !important;
-        }
-        
-        .mobile-stack {
-            flex-direction: column !important;
-        }
-        
-        .mobile-p-4 {
-            padding: 1rem !important;
-        }
-        
-        .mobile-text-sm {
-            font-size: 0.875rem !important;
-        }
-        
-        /* Consistent mobile button sizing */
-        button,
-        .btn {
-            min-height: 44px !important;
-            padding: 0.75rem 1.5rem !important;
-            font-size: 0.9rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .tablet-hidden {
-            display: none !important;
-        }
-        
-        .tablet-full {
-            width: 100% !important;
-        }
-        
-        .tablet-center {
-            text-align: center !important;
-        }
-        
-        /* Consistent tablet button sizing */
-        button,
-        .btn {
-            min-height: 48px !important;
-            padding: 1rem 2rem !important;
-        }
-    }
-    
-    /* Ultra clean scrollbar for better minimalistic UX */
-    ::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: #000000;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: #64748b;
-        border-radius: 3px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-        background: #475569;
-    }
-
-    /* Minimalistic utility classes */
-    .minimal-gradient-text {
-        background: linear-gradient(135deg, #64748b, #0ea5e9);
-        background-size: 200% 200%;
-        animation: gradient-shift 4s ease infinite;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .minimal-glow {
-        box-shadow: 0 0 8px rgba(100, 116, 139, 0.1);
-    }
-
-    .minimal-glow:hover {
-        box-shadow: 0 0 16px rgba(100, 116, 139, 0.2);
-    }
-
-    /* Typography improvements for minimalism */
-    h1, h2, h3, h4, h5, h6 {
-        line-height: 1.2;
-        margin-bottom: 0.5em;
-    }
-
-    p {
-        line-height: 1.6;
-        margin-bottom: 1em;
-    }
-
-    /* Clean focus states */
-    *:focus {
-        outline: 2px solid rgba(100, 116, 139, 0.3);
-        outline-offset: 2px;
-    }
-
-    /* Remove default button and input styles for consistency */
-    button, input, textarea, select {
-        font-family: inherit;
-    }
-
-    /* Ensure consistent box-sizing */
-    *, *::before, *::after {
-        box-sizing: border-box;
-    }
-
-    /* Dark mode compatibility */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            color-scheme: dark;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #000000 0%, #020617 100%);
-            color: #f8fafc;
-        }
-    }
-
-    /* Clean print styles */
-    @media print {
-        * {
-            background: white !important;
-            color: black !important;
-            box-shadow: none !important;
-        }
-    }
 }
+

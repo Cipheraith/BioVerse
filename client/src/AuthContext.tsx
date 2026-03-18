@@ -1,16 +1,46 @@
 import React, { useState, useEffect, ReactNode } from "react";
 import { AuthContext } from "./AuthContextData";
+import { isTokenValid } from "./utils/tokenUtils";
+
+const isDevMode = import.meta.env.DEV;
+const isAuthBypassEnabled =
+  isDevMode && import.meta.env.VITE_BYPASS_AUTH === "true";
+const bypassRole = import.meta.env.VITE_BYPASS_AUTH_ROLE || "admin";
+const bypassUserId = import.meta.env.VITE_BYPASS_AUTH_USER_ID || "test-user";
+const bypassToken = "bypass-token";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const storedToken = localStorage.getItem("token");
+  // Clear stale/expired tokens on initialization
+  const tokenIsValid = isAuthBypassEnabled || isTokenValid(storedToken);
+  const initialToken = tokenIsValid ? (storedToken || (isAuthBypassEnabled ? bypassToken : null)) : null;
+  const initialRole = tokenIsValid ? (localStorage.getItem("role") || (isAuthBypassEnabled ? bypassRole : null)) : null;
+  const initialUserId = tokenIsValid ? (localStorage.getItem("userId") || (isAuthBypassEnabled ? bypassUserId : null)) : null;
+
+  // If token was invalid, clean up localStorage immediately
+  if (!tokenIsValid && storedToken) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+  }
+
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token"),
+    initialToken,
   );
-  const [role, setRole] = useState<string | null>(localStorage.getItem("role"));
+  const [role, setRole] = useState<string | null>(initialRole);
   const [userId, setUserId] = useState<string | null>(
-    localStorage.getItem("userId"),
+    initialUserId,
   );
+
+  useEffect(() => {
+    if (isAuthBypassEnabled && (!token || !role || !userId)) {
+      setToken(bypassToken);
+      setRole(bypassRole);
+      setUserId(bypassUserId);
+    }
+  }, [token, role, userId]);
 
   useEffect(() => {
     if (token) {
@@ -37,6 +67,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const logout = () => {
+    if (isAuthBypassEnabled) {
+      setToken(bypassToken);
+      setRole(bypassRole);
+      setUserId(bypassUserId);
+      return;
+    }
+
     setToken(null);
     setRole(null);
     setUserId(null);

@@ -25,6 +25,8 @@ Express server with PostgreSQL and Redis integration. Swagger available at `/api
 - `appointments` -> schedule and list
 - `pregnancies`, `srh`, `labs`, `locations`
 - `health-twin` and `health-twins` (alias)
+- `dhis2` -> DHIS2 integration, sync endpoints, and connection testing
+- `coordination` -> supply chain coordination, stock statuses, transfer alerts
 - `telemedicine` -> virtual consultations and video call support
 - `predictive`, `dashboard`, `reports`, `policies`, `performance`
 - `notifications`, `messages`, `users`, `me`, `billing`, `marketplace`, `mobile`, `ai`, `luma`

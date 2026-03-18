@@ -1,4 +1,4 @@
-const pool = require('./database');
+const { pool } = require('../config/database');
 
 // Get all wards
 const getAllWards = async (req, res) => {

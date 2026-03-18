@@ -3,24 +3,6 @@ const { logger } = require('../services/logger');
 
 const getDashboardStats = async (req, res) => {
   try {
-    // Return mock data for development to ensure working dashboard
-    if (process.env.NODE_ENV === 'development') {
-      const mockStats = {
-        totalPatients: 247,
-        patientsToday: 12,
-        totalAppointments: 89,
-        appointmentsToday: 7,
-        totalSymptomChecks: 156,
-        symptomChecksToday: 23,
-        highRiskAlerts: 8,
-        riskPercentChange: '12.5',
-        predictedPatientLoad: 275,
-        predictedChangePercent: 15,
-        riskDistribution: { high: 8, medium: 45, low: 194 }
-      };
-      return res.json(mockStats);
-    }
-
     // Get today's date in YYYY-MM-DD format for proper date comparison
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
@@ -132,43 +114,6 @@ const getDashboardStats = async (req, res) => {
 
 const getRecentActivity = async (req, res) => {
   try {
-    // Return mock data for development
-    if (process.env.NODE_ENV === 'development') {
-      const mockActivity = [
-        {
-          type: 'patient',
-          name: 'John Mwila',
-          timestamp: Date.now() - 300000, // 5 minutes ago
-          formattedTime: new Date(Date.now() - 300000).toLocaleString()
-        },
-        {
-          type: 'symptomCheck', 
-          name: 'Sarah Banda',
-          timestamp: Date.now() - 600000, // 10 minutes ago
-          formattedTime: new Date(Date.now() - 600000).toLocaleString()
-        },
-        {
-          type: 'appointment',
-          name: 'Peter Tembo',
-          timestamp: Date.now() - 900000, // 15 minutes ago
-          formattedTime: new Date(Date.now() - 900000).toLocaleString()
-        },
-        {
-          type: 'patient',
-          name: 'Mary Phiri',
-          timestamp: Date.now() - 1200000, // 20 minutes ago
-          formattedTime: new Date(Date.now() - 1200000).toLocaleString()
-        },
-        {
-          type: 'symptomCheck',
-          name: 'David Lungu',
-          timestamp: Date.now() - 1500000, // 25 minutes ago
-          formattedTime: new Date(Date.now() - 1500000).toLocaleString()
-        }
-      ];
-      return res.json(mockActivity);
-    }
-
     let allRecentActivity = [];
     
     // Get recent patients with error handling

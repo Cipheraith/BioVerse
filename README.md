@@ -1,236 +1,175 @@
-<p align="center">
-  <img src="client/public/bio.png" alt="BioVerse logo" width="180" />
-</p>
+# BioVerse - Health System Coordination Platform
 
-<h1 align="center">🏥 BioVerse</h1>
-<h2 align="center">The Future of Healthcare is Here</h2>
+BioVerse is a health system coordination platform that integrates DHIS2, facility management, supply chain intelligence, and emergency response coordination.
 
-<p align="center">
-  <strong>AI-Powered Predictive Health Twin Network for Proactive Care at Population Scale</strong>
-</p>
+## Quick Start
 
-<p align="center">
-  <em>Transforming Africa's Healthcare Landscape Through Revolutionary Digital Health Twins</em>
-</p>
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 15+
+- Redis 7+
+- Docker & Docker Compose (optional)
 
-<p align="center">
-  <a href="#funding-opportunity">💰 Investment Opportunity</a> •
-  <a href="#collaboration">🤝 Collaboration</a> •
-  <a href="#live-demo">🚀 Live Demo</a> •
-  <a href="#technical-overview">🔬 Technical Deep Dive</a>
-</p>
+### Local Development
 
----
+```bash
+# 1. Clone and install
+git clone <repository>
+cd bioverse
+npm install
 
-## 🌟 **Executive Summary**
+# 2. Setup database
+cd server
+cp .env.example .env
+# Edit .env with your database credentials
 
-**BioVerse is revolutionizing healthcare by creating Living Digital Health Twins** - AI-powered virtual representations of every person that continuously learn from devices, medical records, and environmental data to predict health events *before they happen*.
+# 3. Run migrations
+npm run migrate:coordination
 
-**🎯 Mission**: Transform healthcare from reactive treatment to proactive prevention at population scale, starting with Africa's 1.4 billion people.
+# 4. Test coordination engine
+npm run test:coordination
 
-**💡 Innovation**: World's first quantum-inspired health prediction engine that models complex health interconnections across individuals, families, and communities.
+# 5. Start server
+npm start
+```
 
-**🌍 Impact**: One unified platform replacing dozens of fragmented healthcare systems, delivering personalized care from rural villages to urban centers.
+### Docker Deployment
 
-## 💰 **Funding Opportunity**
+```bash
+# Start all services
+docker-compose up -d
 
-### **📈 Market Opportunity**
-- **🌍 Target Market**: Africa's healthcare market valued at **$259 billion** and growing at 8.9% CAGR
-- **📉 Problem Size**: 400+ million Africans lack access to quality healthcare
-- **🔄 Solution Scale**: One platform serving 1.4+ billion people across 54 countries
-- **💵 Revenue Potential**: Multi-billion dollar opportunity through SaaS, partnerships, and data insights
+# Check logs
+docker-compose logs -f node-server
 
-### **🏆 Competitive Advantages**
-1. **🧬 First-Mover**: World's first quantum-inspired health prediction engine
-2. **🌍 Africa-Native**: Built specifically for African healthcare challenges
-3. **📶 Connectivity-Agnostic**: Works offline, via SMS, and in low-bandwidth environments
-4. **🔒 Privacy-First**: Federated learning ensures data stays local while improving globally
-5. **🏥 Government-Ready**: Designed for Ministry of Health adoption and population-scale deployment
+# Run migrations
+docker-compose exec node-server npm run migrate:coordination
+```
 
-### **🚀 Funding Goals**
-- **Seed Round**: $2-5M for MVP completion and pilot deployments
-- **Series A**: $15-25M for Africa-wide expansion and advanced AI features
-- **Series B**: $50-100M for global expansion and quantum computing integration
+## Features
 
-### **📊 Key Metrics to Date**
-- **🛠️ Technical**: 95%+ system reliability, sub-100ms AI response times
-- **🎨 Innovation**: 15+ breakthrough AI/ML algorithms implemented
-- **🌐 Scalability**: Designed for 1B+ digital twins with elastic cloud architecture
-- **🔒 Security**: Military-grade encryption, HIPAA-compliant architecture
-
----
-
-## 🤝 **Collaboration Opportunities**
-
-### **🏥 Healthcare Institutions**
-- **Hospitals & Clinics**: Pilot partnerships for digital twin deployment
-- **Research Centers**: Collaborative research on AI-driven healthcare outcomes
-- **Government Health Ministries**: Population health management solutions
-- **NGOs & Development Organizations**: Humanitarian healthcare delivery
-
-### **🏢 Technology Partners**
-- **Cloud Providers**: Infrastructure partnerships (AWS, Google Cloud, Azure)
-- **AI/ML Companies**: Joint research on healthcare-specific algorithms
-- **IoT/Device Manufacturers**: Integration with medical devices and wearables
-- **Telecommunications**: SMS/USSD integration for rural connectivity
-
-### **🎓 Academic & Research**
-- **Universities**: Joint research programs on digital health twins
-- **Medical Schools**: Clinical validation studies and training partnerships
-- **AI Research Labs**: Quantum-inspired computing for healthcare applications
-- **Public Health Institutions**: Population health modeling and outbreak prediction
-
-### **🌍 International Organizations**
-- **WHO**: Global health monitoring and disease surveillance
-- **World Bank**: Healthcare infrastructure development projects
-- **UN SDG**: Sustainable Development Goal 3 (Health & Well-being) initiatives
-- **Gates Foundation**: Healthcare innovation and global health equity
-
----
-
-## 🚀 **Live Demo**
-
-### **🎬 Interactive Demonstrations**
-- **Health Twin Creation**: Create a digital twin in under 30 seconds
-- **Predictive Analytics**: See AI predict health risks before symptoms appear
-- **Population Insights**: Visualize community health patterns and trends
-- **Emergency Response**: Automated ambulance dispatch and resource optimization
-
-### **📱 Mobile Experience**
-- **Cross-Platform**: Native iOS and Android apps via Expo React Native
-- **Offline-First**: Full functionality without internet connectivity
-- **SMS Integration**: Health alerts and consultations via text messaging
-- **Multilingual**: Support for 20+ African languages
-
-### **🏥 Healthcare Provider Portal**
-- **Patient Management**: Unified view of all patient digital twins
-- **Predictive Alerts**: Early warning system for health deterioration
-- **Resource Optimization**: Real-time bed availability and equipment tracking
-- **Population Health**: Community-wide health pattern analysis
-
----
-
-## 🔬 **Technical Overview**
-- [Overview](#overview)
-- [Vision](#vision)
-- [Tech Stack](#tech-stack)
-- [Monorepo Structure](#monorepo-structure)
-- [API Endpoints](#api-endpoints)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Configuration](#configuration)
-- [License](#license)
-
-## Overview
-
-BioVerse is an all-in-one, AI-powered health ecosystem designed to unify Africa's fragmented healthcare landscape. It moves beyond reactive treatment to deliver proactive, predictive, and personalized care through the concept of a **Living Digital Twin**.
-
-Each person is represented by a dynamic, continuously learning digital twin that models the complex interplay between their biology, genetics, lifestyle, and environment. These individual twins are then interconnected within a larger network, creating living models of families, communities, and entire populations. This multi-scale approach allows BioVerse to not only deliver personalized wellness nudges but also to identify and predict large-scale health trends, resource needs, and disease outbreaks.
-
-## The Vision: A Unified, Proactive Health Ecosystem
-
-Our vision is to build the single platform that coordinates healthcare across Africa, replacing dozens of fragmented systems with one intelligent, cohesive whole.
-
-- **Unified Platform:** One system to manage all aspects of health, from individual patient care and telehealth to population-level analytics and pandemic response.
-- **Living Digital Twins:** A virtual, dynamic representation of every person, enabling truly personalized medicine and proactive interventions before illness occurs.
-- **Quantum-Inspired Network:** We use a revolutionary modeling framework inspired by quantum principles. Concepts like "entanglement" are used to model the deep, interconnected health dependencies between people, while "superposition" helps us manage the inherent uncertainties of biology. This allows for unprecedented accuracy in predicting both individual and collective health outcomes.
-- **Population-Scale Proaction:** By aggregating insights from the entire network, we can predict and respond to disease outbreaks, optimize resource allocation for Ministries of Health, and ultimately elevate the wellbeing of entire nations.
-- **Africa-Ready by Design:** Engineered for the African context with offline-first capabilities, multi-lingual support (including SMS/USSD), and optimization for low-bandwidth environments.
-
-## Tech Stack
-- **Web Frontend**: Vite + React + TypeScript, Tailwind CSS, i18n.
-- **Mobile App**: Expo React Native for cross-platform support.
-- **Server/API**: Node.js + Express, PostgreSQL, Redis for core backend services.
-- **AI Service**: A high-performance Python service using FastAPI, responsible for:
-    - **Digital Twin Core**: Manages the state and logic of each Living Patient Twin.
-    - **Machine Learning**: Foundational risk and trajectory models using Scikit-learn.
-    - **Advanced Predictions**: Multi-modal forecasting (genomics, lifestyle) for life expectancy and quality of life.
-    - **Conversational AI**: LLM-based interactive health companion via Ollama.
-    - **Medical Vision**: CNN-based analysis of medical images (X-rays, dermatology, etc.).
-    - **Federated Learning**: Privacy-preserving model training across a network of participants.
-- **DevOps & Infra**: Docker, Docker Compose, Terraform, and GitHub Actions for CI/CD.
-
-## Monorepo Structure
-- `client/`: React + Vite + TS frontend
-- `server/`: Node.js Express API (PostgreSQL)
-- `python-ai/`: FastAPI service for all AI/ML and Digital Twin logic
-- `bioverse-mobile/`: Expo React Native app
-- `terraform/`: Infrastructure as Code (IaC) definitions
-
-## API Endpoints
-
-The `python-ai` service provides a rich API for interacting with the BioVerse network. The main endpoints are available at the `/api/v1/` prefix.
-
-- **`GET /health`**: Health check for the AI service and its sub-components.
-- **`POST /health-twins/create`**: Creates a new Living Patient Twin.
-- **`GET /health-twins/{twin_id}`**: Retrieves a specific twin's data.
-- **`POST /health-twins/{twin_id}/converse`**: Interact with a twin's conversational AI.
-- **`POST /vision/analyze`**: Upload and analyze a medical image (X-ray, dermatology, etc.).
-- **`POST /federated/participants/register`**: Register a new institution for federated learning.
-- **`POST /federated/training/start_round`**: Initiate a new privacy-preserving training round.
-
-For a complete, interactive API reference, see the [Documentation](#documentation) section.
-
-## Quick Start (local)
-1.  **Prerequisites**: Node 20+, npm 10+, Docker, Python 3.10/3.11
-2.  **Install Dependencies**: `npm run install:all`
-3.  **Configure Environment**: Copy `.env.example` files and set JWT_SECRET
-    ```bash
-    cp server/.env.example server/.env
-    echo "JWT_SECRET=$(openssl rand -base64 32)" >> server/.env
-    ```
-4.  **Start Docker Services**: `docker compose -f docker-compose.dev.yml up -d`
-5.  **Run the App**: `npm run dev` (starts all services)
-6.  **Access the App**: 
-    - Client: http://localhost:5173
-    - Server API: http://localhost:3000
-    - Python AI API: http://localhost:8000
-
-For detailed setup instructions, see [SETUP.md](./SETUP.md).
+- **DHIS2 Integration**: Automatic stock data ingestion from public health facilities
+- **Supply Chain Intelligence**: Real-time stock status tracking (CRITICAL/HEALTHY/SURPLUS)
+- **Spatial Matching**: Pairs critical stockouts with nearest surplus facilities
+- **Transfer Alerts**: Automated recommendations for resource redistribution
+- **Pharmacy Portal**: API for private pharmacies to update stock levels
+- **Ministry Dashboard**: Real-time facility status visualization
 
 ## Documentation
 
-### Getting Started
-- **[Setup Guide](./SETUP.md)** - Complete installation and configuration guide
-- **[Security Policy](./SECURITY.md)** - Security best practices and vulnerability reporting
-- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute to BioVerse
+- [DHIS2 Integration Guide](./DHIS2_INTEGRATION.md)
+- [Coordination Engine Details](./server/COORDINATION_ENGINE.md)
+- [Architecture Overview](./docs/architecture.md)
+- [API Documentation](./docs/backend.md)
+- [AI Service](./docs/ai-service.md)
 
-### Technical Documentation
-- **[API Documentation](http://localhost:8000/docs)** - Interactive Swagger UI (when Python AI is running)
-- **[API Reference](http://localhost:8000/redoc)** - ReDoc documentation
-- **[CI/CD Guide](./docs/CI_CD.md)** - Complete CI/CD pipeline documentation
-- **[Issues Tracking](./docs/ISSUES.md)** - Comprehensive issue analysis and fixes
+---
 
-### Development Resources
-- **[Workflows README](./.github/workflows/README.md)** - GitHub Actions workflows overview
-- **[Architecture](./docs/)** - System architecture and design documents
+# BioVerse Backend Documentation: Core Coordination Engine
 
-## CI/CD Pipelines
+### **System Architecture Overview**
 
-BioVerse includes comprehensive CI/CD pipelines:
+BioVerse operates on a **Hub and Spoke** middleware architecture. It acts as the central intelligence hub, continuously ingesting data from external spokes (DHIS2, public clinics, private pharmacies), normalizing that data into a single PostgreSQL database, and running a calculation engine to pair supply surpluses with critical stockouts.
 
-- ✅ **Continuous Integration** - Automated testing, linting, and building
-- 🔒 **Security Scanning** - CodeQL, dependency scanning, secret detection
-- 📊 **Code Quality** - Coverage analysis, complexity checks, performance testing
-- 🚀 **Deployment** - Automated deployment to staging and production
+---
 
-See [CI/CD Documentation](./docs/CI_CD.md) for details.
+### **1. The Data Layer (PostgreSQL Schema)**
 
-## Security
+To coordinate the system, BioVerse needs to know *who* has *what*, and *where* they are. We use three core relational tables to build this map.
 
-BioVerse takes security seriously. We have implemented:
+**Table 1: `facilities**`
+Tracks both public hospitals (from DHIS2) and private pharmacies.
 
-- ✅ JWT authentication with strong secret validation
-- ✅ Rate limiting on authentication endpoints
-- ✅ Content Security Policy without unsafe directives
-- ✅ Input validation on all API routes
-- ✅ Automated security scanning (CodeQL, Trivy, TruffleHog)
-- ✅ Regular dependency vulnerability checks
+* `id` (Primary Key)
+* `name` (e.g., "Lusaka General" or "PillBox Pharmacy")
+* `type` (Enum: 'PUBLIC_HOSPITAL', 'RURAL_CLINIC', 'PRIVATE_PHARMACY')
+* `latitude` / `longitude` (For the emergency routing and heat maps)
 
-See [SECURITY.md](./SECURITY.md) for our security policy and reporting vulnerabilities.
+**Table 2: `inventory_catalog**`
+The master list of medications and equipment we are tracking.
 
-## Configuration
-Copy `.env.example` to `.env` in each service (`server`, `python-ai`) and fill in the required secrets and configuration variables.
+* `id` (Primary Key)
+* `item_name` (e.g., "Coartem 20/120mg")
+* `category` (Enum: 'MEDICATION', 'HARDWARE', 'BLOOD')
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+**Table 3: `facility_stock_levels**`
+The constantly updating ledger of exactly how much of an item is at a specific facility.
+
+* `id` (Primary Key)
+* `facility_id` (Foreign Key -> facilities.id)
+* `item_id` (Foreign Key -> inventory_catalog.id)
+* `current_stock` (Integer: The actual box count)
+* `daily_burn_rate` (Float: How many boxes they use per day on average)
+* `last_updated` (Timestamp)
+
+---
+
+### **2. The Coordination Engine (The Logic Loop)**
+
+This is the "Brain" of BioVerse. It runs automatically on the Node.js or Python backend using a CRON job (a scheduled task).
+
+**Phase A: Data Ingestion (Every 6 Hours)**
+
+1. The backend fires a `GET` request to the DHIS2 API to pull public hospital stock levels.
+2. The backend receives `POST` requests from private pharmacy portals pushing their latest counts.
+3. The database updates the `current_stock` in the `facility_stock_levels` table.
+
+**Phase B: The Burn Rate & Status Algorithm**
+The engine calculates the status of every single facility based on this math:
+`Days_of_Supply = current_stock / daily_burn_rate`
+
+* **CRITICAL:** If `Days_of_Supply < 3` ➔ Flag facility Red.
+* **HEALTHY:** If `Days_of_Supply >= 3 AND <= 30` ➔ Flag facility Green.
+* **SURPLUS:** If `Days_of_Supply > 30` ➔ Flag facility Blue.
+
+**Phase C: The Matchmaker (The Solution)**
+When the engine detects a **CRITICAL** facility, it runs a spatial query (using the latitude/longitude) to find the nearest facility that holds a **SURPLUS** of that exact same `item_id`. It then generates a "Suggested Transfer Route" for the dashboard.
+
+---
+
+### **3. The REST API Endpoints (How the Dashboard talks to the Backend)**
+
+When the Minister of Health logs into your React dashboard, the frontend calls these exact backend routes to display the data.
+
+**Endpoint 1: Fetching the Heat Map Data**
+
+* **Route:** `GET /api/v1/coordination/status-map`
+* **What it does:** Returns a JSON array of all facilities and their current Red/Green/Blue status.
+* **React Use Case:** Your frontend `.map()` function loops over this array and plots the colored dots on the Zambian map.
+
+**Endpoint 2: The Emergency Transfer Alert**
+
+* **Route:** `GET /api/v1/coordination/critical-transfers`
+* **What it does:** Returns a JSON object pairing a starving clinic with a surplus hospital.
+* **Response Example:**
+
+```json
+{
+  "alert_id": "TRN-992",
+  "item": "Coartem 20/120mg",
+  "action": "TRANSFER_REQUIRED",
+  "from_facility": {
+    "name": "Lusaka General Hospital",
+    "surplus_amount": 450,
+    "distance_km": 42
+  },
+  "to_facility": {
+    "name": "Chongwe Rural Health Centre",
+    "shortage_timeframe": "48 Hours"
+  }
+}
+
+```
+
+**Endpoint 3: The Private Pharmacy Sync**
+
+* **Route:** `POST /api/v1/pharmacy/update-stock`
+* **What it does:** Allows the lightweight React portal used by private pharmacists to push their daily stock numbers directly into the BioVerse database, bypassing DHIS2 entirely.
+
+---
+
+### **The Architect's Reality**
+
+By structuring the backend this way, you have completely separated the *data collection* from the *data presentation*. The React frontend is stupid—it just draws boxes and maps. The Node.js/Python backend is the genius that does all the matchmaking and math.
+
+Now that you have the architectural blueprint for the backend, which piece of this engine do you want to actually build first? Do you want to map out the exact SQL code to create those database tables, or do you want to write the Node.js Express route for the `GET /api/v1/coordination/status-map` endpoint?

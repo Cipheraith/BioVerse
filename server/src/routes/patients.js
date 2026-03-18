@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const { getAllPatients, createPatient, getPatientById, updatePatient, createSymptomCheck, getMe, getPatientHealthTwin } = require('../controllers/patientController');
+const { getAllPatients, createPatient, getPatientById, updatePatient, createSymptomCheck, getMe } = require('../controllers/patientController');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 /**
@@ -70,7 +70,7 @@ router.post('/', authenticateToken, authorizeRoles(['admin', 'health_worker']), 
 
 router.get('/me', authenticateToken, authorizeRoles(['patient']), getMe);
 router.get('/:id', authenticateToken, authorizeRoles(['admin', 'health_worker', 'moh', 'patient']), getPatientById);
-router.get('/:id/health-twin', authenticateToken, authorizeRoles(['admin', 'health_worker', 'moh', 'patient']), getPatientHealthTwin);
+
 router.put('/:id', authenticateToken, authorizeRoles(['admin', 'health_worker']), updatePatient);
 
 router.post('/:id/symptom-checks', authenticateToken, authorizeRoles(['patient']), [

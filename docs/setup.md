@@ -22,9 +22,11 @@ npm run dev
 - Python AI Service
 ```bash
 cd python-ai
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv
+.\\.venv\\Scripts\\Activate.ps1
 pip install -r requirements.txt
-export PYTHON_AI_PORT=8000 PYTHON_AI_HOST=0.0.0.0
+$env:PYTHON_AI_PORT=8000
+$env:PYTHON_AI_HOST=0.0.0.0
 python main.py
 # Swagger at http://localhost:8000/docs
 ```

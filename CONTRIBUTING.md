@@ -1,13 +1,13 @@
 # 🤝 Contributing to BioVerse
 
-**Welcome to the future of healthcare!** BioVerse is revolutionizing global health through AI-powered Digital Health Twins, and we're excited to collaborate with developers, researchers, healthcare professionals, and institutions worldwide.
+**Welcome to the future of healthcare logistics!** BioVerse is building supply chain coordination tools for African health systems powered by DHIS2 integration, and we're excited to collaborate with developers, researchers, healthcare professionals, and institutions worldwide.
 
 ---
 
 ## 🌟 **Why Contribute to BioVerse?**
 
 - 🌍 **Global Impact**: Help transform healthcare for 1.4+ billion people across Africa
-- 🧠 **Cutting-Edge AI**: Work with quantum-inspired health prediction algorithms
+- 🧠 **Real-World Integration**: Work with DHIS2 APIs and health supply chain data
 - 🏥 **Save Lives**: Your code directly contributes to early disease detection and prevention
 - 🚀 **Career Growth**: Gain experience with enterprise-scale healthcare technology
 - 🤝 **Community**: Join a passionate community of healthcare innovators
@@ -31,7 +31,7 @@
 - **Medical Researchers**: Clinical studies, evidence-based improvements
 
 ### **🎓 Researchers & Academics**
-- **AI Researchers**: Quantum-inspired computing, federated learning
+- **AI Researchers**: Demand forecasting, supply chain optimization
 - **Computer Scientists**: Algorithm optimization, distributed systems
 - **Data Scientists**: Health analytics, predictive modeling
 - **Biomedical Engineers**: Medical device integration, sensor fusion
@@ -53,8 +53,7 @@ npm run install:all
 # 3. Set up Python virtual environment
 cd python-ai
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or: .\venv\Scripts\activate  # Windows
+.\venv\Scripts\activate  # Windows PowerShell
 pip install -r requirements.txt
 cd ..
 
@@ -144,7 +143,7 @@ Use [Conventional Commits](https://conventionalcommits.org/):
 
 ```bash
 # Feature additions
-git commit -m "feat(ai): add quantum health prediction algorithm"
+git commit -m "feat(dhis2): add organisation unit sync service"
 
 # Bug fixes
 git commit -m "fix(api): resolve authentication timeout issue"
@@ -153,7 +152,7 @@ git commit -m "fix(api): resolve authentication timeout issue"
 git commit -m "docs: update deployment guide for AWS"
 
 # Testing
-git commit -m "test: add unit tests for digital twin service"
+git commit -m "test: add unit tests for coordination service"
 
 # Performance improvements
 git commit -m "perf(ai): optimize prediction engine response time"
@@ -193,7 +192,7 @@ git commit -m "perf(ai): optimize prediction engine response time"
 5. **Security Hardening**: Advanced threat protection
 
 ### **🔬 Research Opportunities**
-1. **Quantum Health Computing**: Revolutionary modeling algorithms
+1. **Supply Chain Analytics**: Demand forecasting and stock optimization algorithms
 2. **Federated Learning**: Privacy-preserving AI training
 3. **Computer Vision**: Medical image analysis and diagnostics
 4. **Population Health**: Epidemiological modeling and outbreak prediction
@@ -210,7 +209,7 @@ git commit -m "perf(ai): optimize prediction engine response time"
 - **Infrastructure Integration**: EMR and hospital system connections
 
 ### **🎓 Academic Research**
-- **Joint Publications**: Research papers on digital health twins
+- **Joint Publications**: Research papers on health supply chain coordination
 - **Grant Applications**: Collaborative funding for healthcare innovation
 - **Student Projects**: Internships and thesis opportunities
 - **Conference Presentations**: Academic and industry conference speaking

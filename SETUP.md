@@ -1,6 +1,6 @@
 # BioVerse Setup Guide
 
-Complete guide for setting up the BioVerse AI-Powered Predictive Health Twin Network for local development.
+Complete guide for setting up the BioVerse Health Supply Chain Coordination Platform for local development.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -31,7 +31,7 @@ Complete guide for setting up the BioVerse AI-Powered Predictive Health Twin Net
 ### System Requirements
 - **RAM**: 8GB minimum, 16GB recommended
 - **Disk Space**: 10GB free space
-- **OS**: Windows 10/11, macOS 10.15+, or Linux (Ubuntu 20.04+)
+- **OS**: Windows 10/11 or macOS 10.15+
 
 ---
 
@@ -51,13 +51,13 @@ npm run install:all
 docker compose -f docker-compose.dev.yml up -d
 
 # 4. Copy environment files
-cp server/.env.example server/.env
-cp client/.env.development client/.env
-cp python-ai/.env.example python-ai/.env
+Copy-Item server/.env.example server/.env
+Copy-Item client/.env.development client/.env
+Copy-Item python-ai/.env.example python-ai/.env
 
 # 5. Configure JWT secret (IMPORTANT!)
 # Edit server/.env and set a strong JWT_SECRET
-echo "JWT_SECRET=$(openssl rand -base64 32)" >> server/.env
+Add-Content server/.env "JWT_SECRET=change_me_to_a_strong_secret"
 
 # 6. Start the application
 npm run dev
@@ -105,7 +105,7 @@ cd ..
 ```bash
 cd python-ai
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 cd ..
 ```
@@ -143,11 +143,11 @@ cp server/.env.example server/.env
 Edit `server/.env`:
 ```env
 # Database Configuration
-PGHOST=localhost
-PGPORT=5432
-PGUSER=bioverse_user
-PGPASSWORD=your_secure_password_here
-PGDATABASE=bioverse_db
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_database_password_here
+DB_NAME=bioverse_zambia_db
 
 # Authentication (CRITICAL - Must be set!)
 JWT_SECRET=your_generated_secret_here  # Use: openssl rand -base64 32
@@ -418,7 +418,7 @@ docker compose -f docker-compose.dev.yml logs postgres
 **Solution**:
 ```bash
 # Find process using port 3000
-lsof -i :3000  # On macOS/Linux
+lsof -i :3000  # On macOS
 netstat -ano | findstr :3000  # On Windows
 
 # Kill the process or change the port in .env
@@ -589,7 +589,7 @@ After setup:
 2. ✅ Test the API at http://localhost:8000/docs
 3. ✅ Read the [Contributing Guide](./CONTRIBUTING.md)
 4. ✅ Join our community discussions
-5. ✅ Start building your first health twin!
+5. ✅ Start exploring supply chain coordination!
 
 ---
 

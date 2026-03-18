@@ -25,16 +25,14 @@ const handleValidationErrors = (req, res, next) => {
 
 // Validation rules for registration
 const validateRegister = [
-  body('username').optional().isEmail().withMessage('Please enter a valid email for username if provided.'),
+  body('username').optional().isString().trim().notEmpty().withMessage('Username is required if provided.'),
   body('phoneNumber').optional().isMobilePhone('any').withMessage('Please enter a valid phone number if provided.'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.'),
-  body('role').isIn(['patient', 'health_worker', 'admin', 'moh', 'pharmacy', 'ambulance_driver']).withMessage('Invalid role.'),
+  body('role').isIn(['health_worker', 'admin', 'moh', 'facility_manager', 'logistics_coordinator', 'dhis2_admin']).withMessage('Invalid role.'),
   body('fullName').optional().isString().withMessage('Full name must be a string.'),
-  body('dob').isISO8601().withMessage('Date of birth must be a valid date (YYYY-MM-DD).'),
-  body('nationalId').notEmpty().withMessage('National ID is required.'),
   body().custom((value, { req }) => {
     if (!req.body.username && !req.body.phoneNumber) {
-      throw new Error('Either username (email) or phone number is required.');
+      throw new Error('Either username or phone number is required.');
     }
     return true;
   }),
@@ -42,12 +40,12 @@ const validateRegister = [
 
 // Validation rules for login
 const validateLogin = [
-  body('username').optional().isEmail().withMessage('Please enter a valid email for username if provided.'),
+  body('username').optional().isString().trim().notEmpty().withMessage('Username is required if provided.'),
   body('phoneNumber').optional().isMobilePhone('any').withMessage('Please enter a valid phone number if provided.'),
   body('password').notEmpty().withMessage('Password is required.'),
   body().custom((value, { req }) => {
     if (!req.body.username && !req.body.phoneNumber) {
-      throw new Error('Either username (email) or phone number is required.');
+      throw new Error('Either username or phone number is required.');
     }
     return true;
   }),

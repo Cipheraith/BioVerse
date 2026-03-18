@@ -1,11 +1,11 @@
 /**
- * Enhanced AI Controller with Ollama Integration
- * Handles all AI-powered features using local models
+ * AI Controller
+ * Handles AI-powered feature endpoints
  */
 
-const ollamaAI = require('../services/ollamaAIService');
 const { getQuery, allQuery } = require('../config/database');
 const { logger } = require('../services/logger');
+const { analyzeSymptoms, getLumaResponse } = require('../services/aiService');
 
 class AIController {
   /**
@@ -34,12 +34,8 @@ class AIController {
         }
       }
 
-      // Process query with Ollama
-      const aiResponse = await ollamaAI.processHealthQuery(
-        message, 
-        patientId || 'anonymous', 
-        patientContext ? [patientContext] : []
-      );
+      // Process query with AI service
+      const aiResponse = await getLumaResponse(message);
 
       // Store conversation in database (optional)
       if (patientId) {
@@ -48,10 +44,8 @@ class AIController {
 
       res.json({
         response: aiResponse.response,
-        conversationId: aiResponse.conversationId,
-        timestamp: aiResponse.timestamp,
-        model: aiResponse.model,
-        confidence: 0.85 // Could be calculated based on model response
+        type: aiResponse.type,
+        timestamp: new Date().toISOString()
       });
 
     } catch (error) {

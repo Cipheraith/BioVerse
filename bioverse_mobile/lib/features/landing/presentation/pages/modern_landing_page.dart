@@ -299,7 +299,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                 FadeTransition(
                   opacity: _fadeInAnimation,
                   child: Text(
-                    "Take control of your health with AI-powered predictions, instant access to doctors, and personalized health insights. Get the care you deserve, when you need it.",
+                    "Stay ahead of your health with AI-powered insights, instant access to doctors, and care that fits your life.",
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: AppTheme.textPrimary,
@@ -404,10 +404,10 @@ class _ModernLandingPageState extends State<ModernLandingPage>
 
   Widget _buildStats() {
     final stats = [
-      {'number': '24/7', 'label': 'Access to Healthcare Services', 'icon': Icons.access_time},
-      {'number': '1000+', 'label': 'Verified Healthcare Providers', 'icon': Icons.verified_user},
-      {'number': '< 5min', 'label': 'Average Response Time', 'icon': Icons.speed},
-      {'number': '99.9%', 'label': 'Service Uptime', 'icon': Icons.check_circle},
+      {'number': '24/7', 'label': 'Always Available', 'icon': Icons.access_time},
+      {'number': '1000+', 'label': 'Verified Providers', 'icon': Icons.verified_user},
+      {'number': '< 5min', 'label': 'Response Time', 'icon': Icons.speed},
+      {'number': '99.9%', 'label': 'Uptime', 'icon': Icons.check_circle},
     ];
 
     return GridView.builder(
@@ -510,7 +510,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 8),
           Text(
-            'Everything you need to stay healthy, all in one app',
+            'Everything you need to stay healthy, in one place',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -617,7 +617,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
                 const Icon(Icons.bolt, color: AppTheme.primaryBlue, size: 16),
                 const SizedBox(width: 8),
                 Text(
-                  'What Makes BioVerse Different',
+                  'Why BioVerse',
                   style: GoogleFonts.inter(
                     color: AppTheme.primaryBlue,
                     fontSize: 12,
@@ -642,7 +642,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           Text(
-            'BioVerse combines the best of modern medicine with AI technology to give you personalized health insights and predictions tailored to your unique needs.',
+            'BioVerse brings together modern medicine and AI to give you health insights that actually fit your life.',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -698,11 +698,11 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           ...[
-            'AI Predictions - Know health risks before symptoms appear',
-            'Personal Health Twin - Your digital health companion',
-            'Local Doctors - Connect with healthcare providers near you',
-            'Secure & Private - Your health data is protected',
-            'Works Everywhere - Even with slow internet connection',
+            'Spot health risks before symptoms show up',
+            'A digital companion built around your health profile',
+            'Connect with healthcare providers in your area',
+            'Your health data stays private and encrypted',
+            'Works reliably even on slow connections',
           ].map((feature) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Row(
@@ -745,7 +745,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           Text(
-            'Join thousands of users who have taken control of their health with BioVerse. From prevention to treatment, we\'re with you every step of your health journey.',
+            'Join thousands of people who\'ve made BioVerse part of their health routine. Start today.',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,
@@ -755,10 +755,10 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 32),
           ...[
-            'Track vital signs and get health insights in real-time',
+            'Track vital signs and get real-time health insights',
             'Book appointments with verified healthcare providers',
             'Access your medical records anytime, anywhere',
-            'Get emergency help with one-touch SOS feature',
+            'One-touch SOS for emergency situations',
           ].map((item) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
@@ -859,7 +859,7 @@ class _ModernLandingPageState extends State<ModernLandingPage>
           ),
           const SizedBox(height: 16),
           Text(
-            'Join thousands of users who trust BioVerse for their healthcare needs. Start your journey to better health today.',
+            'Join thousands of users who trust BioVerse for their health. Start your journey today.',
             style: GoogleFonts.inter(
               fontSize: 16,
               color: AppTheme.textPrimary,

@@ -1,6 +1,6 @@
 const { runQuery, getQuery, allQuery } = require('../config/database');
 const { getAIDiagnosis } = require('../services/aiService');
-const { generateHealthTwin } = require('../services/healthTwinService');
+
 const { app: logger } = require('../services/logger');
 
 // Helper function to parse JSON fields
@@ -82,23 +82,7 @@ const getPatientById = async (req, res) => {
   }
 };
 
-const getPatientHealthTwin = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (req.user.role === 'patient' && req.user.id !== id) {
-      return res.status(403).json({ message: 'Access Denied: Patients can only view their own health twin.' });
-    }
-    const healthTwin = await generateHealthTwin(id);
-    if (healthTwin) {
-      res.json(healthTwin);
-    } else {
-      res.status(404).send('Health twin not found for this patient.');
-    }
-  } catch (error) {
-    logger.error('Error fetching health twin:', error);
-    res.status(500).json({ message: 'Failed to retrieve health twin due to an internal error.' });
-  }
-};
+
 
 const updatePatient = async (req, res) => {
   const { id } = req.params;
@@ -191,4 +175,4 @@ const getMe = async (req, res) => {
   }
 };
 
-module.exports = { getAllPatients, createPatient, getPatientById, updatePatient, createSymptomCheck, getMe, getPatientHealthTwin };
+module.exports = { getAllPatients, createPatient, getPatientById, updatePatient, createSymptomCheck, getMe };

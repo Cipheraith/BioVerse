@@ -1,10 +1,84 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import logo from '/bio.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, Calendar, BarChart2, LogOut, Settings, Bell, Bot, HeartPulse, Menu, Video } from 'lucide-react';
+import { Home, Package, Building2, BarChart3, Database, MapPin, LogOut, Settings, Bell, Menu, AlertTriangle, Truck, ChevronsLeft, ChevronsRight, Activity, ClipboardList, Shield } from 'lucide-react';
 import { useAuth } from './hooks/useAuth';
-import LumaChatbot from './components/LumaChatbot';
 import { motion } from 'framer-motion';
+
+interface NavItem {
+  href: string;
+  icon: React.FC<any>;
+  label: string;
+}
+
+function getNavItemsForRole(role: string | null): NavItem[] {
+  const common: NavItem[] = [
+    { href: '/dashboard', icon: Home, label: 'Overview' },
+  ];
+
+  switch (role) {
+    case 'admin':
+      return [
+        ...common,
+        { href: '/moh-dashboard', icon: Shield, label: 'National Dashboard' },
+        { href: '/district-dashboard', icon: Activity, label: 'District Dashboard' },
+        { href: '/coordination', icon: Package, label: 'Coordination' },
+        { href: '/facilities', icon: Building2, label: 'Facilities' },
+        { href: '/stock', icon: BarChart3, label: 'Stock Overview' },
+        { href: '/dhis2', icon: Database, label: 'DHIS2 Sync' },
+        { href: '/map', icon: MapPin, label: 'Facility Map' },
+        { href: '/alerts', icon: AlertTriangle, label: 'Outbreak Alerts' },
+        { href: '/logistics', icon: Truck, label: 'Emergency Logistics' },
+      ];
+    case 'moh':
+      return [
+        ...common,
+        { href: '/moh-dashboard', icon: Shield, label: 'National Dashboard' },
+        { href: '/district-dashboard', icon: Activity, label: 'District Dashboard' },
+        { href: '/facilities', icon: Building2, label: 'Facilities' },
+        { href: '/stock', icon: BarChart3, label: 'Stock Overview' },
+        { href: '/dhis2', icon: Database, label: 'DHIS2 Sync' },
+        { href: '/map', icon: MapPin, label: 'Facility Map' },
+        { href: '/alerts', icon: AlertTriangle, label: 'Outbreak Alerts' },
+      ];
+    case 'facility_manager':
+      return [
+        ...common,
+        { href: '/facility-dashboard', icon: Building2, label: 'My Facility' },
+        { href: '/district-dashboard', icon: Activity, label: 'District Dashboard' },
+        { href: '/stock', icon: BarChart3, label: 'Stock Overview' },
+        { href: '/map', icon: MapPin, label: 'Facility Map' },
+        { href: '/logistics', icon: Truck, label: 'Emergency Logistics' },
+      ];
+    case 'health_worker':
+      return [
+        ...common,
+        { href: '/hw-dashboard', icon: ClipboardList, label: 'Health Worker Portal' },
+        { href: '/facility-dashboard', icon: Building2, label: 'Facility View' },
+        { href: '/stock', icon: BarChart3, label: 'Stock Overview' },
+        { href: '/map', icon: MapPin, label: 'Facility Map' },
+      ];
+    case 'logistics_coordinator':
+      return [
+        ...common,
+        { href: '/logistics', icon: Truck, label: 'Emergency Logistics' },
+        { href: '/coordination', icon: Package, label: 'Coordination' },
+        { href: '/district-dashboard', icon: Activity, label: 'District Dashboard' },
+        { href: '/stock', icon: BarChart3, label: 'Stock Overview' },
+        { href: '/map', icon: MapPin, label: 'Facility Map' },
+      ];
+    case 'dhis2_admin':
+      return [
+        ...common,
+        { href: '/dhis2', icon: Database, label: 'DHIS2 Sync' },
+        { href: '/facilities', icon: Building2, label: 'Facilities' },
+        { href: '/stock', icon: BarChart3, label: 'Stock Overview' },
+        { href: '/map', icon: MapPin, label: 'Facility Map' },
+      ];
+    default:
+      return common;
+  }
+}
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -13,305 +87,185 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, role, userId } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  const navItems = [
-    { href: '/dashboard', icon: Home, label: 'Dashboard' },
-    { href: '/patients', icon: Users, label: 'Patients' },
-    { href: '/appointments', icon: Calendar, label: 'Appointments' },
-    { href: '/telemedicine', icon: Video, label: 'Telemedicine' },
-    { href: '/symptom-trends', icon: BarChart2, label: 'Analytics' },
-    { href: '/luma', icon: Bot, label: 'AI Assistant' },
-    { href: '/srh', icon: HeartPulse, label: 'SRH Education' },
-  ];
+  const navItems = useMemo(() => getNavItemsForRole(role), [role]);
+
+  const userInitial = (userId || 'U').charAt(0).toUpperCase();
+  const userName = userId || 'User';
+  const userRole = role || '';
 
   return (
-    <div className="flex h-screen bg-black text-white overflow-hidden">
-      {/* 🎆 NETFLIX-LEVEL ANIMATED BACKGROUND */}
-      <div className="fixed inset-0 z-0">
-        {/* Pure black base like Netflix */}
-        <div className="absolute inset-0 bg-black"></div>
-        
-        {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/30 via-black to-gray-900/20"></div>
-        
-        {/* Interactive glow effect */}
-        <div 
-          className="absolute inset-0 opacity-20 transition-all duration-1000 ease-out"
-          style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(59, 130, 246, 0.15), rgba(168, 85, 247, 0.1), transparent 70%)`
-          }}
-        ></div>
-        
-        {/* Premium floating particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(40)].map((_, i) => (
-            <div
-              key={i}
-              className={`absolute rounded-full animate-float opacity-40 ${
-                i % 3 === 0 ? 'w-1 h-1 bg-primary-400/30' :
-                i % 3 === 1 ? 'w-0.5 h-0.5 bg-accent-400/40' :
-                'w-2 h-2 bg-secondary-400/20'
-              }`}
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 8}s`,
-                animationDuration: `${6 + Math.random() * 8}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Subtle noise texture for premium feel */}
-        <div className="absolute inset-0 bg-noise opacity-[0.02] mix-blend-overlay"></div>
-      </div>
-
-      {/* 🔥 PREMIUM NETFLIX-STYLE SIDEBAR */}
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+      {/* Sidebar */}
       <motion.aside
-        initial={{ x: -300, opacity: 0 }}
-        animate={{ 
-          x: isSidebarOpen ? 0 : (typeof window !== 'undefined' && window.innerWidth >= 768 ? 0 : -300),
-          opacity: 1
+        initial={false}
+        animate={{
+          width: isSidebarOpen ? 256 : (typeof window !== 'undefined' && window.innerWidth >= 768 ? (isCollapsed ? 72 : 256) : 0),
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed inset-y-0 left-0 z-50 w-80 flex-shrink-0 bg-gray-900 border-r border-gray-700/50 flex flex-col shadow-2xl md:relative md:translate-x-0 backdrop-blur-2xl"
-        style={{
-          background: 'linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(0, 0, 0, 0.98) 100%)'
-        }}
+        className="fixed inset-y-0 left-0 z-50 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col shadow-sm md:relative overflow-hidden"
       >
-        {/* 💎 PREMIUM LOGO SECTION */}
-        <div className="h-28 flex items-center justify-center border-b border-gray-700/40 relative overflow-hidden">
-          {/* Gradient background for logo area */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-accent-500/10"></div>
-          <motion.div 
-            className="flex items-center space-x-3"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            <div className="relative">
-              <img src={logo} alt="BioVerse Logo" className="h-16 w-16 drop-shadow-2xl" />
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-400/30 to-secondary-400/30 rounded-full blur-xl animate-pulse-glow"></div>
+        {/* Logo */}
+        <div className="h-16 flex items-center px-5 border-b border-gray-200 dark:border-gray-700 min-w-0">
+          <Link to="/" className="flex items-center space-x-3 overflow-hidden">
+            <img src={logo} alt="BioVerse" className="h-9 w-9 flex-shrink-0" />
+            {!isCollapsed && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="hidden md:block">
+                <span className="text-lg font-bold text-gray-900 dark:text-white block leading-tight whitespace-nowrap">BioVerse</span>
+                <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase leading-none whitespace-nowrap">Health System Coordinator</span>
+              </motion.div>
+            )}
+            {/* Always show text on mobile overlay */}
+            <div className="md:hidden">
+              <span className="text-lg font-bold text-gray-900 dark:text-white block leading-tight whitespace-nowrap">BioVerse</span>
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase leading-none whitespace-nowrap">Health System Coordinator</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold tracking-wider bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 bg-clip-text text-transparent">
-                BIOVERSE
-              </span>
-              <span className="text-xs text-dark-muted font-medium tracking-wide">
-                Digital Health Twin
-              </span>
-            </div>
-          </motion.div>
+          </Link>
         </div>
 
-        {/* 🎆 PREMIUM NETFLIX-STYLE NAVIGATION */}
-        <nav className="mt-8 flex-1 px-6">
-          <ul className="space-y-1">
-            {navItems.map((item, index) => {
+        {/* Collapse Toggle — desktop only */}
+        <div className="hidden md:flex justify-end px-3 pt-3">
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isCollapsed ? <ChevronsRight className="w-4 h-4" /> : <ChevronsLeft className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="mt-2 flex-1 px-3 overflow-y-auto">
+          {!isCollapsed && (
+            <p className="px-3 text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Main Menu</p>
+          )}
+          <ul className="space-y-0.5">
+            {navItems.map((item) => {
               const isActive = location.pathname.startsWith(item.href);
               return (
-                <motion.li 
-                  key={item.href}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.08 }}
-                >
+                <li key={item.href}>
                   <Link
                     to={item.href}
-                    className={`group flex items-center px-5 py-4 transition-all duration-300 rounded-2xl relative overflow-hidden ${
-                      isActive 
-                        ? 'text-white bg-gradient-to-r from-primary-500/20 to-accent-500/20 shadow-xl border border-primary-400/30 backdrop-blur-sm' 
-                        : 'text-gray-400 hover:text-white hover:bg-gray-800/50 hover:shadow-lg'
+                    title={isCollapsed ? item.label : undefined}
+                    className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'px-3'} py-2.5 rounded-lg transition-all duration-150 text-sm font-medium ${
+                      isActive
+                        ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white'
                     }`}
                     onClick={() => setIsSidebarOpen(false)}
                   >
-                    {/* ⚡ ACTIVE STATE GLOW */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeNavGlow"
-                        className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10 rounded-2xl"
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                      />
-                    )}
-                    
-                    {/* LEFT BORDER INDICATOR */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeIndicator"
-                        className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-primary-400 to-accent-400 rounded-r-full"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
-                    
-                    {/* 🔥 PREMIUM ICON CONTAINER */}
-                    <div className={`relative mr-5 p-2.5 rounded-xl transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-primary-500/20 text-primary-300 shadow-lg scale-110' 
-                        : 'group-hover:bg-gray-700/50 group-hover:text-primary-400 group-hover:scale-105'
-                    }`}>
-                      <item.icon className="w-5 h-5" />
-                      
-                      {/* Active glow effect */}
-                      {isActive && (
-                        <motion.div
-                          className="absolute inset-0 bg-primary-400/30 rounded-xl blur-md"
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                      )}
-                    </div>
-                    
-                    {/* 📝 TEXT LABEL */}
-                    <span className={`font-medium tracking-wide transition-all duration-300 ${
-                      isActive ? 'text-white font-semibold' : 'group-hover:text-white'
-                    }`}>
-                      {item.label}
-                    </span>
-                    
-                    {/* ✨ HOVER SHIMMER EFFECT */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+                    <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
+                    {!isCollapsed && <span className="whitespace-nowrap">{item.label}</span>}
+                    {!isCollapsed && isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600"></div>}
                   </Link>
-                </motion.li>
+                </li>
               );
             })}
           </ul>
         </nav>
 
-        {/* Enhanced Logout Section */}
-        <div className="border-t border-primary-500/30 p-4 bg-gradient-to-r from-red-900/20 to-red-800/20">
-          <motion.button
-            onClick={handleLogout}
-            className="group flex items-center w-full px-4 py-3 text-dark-text hover:text-red-400 transition-all duration-300 rounded-xl hover:bg-red-900/30 border border-transparent hover:border-red-500/40"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="relative mr-4 p-2 rounded-lg transition-all duration-300 group-hover:bg-red-500/20">
-              <LogOut className="w-5 h-5" />
+        {/* User + Logout */}
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+          {!isCollapsed ? (
+            <>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                  {userInitial}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userName}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{userRole.replace('_', ' ')}</p>
+                </div>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors"
+              >
+                <LogOut className="w-4 h-4 mr-3" />
+                <span className="font-medium">Sign Out</span>
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-col items-center space-y-2">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm">
+                {userInitial}
+              </div>
+              <button
+                onClick={handleLogout}
+                title="Sign Out"
+                className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
             </div>
-            <span className="font-medium tracking-wide">Logout</span>
-          </motion.button>
+          )}
         </div>
       </motion.aside>
 
       {/* Backdrop for mobile sidebar */}
       {isSidebarOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+        <div
+          className="fixed inset-0 bg-gray-900/50 z-40 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden relative z-10">
-        {/* 🎆 PREMIUM NETFLIX-STYLE HEADER */}
-        <motion.header 
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="h-20 flex items-center justify-between px-8 border-b border-gray-800/60 backdrop-blur-2xl shadow-2xl"
-          style={{
-            background: 'linear-gradient(90deg, rgba(0, 0, 0, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%)'
-          }}
-        >
-          <div className="flex items-center space-x-4">
-            <motion.button
-              className="text-dark-muted hover:text-primary-400 md:hidden p-2 rounded-lg hover:bg-primary-500/10 transition-all duration-300"
+      <div className="flex-1 flex flex-col overflow-hidden relative z-10 w-full min-w-0">
+        {/* Header */}
+        <header className="h-14 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 md:px-6 shadow-sm z-20">
+          <div className="flex items-center">
+            <button
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white md:hidden mr-4"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
             >
-              <Menu size={24} />
-            </motion.button>
-            
-            {/* Page Title */}
-            <div className="hidden md:block">
-              <h1 className="text-xl font-semibold bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent">
-                {navItems.find(item => location.pathname.startsWith(item.href))?.label || 'BioVerse'}
-              </h1>
-            </div>
+              <Menu size={22} />
+            </button>
+            <h1 className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+              {navItems.find(item => location.pathname.startsWith(item.href))?.label || 'BioVerse'}
+            </h1>
           </div>
 
-          <div className="flex items-center space-x-4 md:space-x-6">
-            {/* Notifications */}
-            <div className="relative">
-              <motion.button 
-                onClick={() => setIsNotificationPanelOpen(!isNotificationPanelOpen)}
-                className="text-dark-muted hover:text-primary-400 relative p-2 rounded-lg hover:bg-primary-500/10 transition-all duration-300"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Bell size={22} />
-                <motion.span 
-                  className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  3
-                </motion.span>
-              </motion.button>
-            </div>
-
+          <div className="flex items-center space-x-2">
+            {/* Notification */}
+            <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <Bell size={18} />
+              <span className="absolute top-1 right-1 bg-red-500 text-white text-[9px] rounded-full h-3.5 w-3.5 flex items-center justify-center font-bold">3</span>
+            </button>
             {/* Settings */}
-            <Link 
+            <Link
               to="/settings"
-              className="text-dark-muted hover:text-primary-400 p-2 rounded-lg hover:bg-primary-500/10 transition-all duration-300"
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              <Settings size={22} />
+              <Settings size={18} />
             </Link>
-
-            {/* User Profile */}
-            <div className="flex items-center space-x-3">
-              <motion.div 
-                className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-bold shadow-lg"
-                whileHover={{ scale: 1.1 }}
-              >
-                A
-              </motion.div>
+            {/* User avatar */}
+            <div className="flex items-center space-x-2 pl-2 border-l border-gray-200 dark:border-gray-700">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold text-sm">
+                {userInitial}
+              </div>
               <div className="hidden md:block">
-                <p className="font-semibold text-sm text-dark-text">Admin User</p>
-                <p className="text-xs text-dark-muted">Administrator</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white leading-tight">{userName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize leading-tight">{userRole.replace('_', ' ')}</p>
               </div>
             </div>
           </div>
-        </motion.header>
+        </header>
 
-        {/* 🎆 MAIN CONTENT AREA - NETFLIX STYLE */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-black/95">
-          <div className="p-6 md:p-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              {children}
-            </motion.div>
+        {/* Page Content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 dark:bg-gray-900">
+          <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+            {children}
           </div>
         </main>
-
-        {/* Enhanced Chatbot */}
-        <LumaChatbot />
       </div>
     </div>
   );

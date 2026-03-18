@@ -1,15 +1,27 @@
 """
 Advanced Prediction Service for BioVerse
 
-This service encapsulates the logic from the quantum_health_predictor.py,
-providing advanced, multi-modal health predictions.
+Provides multi-modal health risk predictions combining
+genetics, behavior, and environmental data.
 """
 
 import numpy as np
 from typing import Dict, List, Any, Optional
 
+from dataclasses import dataclass, field
+
 from .base_service import BaseService
-from .health_twin_service import HealthTwinData # Use the main data model
+
+
+@dataclass
+class HealthTwinData:
+    """Data model for patient health data used in predictions."""
+    patient_id: str = ""
+    genetic_markers: dict = field(default_factory=dict)
+    lifestyle: dict = field(default_factory=dict)
+    environmental_data: dict = field(default_factory=dict)
+    vitals: dict = field(default_factory=dict)
+    medications: list = field(default_factory=list)
 
 class AdvancedPredictionService(BaseService):
     """

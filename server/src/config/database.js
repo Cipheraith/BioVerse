@@ -231,43 +231,37 @@ async function seedData() {
     // Admin user
     await runQuery(
       `INSERT INTO users (username, password, name, role) VALUES ($1, $2, $3, $4) RETURNING id`,
-      [
-        'admin',
-        hashedPassword,
-        'BioVerse Admin',
-        'admin',
-      ]
+      ['admin', hashedPassword, 'BioVerse Admin', 'admin']
     );
     
-    // Doctor users for telemedicine
+    // Ministry of Health
     await runQuery(
       `INSERT INTO users (username, password, name, role) VALUES ($1, $2, $3, $4) RETURNING id`,
-      [
-        'dr.smith',
-        hashedPassword,
-        'Dr. Sarah Smith',
-        'doctor',
-      ]
+      ['moh.director', hashedPassword, 'Dr. Mwansa Kaluba', 'moh']
     );
     
+    // Health Worker
     await runQuery(
       `INSERT INTO users (username, password, name, role) VALUES ($1, $2, $3, $4) RETURNING id`,
-      [
-        'dr.jones',
-        hashedPassword,
-        'Dr. Michael Jones',
-        'doctor',
-      ]
+      ['h.worker', hashedPassword, 'Nurse Grace Banda', 'health_worker']
     );
     
+    // Facility Manager
     await runQuery(
       `INSERT INTO users (username, password, name, role) VALUES ($1, $2, $3, $4) RETURNING id`,
-      [
-        'dr.brown',
-        hashedPassword,
-        'Dr. Emily Brown',
-        'doctor',
-      ]
+      ['facility.mgr', hashedPassword, 'Joseph Tembo', 'facility_manager']
+    );
+    
+    // Logistics Coordinator
+    await runQuery(
+      `INSERT INTO users (username, password, name, role) VALUES ($1, $2, $3, $4) RETURNING id`,
+      ['logistics', hashedPassword, 'Chanda Mulenga', 'logistics_coordinator']
+    );
+    
+    // DHIS2 Administrator
+    await runQuery(
+      `INSERT INTO users (username, password, name, role) VALUES ($1, $2, $3, $4) RETURNING id`,
+      ['dhis2.admin', hashedPassword, 'Fred Zulu', 'dhis2_admin']
     );
     
     console.log('Users seeded.');
@@ -328,4 +322,4 @@ async function seedData() {
   console.log('Telemedicine seeding completed - monitoring sessions seeding disabled for debugging');
 }
 
-module.exports = { initializeDatabase, getDB, runQuery, getQuery, allQuery };
+module.exports = { initializeDatabase, getDB, runQuery, getQuery, allQuery, get pool() { return pool; } };

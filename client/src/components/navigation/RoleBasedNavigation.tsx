@@ -98,6 +98,7 @@ const roleConfigs: Record<string, RoleConfig> = {
       { id: 'patients', label: 'Patients', icon: Users, path: '/patients', gradient: 'cyan', description: 'Patient database' },
       { id: 'health-twins', label: 'Health Twins', icon: Brain, path: '/health-twins', gradient: 'pink', description: 'AI health monitoring system' },
       { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics', gradient: 'green', description: 'System analytics & insights' },
+      { id: 'coordination', label: 'Supply Chain', icon: Truck, path: '/coordination', gradient: 'orange', description: 'Stock coordination & DHIS2 sync' },
       { id: 'telemedicine', label: 'Telemedicine', icon: Video, path: '/telemedicine', gradient: 'orange', description: 'Virtual care platform' },
       { id: 'settings', label: 'System Settings', icon: Settings, path: '/settings', gradient: 'purple', description: 'Configure system settings' },
     ]
@@ -114,6 +115,7 @@ const roleConfigs: Record<string, RoleConfig> = {
       { id: 'disease-surveillance', label: 'Disease Surveillance', icon: Monitor, path: '/disease-surveillance', gradient: 'purple', description: 'Disease tracking & monitoring' },
       { id: 'health-facilities', label: 'Health Facilities', icon: Shield, path: '/health-facilities', gradient: 'cyan', description: 'Healthcare facility management' },
       { id: 'emergency-response', label: 'Emergency Response', icon: AlertTriangle, path: '/emergency-response', gradient: 'pink', description: 'National emergency coordination' },
+      { id: 'coordination', label: 'Supply Chain', icon: Truck, path: '/coordination', gradient: 'cyan', description: 'Stock coordination & DHIS2 sync' },
       { id: 'prescription-oversight', label: 'Prescription Oversight', icon: Pill, path: '/prescriptions/manage', gradient: 'orange', description: 'Oversee prescription fulfillment' },
       { id: 'analytics', label: 'Health Analytics', icon: BarChart3, path: '/analytics', gradient: 'green', description: 'National health analytics' },
       { id: 'policies', label: 'Health Policies', icon: FileText, path: '/policies', gradient: 'purple', description: 'Health policy management' },
@@ -144,6 +146,7 @@ const roleConfigs: Record<string, RoleConfig> = {
     navigationItems: [
       { id: 'dashboard', label: 'Pharmacy Dashboard', icon: Home, path: '/dashboard', gradient: 'cyan', description: 'Pharmacy operations overview' },
       { id: 'inventory', label: 'Inventory', icon: Pill, path: '/inventory', gradient: 'blue', description: 'Medication inventory management' },
+      { id: 'coordination', label: 'Supply Chain', icon: Truck, path: '/coordination', gradient: 'green', description: 'Cross-facility stock coordination' },
       { id: 'prescriptions', label: 'Prescriptions', icon: FileText, path: '/prescriptions/manage', gradient: 'purple', description: 'Prescription management' },
       { id: 'orders', label: 'Orders', icon: Calendar, path: '/orders', gradient: 'green', description: 'Medication orders & requests' },
       { id: 'patients', label: 'Patients', icon: Users, path: '/patients', gradient: 'orange', description: 'Patient medication history' },

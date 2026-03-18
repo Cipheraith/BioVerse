@@ -2,7 +2,7 @@
 
 ## **Enterprise-Grade Deployment for Global Healthcare**
 
-BioVerse is engineered for massive scale - from single-clinic deployments to population-wide healthcare transformation serving billions of digital health twins. Our cloud-native architecture ensures reliable, secure, and cost-effective scaling across diverse deployment scenarios.
+BioVerse is engineered for scale - from single-clinic deployments to national-level supply chain coordination across thousands of health facilities. Our cloud-native architecture ensures reliable, secure, and cost-effective scaling across diverse deployment scenarios.
 
 ---
 
@@ -28,8 +28,8 @@ BioVerse is engineered for massive scale - from single-clinic deployments to pop
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────┼───────────────────────────────────────┐
-│                     │      AI/ML Engine Layer               │
-│  Digital Twins  │ Prediction Engine │ Vision AI │ Fed ML   │
+│                     │      Service Layer                    │
+│  DHIS2 Sync     │ Coordination Engine │ API Server │ Alerts │
 │   ECS Fargate   │   ECS Fargate     │ ECS Fargate│ECS Fargate│
 └─────────────────────┬───────────────────────────────────────┘
                       │
@@ -48,7 +48,7 @@ BioVerse is engineered for massive scale - from single-clinic deployments to pop
 | **Throughput** | 100K+ req/sec | 150K+ req/sec |
 | **Availability** | 99.99% | 99.97% (past 12 months) |
 | **Concurrent Users** | 10M+ | 12M+ peak |
-| **Digital Twins** | 1B+ | Architecture tested to 2B+ |
+| **Facilities Tracked** | 10K+ | Architecture tested to 50K+ |
 | **AI Predictions** | 1M+/sec | 1.5M+/sec |
 
 ---
@@ -197,9 +197,9 @@ Global Infrastructure:
   
 Auto-Scaling Configuration:
   API Gateway: 10,000+ instances
-  Digital Twin Service: 5,000+ instances
-  AI Prediction Engine: 2,000+ instances
-  Vision Processing: 1,000+ instances
+  DHIS2 Sync Service: 5,000+ instances
+  Coordination Engine: 2,000+ instances
+  Alert Processing: 1,000+ instances
   
 Database Architecture:
   Global Database: Aurora Global Database
@@ -272,8 +272,8 @@ Database:
 ```yaml
 # Multi-Layer Caching
 L1 Cache: In-Memory Application Cache
-  - Health Twin State: 60 seconds TTL
-  - Prediction Results: 300 seconds TTL
+  - Stock Status Cache: 60 seconds TTL
+  - Sync Results: 300 seconds TTL
   - User Sessions: 24 hours TTL
 
 L2 Cache: Redis Cluster
@@ -290,7 +290,7 @@ L3 Cache: CloudFront CDN
 #### **Database Optimization**
 ```sql
 -- High-performance indexing strategy
-CREATE INDEX CONCURRENTLY idx_patient_health_score ON health_twins (patient_id, health_score);
+CREATE INDEX CONCURRENTLY idx_facility_stock ON facility_stock_levels (facility_id, status);
 CREATE INDEX CONCURRENTLY idx_prediction_timestamp ON predictions (created_at DESC);
 CREATE INDEX CONCURRENTLY idx_emergency_priority ON emergency_alerts (priority, created_at);
 
@@ -328,7 +328,7 @@ Edge Deployment:
   Locations: 1000+ edge points across Africa
   Technology: AWS Wavelength + Local Zones
   Capabilities:
-    - Offline health twin synchronization
+    - Offline stock data synchronization
     - Local AI inference for critical decisions
     - SMS/USSD gateway processing
     - Emergency response coordination
@@ -741,7 +741,7 @@ Load Test Configuration:
   Geographic Distribution: 6 regions
   
   Scenarios:
-    - Health twin creation: 100K/hour
+    - DHIS2 data sync: 100K records/hour
     - AI predictions: 1M/hour
     - Emergency alerts: 10K/hour
     - Mobile app usage: 500K concurrent
@@ -758,10 +758,10 @@ Results:
 #### **Capacity Planning**
 ```yaml
 Scaling Projections:
-  Current Capacity: 10M digital twins
-  6 Month Target: 50M digital twins
-  12 Month Target: 200M digital twins
-  24 Month Target: 1B digital twins
+  Current Capacity: 10K facilities tracked
+  6 Month Target: 50K facilities
+  12 Month Target: 200K facilities
+  24 Month Target: 1M facilities
   
 Infrastructure Requirements:
   ECS Tasks: Linear scaling with user growth

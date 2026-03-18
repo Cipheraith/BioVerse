@@ -1,5 +1,5 @@
 const { allQuery } = require('../config/database');
-const logger = require('../config/logger');
+const { logger } = require('./logger');
 
 // Haversine formula to calculate distance between two points given their latitudes and longitudes
 function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -28,7 +28,7 @@ class RoutingService {
      */
     async findNearestFacility(patientLocation, requiredResources) {
         try {
-            const facilities = await allQuery('SELECT id, name, type, position, bedsAvailable, equipmentAvailable, specialistsAvailable FROM locations WHERE type IN ('clinic', 'hospital')');
+            const facilities = await allQuery("SELECT id, name, type, position, bedsAvailable, equipmentAvailable, specialistsAvailable FROM locations WHERE type IN ('clinic', 'hospital')");
 
             let bestFacility = null;
             let minDistance = Infinity;
@@ -112,4 +112,6 @@ class RoutingService {
     }
 }
 
-module.exports = new RoutingService();
+const routingService = new RoutingService();
+module.exports = routingService;
+module.exports.haversineDistance = haversineDistance;

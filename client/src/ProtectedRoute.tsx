@@ -1,16 +1,18 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
+import { isTokenValid } from "./utils/tokenUtils";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
-  const { token, role } = useAuth();
+  const { token, role, logout } = useAuth();
 
-  if (!token) {
-    // Not authenticated, redirect to login page
+  if (!token || !isTokenValid(token)) {
+    // Not authenticated or token expired — clear state and redirect to login
+    if (token) logout();
     return <Navigate to="/login" replace />;
   }
 

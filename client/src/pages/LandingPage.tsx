@@ -15,30 +15,12 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [currentFeature, setCurrentFeature] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
-  
-  // Mouse tracking for interactive effects
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   const features = [
-    { icon: Brain, title: "AI Health Twins", desc: "Digital replicas that predict your health future" },
-    { icon: Activity, title: "Real-time Monitoring", desc: "Continuous health tracking with instant alerts" },
-    { icon: Dna, title: "Molecular Analysis", desc: "Cellular-level health insights and predictions" },
-    { icon: Target, title: "Precision Medicine", desc: "Personalized treatments based on your unique profile" }
+    { icon: Activity, title: "Outbreak Detection", desc: "Real-time anomaly detection for epidemic tracking" },
+    { icon: Layers, title: "Supply Chain Intelligence", desc: "Stockout prediction and medicine distribution" },
+    { icon: MapPin, title: "Facility Resource Mapping", desc: "Live views of bed and equipment availability" },
+    { icon: Shield, title: "Emergency Logistics", desc: "Automated ambulance routing and facility matching" }
   ];
 
   useEffect(() => {
@@ -49,608 +31,154 @@ const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white font-sans overflow-x-hidden relative">
-      {/* Enhanced Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <GlowingOrb size="xl" color="blue" className="absolute top-20 left-10 opacity-20" />
-        <GlowingOrb size="xl" color="purple" className="absolute bottom-20 right-10 opacity-30" />
-        <GlowingOrb size="lg" color="cyan" className="absolute top-1/2 left-1/2 opacity-25" />
-        <GlowingOrb size="md" color="pink" className="absolute top-1/4 right-1/4 opacity-20" />
-        <GlowingOrb size="sm" color="green" className="absolute bottom-1/4 left-1/4 opacity-30" />
-        
-        {/* Enhanced floating particles */}
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-cyan-400 rounded-full"
-            animate={{
-              x: [0, Math.random() * 200 - 100],
-              y: [0, Math.random() * 200 - 100],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 15 + 10,
-              repeat: Infinity,
-              delay: Math.random() * 10,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-        
-        {/* Neural network lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-10">
-          {[...Array(20)].map((_, i) => (
-            <motion.line
-              key={i}
-              x1={`${Math.random() * 100}%`}
-              y1={`${Math.random() * 100}%`}
-              x2={`${Math.random() * 100}%`}
-              y2={`${Math.random() * 100}%`}
-              stroke="url(#gradient)"
-              strokeWidth="1"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.3 }}
-              transition={{ duration: 2, delay: i * 0.1, repeat: Infinity, repeatType: "reverse" }}
-            />
-          ))}
-          <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#06b6d4" />
-              <stop offset="100%" stopColor="#8b5cf6" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
+    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans overflow-x-hidden">
 
       {/* Header */}
-      <header className="relative z-10 mobile-container px-4 sm:px-6 md:px-8 py-4 sm:py-6 flex justify-center items-center">
+      <header className="relative z-10 mobile-container px-4 sm:px-6 md:px-8 py-4 sm:py-6 flex justify-between items-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center space-x-2 sm:space-x-3">
-          <motion.img 
+          <img 
             src="/bio.png" 
             alt="BioVerse Logo" 
-            className="h-12 w-12 sm:h-16 sm:w-16" 
-            animate={{ 
-              rotate: [0, 360],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{
-              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-              scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-            }}
+            className="h-10 w-10 sm:h-12 sm:w-12"
           />
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.span 
-              className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"
-              animate={{ 
-                backgroundPosition: ['0%', '200%', '0%']
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              BIOVERSE
-            </motion.span>
-            <div className="text-xs text-gray-400 tracking-widest">AI-POWERED HEALTH NETWORK</div>
-          </motion.div>
+          <div>
+            <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+              BioVerse
+            </span>
+            <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">HEALTH SYSTEM COORDINATOR</div>
+          </div>
+        </div>
+        <div className="hidden md:flex space-x-4">
+          <button onClick={() => navigate('/login')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium px-4 py-2">Sign In</button>
         </div>
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 mobile-container px-4 sm:px-6 md:px-8 py-12 sm:py-20 md:py-32">
-        <div className="text-center mb-12 sm:mb-16">
-          <motion.div
-            className="inline-flex items-center bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-full px-4 sm:px-6 py-2 mb-6 sm:mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 mr-2" />
-            <span className="text-xs sm:text-sm text-blue-300 font-medium">World's First AI-Powered Health Twin Network</span>
-            <motion.div
-              className="ml-2 w-2 h-2 bg-green-400 rounded-full"
-              animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </motion.div>
+      <main className="relative z-10 mobile-container px-4 sm:px-6 md:px-8 py-12 sm:py-20 md:py-24">
+        <div className="text-center mb-12 sm:mb-16 max-w-5xl mx-auto">
+          <div className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-full px-4 py-2 border border-blue-100 dark:border-blue-800 mb-8 font-medium text-sm">
+            <Activity className="w-4 h-4 mr-2" />
+            The Operating System for Public Health
+          </div>
 
-          <motion.h1 
-            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 sm:mb-8 px-2"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            <span className="bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent block">
-              The Future of
-            </span>
-            <motion.span 
-              className="bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent block"
-              animate={{
-                backgroundPosition: ['0%', '200%', '0%']
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "linear"
-              }}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-8 text-gray-900 dark:text-white">
+            Coordinate Healthcare <br className="hidden md:block" />
+            <span className="text-blue-600">At System Scale</span>
+          </h1>
+
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
+            BioVerse provides real-time visibility into supply chains, facility resources, 
+            and outbreak detection. Empowering ministries and health workers to make data-driven decisions that save lives.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 shadow-sm w-full sm:w-auto text-lg"
             >
-              Healthcare is Here
-            </motion.span>
-          </motion.h1>
-
-          <motion.p 
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <span className="text-cyan-400 font-semibold">BioVerse</span> creates digital twins of your health that predict, prevent, and personalize your medical care. 
-            Our groundbreaking AI analyzes your unique biological patterns to deliver 
-            <span className="text-purple-400 font-semibold"> precision medicine</span> that adapts in real-time.
-          </motion.p>
-
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12 sm:mb-16 px-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <motion.button
-              onClick={() => setIsVideoPlaying(true)}
-              className="mobile-button group bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg w-full sm:w-auto"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 15px 30px rgba(6, 182, 212, 0.25)"
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-              <span>Watch Demo</span>
-            </motion.button>
+              <span>Access Dashboard</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
             
-            <motion.button
+            <button
               onClick={() => navigate('/register')}
-              className="mobile-button group bg-gradient-to-r from-purple-700 to-pink-700 hover:from-purple-800 hover:to-pink-800 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg w-full sm:w-auto"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 15px 30px rgba(147, 51, 234, 0.25)"
-              }}
-              whileTap={{ scale: 0.95 }}
+              className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 w-full sm:w-auto text-lg shadow-sm"
             >
-              <span>Start Your Health Journey</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
-          </motion.div>
+              Register Facility
+            </button>
+          </div>
 
-          {/* Breakthrough Features Showcase */}
-          <motion.div
-            className="mobile-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto px-4"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1 }}
-          >
+          {/* Active Features List */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto px-4 mt-12 mb-20 text-left">
             {features.map((feature, index) => (
-              <motion.div
+              <div
                 key={index}
-                className={`relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border rounded-2xl p-6 transition-all duration-500 ${
+                className={`bg-white dark:bg-gray-800 border rounded-xl p-6 transition-all duration-300 ${
                   currentFeature === index 
-                    ? 'border-cyan-400 shadow-2xl shadow-cyan-400/20 scale-105' 
-                    : 'border-slate-700 hover:border-slate-600'
+                    ? 'border-blue-500 shadow-md ring-1 ring-blue-500 z-10' 
+                    : 'border-gray-200 dark:border-gray-700'
                 }`}
-                whileHover={{ scale: 1.02 }}
               >
-                <motion.div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
-                    currentFeature === index 
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600' 
-                      : 'bg-slate-700'
-                  }`}
-                  animate={currentFeature === index ? { 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0]
-                  } : {}}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <feature.icon className="w-6 h-6 text-white" />
-                </motion.div>
-                <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-400 text-sm">{feature.desc}</p>
-                
-                {currentFeature === index && (
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 rounded-2xl"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                  />
-                )}
-              </motion.div>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
+                  currentFeature === index 
+                    ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400' 
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                }`}>
+                  <feature.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{feature.desc}</p>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </main>
 
-      {/* Video Modal */}
-      <AnimatePresence>
-        {isVideoPlaying && (
-          <motion.div
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsVideoPlaying(false)}
-          >
-            <motion.div
-              className="relative bg-slate-900 rounded-2xl p-8 max-w-4xl w-full"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setIsVideoPlaying(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-              >
-                ✕
-              </button>
-              <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <Play className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-2">BioVerse Demo</h3>
-                  <p className="text-gray-400">Experience the future of healthcare</p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Why BioVerse is Groundbreaking */}
-      <section className="py-32 bg-gradient-to-b from-black via-slate-900 to-black relative overflow-hidden">
-        {/* Animated particles */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-cyan-400 rounded-full"
-              animate={{
-                x: [0, Math.random() * 1000],
-                y: [0, Math.random() * 800],
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: Math.random() * 10 + 5,
-                repeat: Infinity,
-                delay: Math.random() * 5,
-              }}
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              className="inline-flex items-center bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-full px-6 py-2 mb-6"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <Zap className="w-4 h-4 text-orange-400 mr-2" />
-              <span className="text-sm text-orange-300 font-medium">Breakthrough Innovation</span>
-            </motion.div>
-
-            <h2 className="text-3xl sm:text-5xl md:text-7xl font-black mb-8">
-              <span className="bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                Why BioVerse is
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Groundbreaking
-              </span>
+      {/* Functional Modules Display */}
+      <section className="py-24 bg-white dark:bg-gray-800 border-t border-b border-gray-200 dark:border-gray-700">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
+              Complete System Visibility
             </h2>
-
-            <div className="text-base sm:text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed px-4">
-              <p className="mb-6">
-                BioVerse stands at the forefront of healthcare innovation by combining 
-                <span className="text-cyan-400 font-semibold"> AI</span>, 
-                <span className="text-purple-400 font-semibold"> blockchain</span>, and 
-                <span className="text-green-400 font-semibold"> IoT technologies</span> to deliver unmatched health insights.
-              </p>
-              
-              <div className="bg-gradient-to-r from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 mb-6">
-                <h4 className="text-2xl font-bold text-white mb-4 flex items-center">
-                  <span className="text-cyan-400 mr-2">⚡</span> Our AI Health Twin Network provides:
-                </h4>
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <span className="text-yellow-400 text-xl">🔮</span>
-                    <div>
-                      <span className="text-yellow-400 font-semibold">Predictive Analysis:</span>
-                      <span className="text-gray-300"> Using AI trained on vast amounts of health data to forecast health risks well in advance, enabling preventive care.</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <span className="text-pink-400 text-xl">🧬</span>
-                    <div>
-                      <span className="text-pink-400 font-semibold">Personalized Care:</span>
-                      <span className="text-gray-300"> Tailoring medical interventions based on your unique genetic and lifestyle factors.</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <span className="text-green-400 text-xl">📊</span>
-                    <div>
-                      <span className="text-green-400 font-semibold">Real-Time Health Monitoring:</span>
-                      <span className="text-gray-300"> Continuously tracking health metrics with instant alerts for anomalies.</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-center">
-                By integrating these groundbreaking technologies, BioVerse ensures healthcare is not
-                only reactive but <span className="text-cyan-400 font-semibold">proactive</span>, improving outcomes and reducing costs globally.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Revolutionary Features Grid */}
-          <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16 mb-16 lg:mb-20">
-            {/* 3D Health Visualization */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
-                <motion.div
-                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6"
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                >
-                  <Eye className="w-8 h-8 text-white" />
-                </motion.div>
-                
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                  3D Health Visualization
-                </h3>
-                <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-                  Experience your health like never before with interactive 3D anatomical models, 
-                  molecular-level visualizations, and real-time organ health status. See your body's 
-                  systems working in harmony or identify issues before they become critical.
-                </p>
-                
-                {/* Mini 3D Demo */}
-                <div className="relative bg-gradient-to-br from-slate-900 to-black rounded-2xl p-6 border border-slate-600">
-                  <div className="flex justify-center space-x-4 mb-4">
-                    <motion.div
-                      className="w-12 h-12 bg-red-500/30 rounded-full flex items-center justify-center"
-                      animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                    >
-                      <HeartPulse className="w-6 h-6 text-red-400" />
-                    </motion.div>
-                    <motion.div
-                      className="w-12 h-12 bg-blue-500/30 rounded-full flex items-center justify-center"
-                      animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
-                      transition={{ duration: 4, repeat: Infinity, delay: 0.5 }}
-                    >
-                      <Brain className="w-6 h-6 text-blue-400" />
-                    </motion.div>
-                    <motion.div
-                      className="w-12 h-12 bg-green-500/30 rounded-full flex items-center justify-center"
-                      animate={{ scale: [1, 1.3, 1], rotate: [0, -180, -360] }}
-                      transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-                    >
-                      <Activity className="w-6 h-6 text-green-400" />
-                    </motion.div>
-                  </div>
-                  <div className="text-center text-sm text-gray-400">
-                    Interactive 3D Health Models
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* AI Prediction Engine */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
-                <motion.div
-                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <BrainCircuit className="w-8 h-8 text-white" />
-                </motion.div>
-                
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                  AI Prediction Engine
-                </h3>
-                <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-                  Our advanced AI doesn't just track your current health—it predicts your future. 
-                  Using machine learning models trained on millions of health patterns, we can 
-                  forecast potential health issues months or even years in advance.
-                </p>
-                
-                {/* AI Prediction Demo */}
-                <div className="relative bg-gradient-to-br from-slate-900 to-black rounded-2xl p-6 border border-slate-600">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400">Cardiovascular Risk</span>
-                      <motion.div
-                        className="text-green-400 font-semibold"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        Low (12%)
-                      </motion.div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400">Diabetes Risk</span>
-                      <motion.div
-                        className="text-yellow-400 font-semibold"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-                      >
-                        Medium (34%)
-                      </motion.div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400">Mental Health</span>
-                      <motion.div
-                        className="text-green-400 font-semibold"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
-                      >
-                        Stable (8%)
-                      </motion.div>
-                    </div>
-                  </div>
-                  <div className="text-center text-xs text-gray-500 mt-4">
-                    AI Confidence: 94%
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Molecular Health Analysis */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
-                <motion.div
-                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6"
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                >
-                  <Dna className="w-8 h-8 text-white" />
-                </motion.div>
-                
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                  Molecular Health Analysis
-                </h3>
-                <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-                  Dive deeper than ever before with cellular and molecular-level health insights. 
-                  Our platform analyzes your blood composition, immune system status, and genetic 
-                  factors to provide unprecedented health intelligence.
-                </p>
-                
-                {/* Molecular Visualization */}
-                <div className="relative bg-gradient-to-br from-slate-900 to-black rounded-2xl p-6 border border-slate-600">
-                  <div className="flex justify-center space-x-2 mb-4">
-                    {[...Array(8)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="w-3 h-3 bg-gradient-to-r from-green-400 to-teal-400 rounded-full"
-                        animate={{
-                          scale: [1, 1.5, 1],
-                          opacity: [0.5, 1, 0.5],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          delay: i * 0.2,
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <div className="text-center text-sm text-gray-400">
-                    Real-time Molecular Analysis
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Real-time Health Network */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 sm:p-8 h-full">
-                <motion.div
-                  className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <Globe className="w-8 h-8 text-white" />
-                </motion.div>
-                
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                  National Health Network
-                </h3>
-                <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-                  Connect every healthcare provider, patient, and medical facility across Zambia 
-                  in one unified network. Real-time data sharing, emergency response coordination, 
-                  and population health insights at your fingertips.
-                </p>
-                
-                {/* Network Visualization */}
-                <div className="relative bg-gradient-to-br from-slate-900 to-black rounded-2xl p-6 border border-slate-600">
-                  <div className="relative h-24 flex items-center justify-center">
-                    <motion.div
-                      className="absolute w-4 h-4 bg-orange-400 rounded-full"
-                      animate={{
-                        scale: [1, 2, 1],
-                        opacity: [1, 0.3, 1],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                    {[...Array(6)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-2 h-2 bg-cyan-400 rounded-full"
-                        animate={{
-                          x: Math.cos((i * Math.PI * 2) / 6) * 40,
-                          y: Math.sin((i * Math.PI * 2) / 6) * 40,
-                          scale: [1, 1.5, 1],
-                        }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          delay: i * 0.3,
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <div className="text-center text-sm text-gray-400">
-                    Connected Healthcare Network
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              BioVerse integrates supply, logistics, and epidemiological data into a single pane of glass, allowing for proactive health management.
+            </p>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            
+            {/* Supply Chain */}
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-6">
+                <Layers className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Supply Chain API</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-sm">
+                Anticipate stockouts of essential supplies before they occur using predictive modeling based on historical distribution and consumption rates.
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Predictive stockout alerts</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Cross-facility inventory views</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Automated distribution logic</li>
+              </ul>
+            </div>
+
+            {/* Outbreak Detection */}
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center mb-6">
+                <Activity className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Outbreak Intelligence</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-sm">
+                Real-time scanning of aggregate patient logs to identify unexpected spikes in symptom clusters, empowering early response.
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Spatial anomaly mapping</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Automated ministry alerts</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Case rate tracking</li>
+              </ul>
+            </div>
+
+            {/* Emergency Network */}
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-xl flex items-center justify-center mb-6">
+                <Shield className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Facility Coordination</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-sm">
+                Ensure emergency responders know which facilities have available beds and functioning equipment before dispatch.
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Live bed capacity monitoring</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Equipment status tracking</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Ambulance routing logic</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
 
           {/* Revolutionary Technology Section */}
           <motion.div
@@ -663,11 +191,11 @@ const LandingPage: React.FC = () => {
             <div className="text-center mb-12">
               <h3 className="text-4xl font-bold text-white mb-4">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Revolutionary Technologies Powering BioVerse
+                  Built on Modern Health Infrastructure
                 </span>
               </h3>
               <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-                Our cutting-edge platform combines multiple breakthrough technologies to deliver unparalleled healthcare insights
+                BioVerse is built on a stack designed for reliability, security, and scale across health systems
               </p>
             </div>
 
@@ -685,18 +213,18 @@ const LandingPage: React.FC = () => {
                 >
                   <Cpu className="w-6 h-6 text-white" />
                 </motion.div>
-                <h4 className="text-xl font-bold text-white mb-3">Quantum Health Analytics</h4>
+                <h4 className="text-xl font-bold text-white mb-3">Predictive Health Analytics</h4>
                 <p className="text-gray-300 text-sm mb-4">
-                  Leveraging quantum computing principles to analyze complex biological patterns at unprecedented speed and accuracy.
+                  Analyzes complex biological patterns across large datasets to surface health risks early and support clinical decisions.
                 </p>
                 <div className="space-y-2 text-xs">
                   <div className="flex items-center text-cyan-400">
                     <span className="w-2 h-2 bg-cyan-400 rounded-full mr-2"></span>
-                    Process millions of health data points simultaneously
+                    Processes millions of health data points
                   </div>
                   <div className="flex items-center text-blue-400">
                     <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                    99.7% accuracy in predictive health modeling
+                    High accuracy in predictive health modeling
                   </div>
                 </div>
               </motion.div>
@@ -816,115 +344,35 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-32 bg-gradient-to-br from-cyan-900/20 via-blue-900/20 to-purple-900/20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-purple-500/5" />
-        
-        <div className="container mx-auto px-6 md:px-8 relative z-10">
-          <motion.div
-            className="text-center max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              className="inline-flex items-center bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 rounded-full px-6 py-2 mb-8"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
+      <section className="py-24 bg-blue-600 dark:bg-blue-900 text-white relative">
+        <div className="container mx-auto px-6 md:px-8 text-center max-w-4xl relative z-10">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+            Ready to Connect Your Facility?
+          </h2>
+          <p className="text-xl text-blue-100 mb-12">
+            Join the BioVerse public health network to begin tracking supply, reducing stockouts, and responding faster to emergencies.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => navigate('/register')}
+              className="bg-white text-blue-700 hover:bg-gray-100 font-bold py-4 px-10 rounded-lg text-lg transition-colors shadow-lg"
             >
-              <Star className="w-4 h-4 text-cyan-400 mr-2" />
-              <span className="text-sm text-cyan-300 font-medium">Join the Healthcare Revolution</span>
-            </motion.div>
-
-            <h2 className="text-5xl md:text-7xl font-black mb-8">
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Ready to Transform
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">
-                Your Health?
-              </span>
-            </h2>
-
-            <p className="text-xl text-gray-300 mb-12 leading-relaxed">
-              Don't wait for the future of healthcare—experience it today. Join thousands of patients 
-              and healthcare providers who are already benefiting from AI-powered health insights.
-            </p>
-
-            <motion.div
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+              Get Started Free
+            </button>
+            <button
+              onClick={() => navigate('/docs')}
+              className="border-2 border-white hover:bg-blue-700/50 font-bold py-4 px-10 rounded-lg text-lg transition-colors"
             >
-              <motion.button
-                onClick={() => navigate('/register')}
-                className="group bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-5 px-10 rounded-full text-xl transition-all duration-300 flex items-center space-x-3 shadow-2xl"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 25px 50px rgba(6, 182, 212, 0.4)"
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>Start Your Health Journey</span>
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-              
-              <motion.button
-                onClick={() => navigate('/about')}
-                className="group border-2 border-purple-500 hover:bg-purple-500 text-purple-400 hover:text-white font-bold py-5 px-10 rounded-full text-xl transition-all duration-300 flex items-center space-x-3"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>Learn More</span>
-                <Eye className="w-6 h-6 group-hover:scale-110 transition-transform" />
-              </motion.button>
-            </motion.div>
-
-            <motion.div
-              className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 text-gray-400 text-sm sm:text-base"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <span>Free to start</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-blue-400" />
-                <span>HIPAA compliant</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Award className="w-5 h-5 text-purple-400" />
-                <span>Award winning</span>
-              </div>
-            </motion.div>
-          </motion.div>
+              Read Documentation
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-b from-black to-gray-900 py-16 border-t border-gray-800 relative overflow-hidden">
-        {/* Animated footer background */}
-        <div className="absolute inset-0 opacity-10">
-          <motion.div
-            className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400"
-            animate={{
-              backgroundPosition: ['0%', '200%', '0%']
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-        </div>
-
-        <div className="container mx-auto px-6 md:px-8 relative z-10">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+      <footer className="bg-gray-900 dark:bg-black py-16 text-gray-400">
+        <div className="container mx-auto px-6 md:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             {/* Company Info */}
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
@@ -973,24 +421,17 @@ const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Platform</h4>
+              <h4 className="text-gray-100 font-semibold mb-4">Platform</h4>
               <ul className="space-y-2 text-sm">
                 {[
-                  { name: 'Health Twins', path: '/health-twins' },
-                  { name: 'AI Analytics', path: '/analytics' },
+                  { name: 'Supply Chain', path: '/supply' },
+                  { name: 'Facility Management', path: '/facilities' },
                   { name: 'Telemedicine', path: '/telemedicine' },
-                  { name: 'Emergency Care', path: '/emergency' },
-                  { name: 'API Access', path: '/api' }
+                  { name: 'Emergency Routing', path: '/emergency' },
+                  { name: 'API Docs', path: '/api' }
                 ].map((link, index) => (
-                  <motion.li 
-                    key={link.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
+                  <li key={link.name}>
                     <a 
                       href={link.path} 
                       className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 flex items-center group"
@@ -1092,30 +533,10 @@ const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="text-center mt-8 pt-8 border-t border-gray-800">
-              <p className="text-gray-400 text-sm">
-                &copy; {new Date().getFullYear()} BioVerse. All rights reserved. 
-                <span className="mx-2">•</span>
-                Built with ❤️ for better healthcare outcomes
-                <span className="mx-2">•</span>
-                <motion.span
-                  className="text-cyan-400"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  Transforming lives through AI
-                </motion.span>
+            <div className="text-center mt-12 pt-8 border-t border-gray-800 text-sm">
+              <p>
+                &copy; {new Date().getFullYear()} BioVerse Health Systems. All rights reserved. 
               </p>
-              
-              <motion.div
-                className="mt-4 text-xs text-gray-500"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.5 }}
-              >
-                Made in Zambia 🇿🇲 • Powered by Innovation • Secured by Design
-              </motion.div>
             </div>
           </div>
         </div>

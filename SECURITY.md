@@ -1,167 +1,197 @@
-# Security Policy
+# BioVerse Security Policy
 
-## Reporting Security Vulnerabilities
+## Reporting Vulnerabilities
 
-**IMPORTANT**: Do not open public issues for security vulnerabilities.
+If you discover a security vulnerability, please report it responsibly:
 
-- **Email**: security@bioverse.com
-- **Response Time**: We aim to respond within 48 hours
-- **Disclosure**: Coordinated disclosure after patch is available
-
-## Supported Versions
-
-Security fixes target the `main` and `develop` branches.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| main    | :white_check_mark: |
-| develop | :white_check_mark: |
-| < 1.0   | :x:                |
-
-## Security Measures
-
-### Authentication & Authorization
-- ✅ JWT-based authentication with required secret validation
-- ✅ Rate limiting on authentication endpoints (5 requests per 15 minutes)
-- ✅ Input validation on all auth routes
-- ✅ Role-based access control (RBAC)
-- ✅ Password hashing with bcrypt
-
-### API Security
-- ✅ Helmet.js for security headers
-- ✅ Content Security Policy (CSP) without unsafe directives
-- ✅ CORS configuration with whitelisted origins
-- ✅ Request size limits (10MB)
-- ✅ API key validation for Python AI service
-
-### Data Protection
-- ✅ Environment variables for sensitive configuration
-- ✅ PostgreSQL parameterized queries (SQL injection prevention)
-- ✅ TLS/HTTPS encryption in transit
-- ⚠️ Encryption at rest (configure in production)
-
-### Infrastructure Security
-- ✅ Docker container isolation
-- ✅ Principle of least privilege
-- ✅ Regular dependency scanning
-- ✅ CodeQL security analysis
-- ✅ Container image scanning with Trivy
-
-## Security Checklist
-
-### Before Deployment
-- [ ] Rotate all default passwords and secrets
-- [ ] Generate strong JWT_SECRET (256-bit minimum)
-- [ ] Configure environment-specific API keys
-- [ ] Enable HTTPS/TLS certificates
-- [ ] Set up WAF (Web Application Firewall)
-- [ ] Configure database connection encryption
-- [ ] Enable audit logging
-- [ ] Set up monitoring and alerting
-- [ ] Review and update CORS whitelist
-- [ ] Disable debug mode in production
-- [ ] Complete HIPAA compliance checklist (healthcare data)
-
-### Secrets Management
-- **NEVER** commit secrets to git
-- Use `.env` files (gitignored)
-- Rotate credentials immediately if exposed
-- Use secrets management systems:
-  - AWS Secrets Manager
-  - HashiCorp Vault
-  - Azure Key Vault
-  - Google Secret Manager
-
-### Known Security Fixes Applied
-1. ✅ Removed `unsafe-inline` and `unsafe-eval` from CSP
-2. ✅ JWT_SECRET validation enforced (server fails without it)
-3. ✅ API key validation in Python AI service
-4. ✅ Auth route input validation and rate limiting
-5. ✅ Parameterized database queries throughout
-
-### Ongoing Security Tasks
-- Regular dependency updates (`npm audit`, `safety check`)
-- Security scanning in CI/CD pipeline
-- Penetration testing (recommended quarterly)
-- Security training for development team
-- Incident response plan maintenance
-
-## HIPAA Compliance Notes
-
-As a healthcare application, BioVerse must comply with HIPAA regulations:
-
-### Technical Safeguards Required
-- [ ] Unique user identification
-- [ ] Emergency access procedure
-- [ ] Automatic logoff
-- [ ] Encryption and decryption
-- [ ] Audit controls
-- [ ] Integrity controls
-- [ ] Person or entity authentication
-- [ ] Transmission security
-
-### Administrative Safeguards Required
-- [ ] Security management process
-- [ ] Assigned security responsibility
-- [ ] Workforce security
-- [ ] Information access management
-- [ ] Security awareness and training
-- [ ] Security incident procedures
-- [ ] Contingency plan
-- [ ] Business associate contracts
-
-### Physical Safeguards Required
-- [ ] Facility access controls
-- [ ] Workstation use
-- [ ] Workstation security
-- [ ] Device and media controls
-
-**Note**: Complete HIPAA compliance documentation in `server/docs/HIPAA_CHECKLIST.md`
-
-## Security Best Practices
-
-### For Developers
-1. **Never** hardcode credentials or API keys
-2. Always use parameterized queries
-3. Validate and sanitize all user inputs
-4. Follow principle of least privilege
-5. Keep dependencies up to date
-6. Review code for security issues before committing
-7. Use security linters (ESLint security plugin, Bandit)
-8. Write security tests for critical paths
-
-### For DevOps
-1. Enable automatic security updates
-2. Use container image scanning
-3. Implement network segmentation
-4. Set up intrusion detection systems
-5. Regular backup and disaster recovery testing
-6. Monitor security logs and alerts
-7. Implement rate limiting and DDoS protection
-8. Use secure defaults for all configurations
-
-## Vulnerability Disclosure Timeline
-
-1. **Day 0**: Vulnerability reported
-2. **Day 1-2**: Initial response and triage
-3. **Day 3-7**: Develop and test fix
-4. **Day 8-14**: Deploy fix to production
-5. **Day 15+**: Public disclosure (coordinated with reporter)
-
-## Security Tools in Use
-
-- **Static Analysis**: CodeQL, ESLint, Bandit
-- **Dependency Scanning**: npm audit, Safety, Dependabot
-- **Container Scanning**: Trivy
-- **Secret Scanning**: TruffleHog
-- **Runtime Protection**: Helmet.js, express-rate-limit
-- **Authentication**: JWT, bcrypt
-
-## Contact
-
-For security concerns: security@bioverse.com
+- **Email**: security@bioverse.org (or the project maintainer directly)
+- **Do NOT** open a public GitHub issue for security vulnerabilities
+- Include steps to reproduce, impact assessment, and suggested fix if possible
+- We aim to acknowledge reports within 48 hours and provide a fix within 7 days for critical issues
 
 ---
 
-Last updated: January 2026
+## Architecture Overview
 
+BioVerse is a health supply-chain coordination platform with these components:
+
+| Component | Technology | Port |
+|-----------|-----------|------|
+| Backend API | Node.js + Express 5 | 3000 |
+| Frontend SPA | React + Vite | 5173 |
+| Database | PostgreSQL | 5432 |
+| Real-time | Socket.io (WebSocket) | 3000 |
+| External | DHIS2 API (HTTPS) | 443 |
+
+---
+
+## Authentication & Authorization
+
+### JWT-Based Authentication
+
+- All authenticated API routes require a `Bearer` token in the `Authorization` header
+- Tokens are signed with `JWT_SECRET` (env variable, **required** — server refuses to start without it)
+- Passwords are hashed with **bcryptjs** (salt rounds: 10) before storage
+- Token verification middleware: `server/src/middleware/auth.js`
+
+### Role-Based Access Control (RBAC)
+
+Six roles are enforced via `authorizeRoles()` middleware:
+
+| Role | Access Level |
+|------|-------------|
+| `admin` | Full system access, user management, DHIS2 sync triggers |
+| `moh` | Ministry of Health — national dashboards, sync history, read-only DHIS2 status |
+| `health_worker` | Patient records, consultations, maternal health |
+| `patient` | Own records, telemedicine, symptom checks |
+| `pharmacy` | Inventory management, prescription fulfillment |
+| `ambulance_driver` | Dispatch map, emergency response |
+
+### DHIS2 Integration Authentication
+
+- DHIS2 API calls use **HTTP Basic Auth** (`DHIS2_USERNAME` / `DHIS2_PASSWORD`)
+- Credentials are stored in environment variables, never in source code
+- The DHIS2 client is created per-request with `axios.create()` — no credential caching in memory
+- All DHIS2 sync operations require `admin` role
+
+---
+
+## Transport Security
+
+### HTTPS
+
+- Production deployments must use TLS termination (reverse proxy: nginx, Caddy, or cloud LB)
+- DHIS2 API communication is always over HTTPS
+- `Strict-Transport-Security` header is set via Helmet in production
+
+### Security Headers (Helmet)
+
+The server applies these headers via `helmet()`:
+
+- `Content-Security-Policy` — restricts script/style/connect sources to `'self'`
+- `X-Frame-Options` — prevents clickjacking (`frameSrc: 'none'`)
+- `X-Content-Type-Options` — prevents MIME sniffing
+- `Cross-Origin-Embedder-Policy` — enabled in production
+
+### CORS
+
+- Origin restricted to `CORS_ORIGIN` env variable (default: `http://localhost:5173`)
+- Credentials enabled, methods limited to `GET, POST, PUT, DELETE, OPTIONS`
+- Only `Content-Type` and `Authorization` headers allowed
+
+---
+
+## Rate Limiting
+
+- Express rate limiter: 1,000 requests per 15 minutes per IP (configurable via `API_RATE_LIMIT`)
+- Enabled when `ENABLE_RATE_LIMITING=true`
+- Returns `429 Too Many Requests` with descriptive message
+- Standard rate-limit headers (`RateLimit-*`) included in responses
+
+---
+
+## Input Validation & Injection Prevention
+
+- Request body size limited to **10 MB** (`express.json({ limit: '10mb' })`)
+- All database queries use **parameterized queries** (`$1, $2...`) — no string concatenation in SQL
+- DHIS2 UIDs are validated by the DHIS2 API itself (11-character alphanumeric)
+- JSON parsing is handled by Express built-in middleware
+
+---
+
+## Data Protection
+
+### Database Security
+
+- PostgreSQL connection uses credentials from environment variables
+- Connection pooling via `pg.Pool` with configurable limits
+- Warning emitted if `DB_PASSWORD` is unset (dev convenience, not for production)
+- Sensitive tables: `users` (hashed passwords), `dhis2_sync_log` (audit trail)
+
+### Environment Variables
+
+All secrets are stored in `.env` (gitignored) and loaded via `dotenv`:
+
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `JWT_SECRET` | Token signing key | **Yes** (fatal error if missing) |
+| `DB_PASSWORD` | PostgreSQL password | Yes |
+| `DHIS2_USERNAME` | DHIS2 API auth | Yes (for sync features) |
+| `DHIS2_PASSWORD` | DHIS2 API auth | Yes (for sync features) |
+| `SESSION_SECRET` | Express session (if used) | Recommended |
+
+### What We Do NOT Store
+
+- Raw passwords (only bcrypt hashes)
+- DHIS2 credentials in the database
+- JWT tokens server-side (stateless verification)
+
+---
+
+## Audit & Logging
+
+### Request Logging
+
+- Enabled via `ENABLE_REQUEST_LOGGING=true`
+- Logs: HTTP method, path, client IP
+- Structured JSON logging via Winston (`server/src/services/logger.js`)
+- Module-specific loggers: `auth`, `api`, `database`, `socket`, `scheduler`
+
+### DHIS2 Sync Audit Trail
+
+- Every sync operation is logged in the `dhis2_sync_log` table:
+  - Sync type (org units, data elements, data values)
+  - Status (RUNNING, SUCCESS, FAILED, SKIPPED)
+  - Records processed / failed
+  - Error messages
+  - Start and completion timestamps
+- Accessible via `GET /api/v1/dhis2/sync/history` (admin/moh only)
+
+### User Audit Logs
+
+- Accessible via `GET /api/users/audit/logs` (admin/moh only)
+
+---
+
+## Socket.io Security
+
+- WebSocket connections require JWT authentication (`authenticateSocket` middleware)
+- Token extracted from `auth.token` in handshake
+- Invalid/missing tokens are rejected with `Authentication error`
+- CORS origin enforced on WebSocket connections
+
+---
+
+## Dependency Security
+
+### Current Stack
+
+- **Express 5** with built-in security middleware
+- **bcryptjs** for password hashing (pure JS, no native compile issues)
+- **jsonwebtoken** for stateless auth tokens
+- **helmet** for HTTP security headers
+- **express-rate-limit** for DDoS mitigation
+- **axios** for outbound HTTP (DHIS2 integration)
+- **pg** for PostgreSQL (parameterized queries)
+
+### Recommendations
+
+- Run `npm audit` regularly and patch critical/high vulnerabilities
+- Pin dependency versions in production
+- Use `npm ci` (not `npm install`) in CI/CD pipelines
+
+---
+
+## Production Hardening Checklist
+
+- [ ] Set strong, unique `JWT_SECRET` (min 32 characters, random)
+- [ ] Set strong `DB_PASSWORD`
+- [ ] Enable `ENABLE_RATE_LIMITING=true`
+- [ ] Set `NODE_ENV=production`
+- [ ] Configure `CORS_ORIGIN` to your actual frontend domain
+- [ ] Use TLS termination (nginx/Caddy/cloud LB) — never expose HTTP
+- [ ] Rotate DHIS2 credentials periodically
+- [ ] Enable `ENABLE_REQUEST_LOGGING=true` for audit compliance
+- [ ] Restrict PostgreSQL to localhost or VPN only
+- [ ] Review and remove any test/seed accounts before go-live
+- [ ] Set up monitoring for failed auth attempts and sync errors

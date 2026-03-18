@@ -5,7 +5,7 @@ Vite React app with Tailwind, i18n, Firebase auth, and rich visualization.
 ## Structure
 - `src/App.tsx`: routing and protected routes
 - `src/components/**`: UI components incl. dashboards, charts, video, layout
-- `src/pages/**`: feature pages (telemedicine, health twins, settings)
+- `src/pages/**`: feature pages (telemedicine, coordination dashboard, settings)
 - `src/contexts/**`: auth and app contexts
 - `src/services/**`: API clients
 - `src/i18n.ts`: localization setup
@@ -13,7 +13,7 @@ Vite React app with Tailwind, i18n, Firebase auth, and rich visualization.
 
 ## Routing
 - Public: `/`, `/login`, `/register`, `/about`, `/docs`, `/contact`, `/support`, `/privacy`, `/api`
-- Protected: `/dashboard`, `/luma`, `/telemedicine`, `/dispatch-map`, `/analytics`, `/patients`, `/appointments`, `/health-twins`, etc.
+- Protected: `/dashboard`, `/luma`, `/telemedicine`, `/dispatch-map`, `/analytics`, `/patients`, `/appointments`, `/coordination`, etc.
 - Role-based protection via `ProtectedRoute` and `allowedRoles`.
 
 ## Environment

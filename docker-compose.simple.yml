@@ -1,0 +1,72 @@
+# Simplified BioVerse Stack for Windows Development
+# Uses local PostgreSQL and MongoDB installations
+# Only runs essential services
+
+version: "3.8"
+
+services:
+  # React Frontend Client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: development
+    container_name: bioverse-client
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: "http://localhost:3000"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev
+    restart: unless-stopped
+
+  # Node.js API Server
+  node-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: development
+    container_name: bioverse-node-server
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      CORS_ORIGIN: "http://localhost:5173"
+      # Connect to host machine's PostgreSQL
+      DB_HOST: host.docker.internal
+      DB_PORT: 5432
+      DB_NAME: bioverse_zambia_db
+      DB_USER: postgres
+      DB_PASSWORD: "${DB_PASSWORD}"
+      # Connect to host machine's MongoDB
+      MONGODB_URI: "mongodb://host.docker.internal:27017/bioverse"
+      # JWT
+      JWT_SECRET: bioverse_dev_secret_key_2024
+      JWT_EXPIRY: 24h
+      # DHIS2
+      DHIS2_API_URL: "https://play.dhis2.org/2.40.0"
+      DHIS2_USERNAME: admin
+      DHIS2_PASSWORD: district
+      # Disable AI
+      ENABLE_PYTHON_AI: "false"
+      # Mock billing
+      ENABLE_MOCK_BILLING: "true"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    name: bioverse-simple

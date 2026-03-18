@@ -16,6 +16,15 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [, setConnectionState] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>('connecting');
 
   useEffect(() => {
+    const isAuthBypassEnabled = import.meta.env.DEV && import.meta.env.VITE_BYPASS_AUTH === 'true';
+
+    // In frontend bypass mode, do not attempt any realtime backend connection.
+    if (isAuthBypassEnabled) {
+      setConnectionState('disconnected');
+      setSocket(null);
+      return;
+    }
+
     // Only connect if we have a valid API URL and token
     const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
     const token = localStorage.getItem('token');
